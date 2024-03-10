@@ -83,6 +83,18 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Controls\CircularLoader.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProductMasterControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\PurchaseControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="LoginWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -97,6 +109,16 @@
     </Compile>
     <Compile Include="AppSession.cs" />
     <Compile Include="BasePage.cs" />
+    <Compile Include="Controls\CircularLoader.xaml.cs">
+      <DependentUpon>CircularLoader.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProductMasterControl.xaml.cs">
+      <DependentUpon>ProductMasterControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\PurchaseControl.xaml.cs">
+      <DependentUpon>PurchaseControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="IErrorHandler.cs" />
     <Compile Include="LoginWindow.xaml.cs">
       <DependentUpon>LoginWindow.xaml</DependentUpon>
     </Compile>

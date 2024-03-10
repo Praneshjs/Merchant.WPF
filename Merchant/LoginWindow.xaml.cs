@@ -38,6 +38,12 @@ namespace Merchant
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
             // Set focus to the TextBox when the window is loaded
             txtUserName.Focus();
+
+            ////test bypass login -- remove it 
+            //MainWindow mainWindow = new MainWindow();
+            //mainWindow.Show();
+            //Close();
+
         }
 
         private void UpdateDateLabel()
@@ -51,24 +57,49 @@ namespace Merchant
 
         private async void btnLogin_Click(object sender, RoutedEventArgs e)
         {
-            var userName = txtUserName.Text.Trim();
-            var password = txtPassword.Password;
-            UserService fetchUser = new UserService();
-            var isValidUser = await fetchUser.ValidateLoginAsync(userName, password);
-            if (isValidUser == null)
+            StringBuilder errorMessage = new StringBuilder();
+            try
             {
-                MessageBox.Show("Invalid password. Kindly try again.");
-            }
-            else
-            {
-                // Set user session data
-                UserSession.Instance.Username = isValidUser.UserName;
-                UserSession.Instance.UserId = isValidUser.Id;
+                ToggleLoader(true);
+                var userName = txtUserName.Text.Trim().ToLower();
+                var password = txtPassword.Password;
 
-               
-                MainWindow mainWindow = new MainWindow();
-                mainWindow.Show();
+                if (string.IsNullOrEmpty(userName)) errorMessage.AppendLine("Invalid User Name.");
+                if (string.IsNullOrEmpty(password)) errorMessage.AppendLine("Invalid Password.");
+                if (errorMessage.Length == 0)
+                {
+                    UserService fetchUser = new UserService();
+                    var isValidUser = await fetchUser.ValidateLoginAsync(userName, password);
+                    if (isValidUser == null)
+                    {
+                        errorMessage.AppendLine("Invalid password. Kindly try again.");
+                    }
+                    else
+                    {
+                        UserSession.Instance.Username = isValidUser.UserName;
+                        UserSession.Instance.UserId = isValidUser.Id;
+
+                        MainWindow mainWindow = new MainWindow();
+                        mainWindow.Show();
+                        Close();
+                    }
+                }
             }
+            catch (Exception)
+            {
+                errorMessage.AppendLine("There is a technical error.");
+            }
+            ToggleLoader(false);
+            if (errorMessage.Length > 0)
+                MessageBox.Show(errorMessage.ToString());
+        }
+
+        private void ToggleLoader(bool IsVisible)
+        {
+            if (IsVisible)
+                loader.Visibility = Visibility.Visible;
+            else
+                loader.Visibility = Visibility.Collapsed;
         }
 
         private void TextBox_Loaded(object sender, RoutedEventArgs e)

@@ -29,19 +29,8 @@ namespace Merchant
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             WindowState = WindowState.Maximized;
-            string username = UserSession.Instance.Username;
-            MessageBox.Show($"Welcome {username}");
+            lblLoggedUser.Text = UserSession.Instance.Username;
         }
 
-        private void btnExit_Click(object sender, RoutedEventArgs e)
-        {
-            Environment.Exit(0);
-        }
-
-        private void btnLogin_Click(object sender, RoutedEventArgs e)
-        {
-            LoginWindow myLogin = new LoginWindow();
-            myLogin.Show();
-        }
     }
 }
