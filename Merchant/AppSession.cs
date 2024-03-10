@@ -7,10 +7,29 @@ using System.Threading.Tasks;
 
 namespace Merchant
 {
-    public class AppSession
+    public class UserSession
     {
-        private static readonly Lazy<UserProfile> _currentUser = new Lazy<UserProfile>(() => new UserProfile());
+        private static UserSession instance;
 
-        public static UserProfile CurrentUser => _currentUser.Value;
+        public string Username { get; set; }
+        public int UserId { get; set; }
+
+        private UserSession()
+        {
+            Username = string.Empty;
+            UserId = -1;
+        }
+
+        public static UserSession Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    instance = new UserSession();
+                }
+                return instance;
+            }
+        }
     }
 }

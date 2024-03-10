@@ -61,6 +61,11 @@ namespace Merchant
             }
             else
             {
+                // Set user session data
+                UserSession.Instance.Username = isValidUser.UserName;
+                UserSession.Instance.UserId = isValidUser.Id;
+
+               
                 MainWindow mainWindow = new MainWindow();
                 mainWindow.Show();
             }

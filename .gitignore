@@ -1,0 +1,17 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs/Merchant
+/Merchant/bin
+/Merchant/obj
+/Merchant/bin/.*
+/Merchant/obj/.*
+/MerchantDAL/bin
+/MerchantDAL/obj
+/MerchantDAL/bin/.*
+/MerchantDAL/obj/.*
+/MerchantService/bin
+/MerchantService/obj
+/MerchantService/bin/.*
+/MerchantService/obj/.*

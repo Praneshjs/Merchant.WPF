@@ -28,9 +28,9 @@ namespace Merchant
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            // Set the window state to Maximized when the window is loaded
             WindowState = WindowState.Maximized;
-            MessageBox.Show($"Welcome {AppSession.CurrentUser.UserName}");
+            string username = UserSession.Instance.Username;
+            MessageBox.Show($"Welcome {username}");
         }
 
         private void btnExit_Click(object sender, RoutedEventArgs e)
