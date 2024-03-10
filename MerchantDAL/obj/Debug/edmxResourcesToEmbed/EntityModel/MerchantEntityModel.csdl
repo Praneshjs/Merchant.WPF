@@ -1,0 +1,259 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="MerchantModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="CommonData">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ControlType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ControlValue" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="IsActive" Type="Boolean" />
+    <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+    <Property Name="CreatedBy" Type="Int32" />
+    <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
+    <Property Name="ModifiedBy" Type="Int32" />
+    <NavigationProperty Name="Profile" Relationship="Self.FK__CommonDat__Creat__671F4F74" FromRole="CommonData" ToRole="Profile" />
+    <NavigationProperty Name="Profile1" Relationship="Self.FK__CommonDat__Modif__681373AD" FromRole="CommonData" ToRole="Profile" />
+    <NavigationProperty Name="Products" Relationship="Self.FK__Product__BrandId__6EC0713C" FromRole="CommonData" ToRole="Product" />
+    <NavigationProperty Name="Products1" Relationship="Self.FK__Product__Product__6FB49575" FromRole="CommonData" ToRole="Product" />
+  </EntityType>
+  <EntityType Name="Customer">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FirstName" Type="String" MaxLength="70" FixedLength="false" Unicode="true" />
+    <Property Name="LastName" Type="String" MaxLength="70" FixedLength="false" Unicode="true" />
+    <Property Name="Mobile" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="AltMobile" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="LandLine" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+    <Property Name="EmailId" Type="String" MaxLength="75" FixedLength="false" Unicode="true" />
+    <Property Name="AddressLineOne" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="AddressLineTwo" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="PinCode" Type="String" MaxLength="6" FixedLength="false" Unicode="true" />
+    <Property Name="IsActive" Type="Boolean" />
+    <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="CreatedBy" Type="Int32" />
+    <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
+    <Property Name="ModifiedBy" Type="Int32" />
+    <NavigationProperty Name="Profile" Relationship="Self.FK__Customer__Create__6AEFE058" FromRole="Customer" ToRole="Profile" />
+    <NavigationProperty Name="Profile1" Relationship="Self.FK__Customer__Modifi__6BE40491" FromRole="Customer" ToRole="Profile" />
+  </EntityType>
+  <EntityType Name="Product">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="BrandId" Type="Int32" Nullable="false" />
+    <Property Name="ProductTypeId" Type="Int32" Nullable="false" />
+    <Property Name="IsActive" Type="Boolean" />
+    <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="CreatedBy" Type="Int32" />
+    <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
+    <Property Name="ModifiedBy" Type="Int32" />
+    <NavigationProperty Name="CommonData" Relationship="Self.FK__Product__BrandId__6EC0713C" FromRole="Product" ToRole="CommonData" />
+    <NavigationProperty Name="CommonData1" Relationship="Self.FK__Product__Product__6FB49575" FromRole="Product" ToRole="CommonData" />
+    <NavigationProperty Name="Profile" Relationship="Self.FK__Product__Created__70A8B9AE" FromRole="Product" ToRole="Profile" />
+    <NavigationProperty Name="Profile1" Relationship="Self.FK__Product__Modifie__719CDDE7" FromRole="Product" ToRole="Profile" />
+  </EntityType>
+  <EntityType Name="Profile">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Mobile" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="EmailId" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+    <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="IsRo" Type="Boolean" />
+    <Property Name="RoProfileId" Type="Int32" />
+    <Property Name="IsAdmin" Type="Boolean" />
+    <Property Name="JoinDate" Type="DateTime" Precision="3" />
+    <Property Name="ExitDate" Type="DateTime" Precision="3" />
+    <Property Name="ExitReason" Type="DateTime" Precision="3" />
+    <Property Name="IsActive" Type="Boolean" />
+    <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="CreatedBy" Type="Int32" />
+    <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
+    <Property Name="ModifiedBy" Type="Int32" />
+    <NavigationProperty Name="CommonDatas" Relationship="Self.FK__CommonDat__Creat__671F4F74" FromRole="Profile" ToRole="CommonData" />
+    <NavigationProperty Name="CommonDatas1" Relationship="Self.FK__CommonDat__Modif__681373AD" FromRole="Profile" ToRole="CommonData" />
+    <NavigationProperty Name="Customers" Relationship="Self.FK__Customer__Create__6AEFE058" FromRole="Profile" ToRole="Customer" />
+    <NavigationProperty Name="Customers1" Relationship="Self.FK__Customer__Modifi__6BE40491" FromRole="Profile" ToRole="Customer" />
+    <NavigationProperty Name="Products" Relationship="Self.FK__Product__Created__70A8B9AE" FromRole="Profile" ToRole="Product" />
+    <NavigationProperty Name="Products1" Relationship="Self.FK__Product__Modifie__719CDDE7" FromRole="Profile" ToRole="Product" />
+    <NavigationProperty Name="Profile1" Relationship="Self.FK__Profile__Created__634EBE90" FromRole="Profile" ToRole="Profile1" />
+    <NavigationProperty Name="Profile2" Relationship="Self.FK__Profile__Created__634EBE90" FromRole="Profile1" ToRole="Profile" />
+    <NavigationProperty Name="Profile11" Relationship="Self.FK__Profile__Modifie__6442E2C9" FromRole="Profile" ToRole="Profile1" />
+    <NavigationProperty Name="Profile3" Relationship="Self.FK__Profile__Modifie__6442E2C9" FromRole="Profile1" ToRole="Profile" />
+  </EntityType>
+  <Association Name="FK__CommonDat__Creat__671F4F74">
+    <End Role="Profile" Type="Self.Profile" Multiplicity="0..1" />
+    <End Role="CommonData" Type="Self.CommonData" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Profile">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CommonData">
+        <PropertyRef Name="CreatedBy" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__CommonDat__Modif__681373AD">
+    <End Role="Profile" Type="Self.Profile" Multiplicity="0..1" />
+    <End Role="CommonData" Type="Self.CommonData" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Profile">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CommonData">
+        <PropertyRef Name="ModifiedBy" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Product__BrandId__6EC0713C">
+    <End Role="CommonData" Type="Self.CommonData" Multiplicity="1" />
+    <End Role="Product" Type="Self.Product" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CommonData">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Product">
+        <PropertyRef Name="BrandId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Product__Product__6FB49575">
+    <End Role="CommonData" Type="Self.CommonData" Multiplicity="1" />
+    <End Role="Product" Type="Self.Product" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CommonData">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Product">
+        <PropertyRef Name="ProductTypeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Customer__Create__6AEFE058">
+    <End Role="Profile" Type="Self.Profile" Multiplicity="0..1" />
+    <End Role="Customer" Type="Self.Customer" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Profile">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Customer">
+        <PropertyRef Name="CreatedBy" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Customer__Modifi__6BE40491">
+    <End Role="Profile" Type="Self.Profile" Multiplicity="0..1" />
+    <End Role="Customer" Type="Self.Customer" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Profile">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Customer">
+        <PropertyRef Name="ModifiedBy" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Product__Created__70A8B9AE">
+    <End Role="Profile" Type="Self.Profile" Multiplicity="0..1" />
+    <End Role="Product" Type="Self.Product" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Profile">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Product">
+        <PropertyRef Name="CreatedBy" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Product__Modifie__719CDDE7">
+    <End Role="Profile" Type="Self.Profile" Multiplicity="0..1" />
+    <End Role="Product" Type="Self.Product" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Profile">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Product">
+        <PropertyRef Name="ModifiedBy" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Profile__Created__634EBE90">
+    <End Role="Profile" Type="Self.Profile" Multiplicity="0..1" />
+    <End Role="Profile1" Type="Self.Profile" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Profile">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Profile1">
+        <PropertyRef Name="CreatedBy" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Profile__Modifie__6442E2C9">
+    <End Role="Profile" Type="Self.Profile" Multiplicity="0..1" />
+    <End Role="Profile1" Type="Self.Profile" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Profile">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Profile1">
+        <PropertyRef Name="ModifiedBy" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="MerchantEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="CommonDatas" EntityType="Self.CommonData" />
+    <EntitySet Name="Customers" EntityType="Self.Customer" />
+    <EntitySet Name="Products" EntityType="Self.Product" />
+    <EntitySet Name="Profiles" EntityType="Self.Profile" />
+    <AssociationSet Name="FK__CommonDat__Creat__671F4F74" Association="Self.FK__CommonDat__Creat__671F4F74">
+      <End Role="Profile" EntitySet="Profiles" />
+      <End Role="CommonData" EntitySet="CommonDatas" />
+    </AssociationSet>
+    <AssociationSet Name="FK__CommonDat__Modif__681373AD" Association="Self.FK__CommonDat__Modif__681373AD">
+      <End Role="Profile" EntitySet="Profiles" />
+      <End Role="CommonData" EntitySet="CommonDatas" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Product__BrandId__6EC0713C" Association="Self.FK__Product__BrandId__6EC0713C">
+      <End Role="CommonData" EntitySet="CommonDatas" />
+      <End Role="Product" EntitySet="Products" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Product__Product__6FB49575" Association="Self.FK__Product__Product__6FB49575">
+      <End Role="CommonData" EntitySet="CommonDatas" />
+      <End Role="Product" EntitySet="Products" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Customer__Create__6AEFE058" Association="Self.FK__Customer__Create__6AEFE058">
+      <End Role="Profile" EntitySet="Profiles" />
+      <End Role="Customer" EntitySet="Customers" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Customer__Modifi__6BE40491" Association="Self.FK__Customer__Modifi__6BE40491">
+      <End Role="Profile" EntitySet="Profiles" />
+      <End Role="Customer" EntitySet="Customers" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Product__Created__70A8B9AE" Association="Self.FK__Product__Created__70A8B9AE">
+      <End Role="Profile" EntitySet="Profiles" />
+      <End Role="Product" EntitySet="Products" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Product__Modifie__719CDDE7" Association="Self.FK__Product__Modifie__719CDDE7">
+      <End Role="Profile" EntitySet="Profiles" />
+      <End Role="Product" EntitySet="Products" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Profile__Created__634EBE90" Association="Self.FK__Profile__Created__634EBE90">
+      <End Role="Profile" EntitySet="Profiles" />
+      <End Role="Profile1" EntitySet="Profiles" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Profile__Modifie__6442E2C9" Association="Self.FK__Profile__Modifie__6442E2C9">
+      <End Role="Profile" EntitySet="Profiles" />
+      <End Role="Profile1" EntitySet="Profiles" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

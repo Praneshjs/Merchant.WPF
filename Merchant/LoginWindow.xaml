@@ -1,0 +1,94 @@
+﻿<Window x:Class="Merchant.LoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Merchant"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        Title="Merchant Login" Height="350" Width="500">
+    <Window.Resources>
+        <!-- Style for TextBox -->
+        <Style TargetType="TextBox">
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Grid>
+                            <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Padding="{TemplateBinding Padding}"
+                                CornerRadius="5">
+                                <!-- Adjust the CornerRadius value as needed -->
+                                <ScrollViewer x:Name="PART_ContentHost" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden"/>
+                            </Border>
+                            <TextBlock x:Name="CaretElement" Visibility="Collapsed" Foreground="{TemplateBinding CaretBrush}" VerticalAlignment="Center" TextAlignment="Left" Text="_"/>
+                        </Grid>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter TargetName="CaretElement" Property="Visibility" Value="Visible"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Style for PasswordBox -->
+        <Style TargetType="PasswordBox">
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="PasswordBox">
+                        <Grid>
+                            <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Padding="{TemplateBinding Padding}"
+                                CornerRadius="5">
+                                <!-- Adjust the CornerRadius value as needed -->
+                                <ScrollViewer x:Name="PART_ContentHost" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden"/>
+                            </Border>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Style for Button -->
+        <Style TargetType="Button">
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Padding="{TemplateBinding Padding}"
+                            CornerRadius="5">
+                            <!-- Adjust the CornerRadius value as needed -->
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+
+    <Grid Background="{DynamicResource {x:Static SystemColors.InactiveCaptionBrushKey}}">
+        <Label Name="lblUserName" Content="User Name" HorizontalAlignment="Left" Margin="188,107,0,0" VerticalAlignment="Top" Height="42" Width="97" FontSize="16" Foreground="#FF4B44B4" FontWeight="Bold"/>
+        <TextBox Name="txtUserName" Loaded="TextBox_Loaded" KeyDown="Login_KeyDown" HorizontalAlignment="Left" Height="42" Margin="308,107,0,0" TextWrapping="Wrap" 
+                 Text="" VerticalAlignment="Top" Width="161" FontSize="16" FontWeight="Bold"/>
+        <Label Content="Password" HorizontalAlignment="Left" Margin="188,163,0,0" VerticalAlignment="Top" Height="42" Width="89" FontSize="16" Foreground="#FF4B44B4" FontWeight="Bold"/>
+        <PasswordBox Name="txtPassword" Loaded="PasswordBox_Loaded" KeyDown="Login_KeyDown" HorizontalAlignment="Left" Height="42" Margin="309,165,0,0" VerticalAlignment="Top" Width="161" FontSize="16" FontWeight="Bold"/>
+
+        <Button Name="btnLogin" Click="btnLogin_Click" Content="Login" HorizontalAlignment="Left" Margin="308,222,0,0" VerticalAlignment="Top" Width="161" Height="37" FontWeight="Bold" Foreground="#FF4B44B4"/>
+        <Label Content="Merchant Login" Margin="171,41,0,0" VerticalAlignment="Top" Height="38" Width="132" FontSize="16" FontWeight="Bold" HorizontalAlignment="Left" Foreground="#FF4B44B4"/>
+        <Label Name="lblCurrentDate" Content="" HorizontalAlignment="Left" Margin="318,14,0,0" VerticalAlignment="Top" Width="172" Foreground="#FF4B44B4"/>
+        <Image Source="/Assets/entrepreneur.png" Name="imgAppLogo" HorizontalAlignment="Left" Height="145" Margin="21,94,0,0" VerticalAlignment="Top" Width="145"/>
+    </Grid>
+</Window>
