@@ -85,9 +85,9 @@ namespace Merchant
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                errorMessage.AppendLine("There is a technical error.");
+                errorMessage.AppendLine($"There is a technical error {ex.InnerException}");
             }
             ToggleLoader(false);
             if (errorMessage.Length > 0)

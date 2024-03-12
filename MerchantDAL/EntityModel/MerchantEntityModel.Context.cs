@@ -16,9 +16,14 @@ namespace MerchantDAL.EntityModel
     
     public partial class MerchantEntities : DbContext
     {
-        public MerchantEntities()
-        : base("metadata=res://*/EntityModel.MerchantEntityModel.csdl|res://*/EntityModel.MerchantEntityModel.ssdl|res://*/EntityModel.MerchantEntityModel.msl;provider=System.Data.SqlClient;provider connection string=\"data source=(LocalDB)\\MSSQLLocalDB;attachdbfilename=|DataDirectory|\\Merchant.mdf;integrated security=True;connect timeout=30;MultipleActiveResultSets=True;App=EntityFramework\"")
+        //public MerchantEntities()
+        //: base("metadata=res://*/EntityModel.MerchantEntityModel.csdl|res://*/EntityModel.MerchantEntityModel.ssdl|res://*/EntityModel.MerchantEntityModel.msl;provider=System.Data.SqlClient;provider connection string=\"data source=(LocalDB)\\MSSQLLocalDB;attachdbfilename=|DataDirectory|\\Merchant.mdf;integrated security=True;connect timeout=30;MultipleActiveResultSets=True;App=EntityFramework\"")
+        //{
+        //}
+
+        public MerchantEntities() : base("name=MerchantEntities")
         {
+            Database.SetInitializer<MerchantEntities>(new CreateDatabaseIfNotExists<MerchantEntities>());
         }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

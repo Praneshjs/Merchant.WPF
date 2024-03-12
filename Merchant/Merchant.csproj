@@ -56,6 +56,9 @@
     <ApplicationIcon>merchant.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CommonServiceLocator, Version=2.0.2.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <HintPath>..\packages\CommonServiceLocator.2.0.2\lib\net47\CommonServiceLocator.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -83,6 +86,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ViewModel\ProductMasterViewModel.cs" />
     <Page Include="Controls\CircularLoader.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -155,6 +159,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MerchantDAL\MerchantDAL.csproj">
+      <Project>{467edc63-8b02-4724-be1b-9f1b9524a303}</Project>
+      <Name>MerchantDAL</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MerchantService\MerchantService.csproj">
       <Project>{51fe864f-0cd9-4506-ac66-bb06b88126ff}</Project>
       <Name>MerchantService</Name>
