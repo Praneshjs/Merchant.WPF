@@ -86,8 +86,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\PaginationControl.xaml.cs">
+      <DependentUpon>PaginationControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Helper\StaticHelper.cs" />
     <Compile Include="ViewModel\ProductMasterViewModel.cs" />
     <Page Include="Controls\CircularLoader.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\PaginationControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

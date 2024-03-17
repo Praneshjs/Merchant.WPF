@@ -11,28 +11,35 @@ namespace MerchantDAL
         public ProductMasterEntity()
         {
         }
+
+        public async Task<bool> IsProductMasterExist(string controlType, string controlValue)
+        {
+            using (var context = new MerchantEntities())
+            {
+                return await context.CommonDatas
+                    .AnyAsync(s => s.ControlType == controlType 
+                    && s.ControlValue == controlValue);
+            }
+        }
+
         public async Task<List<CommonData>> SubmitProductMasterAsync(string selectedId, string controlType, string controlValue, bool isActive)
         {
             using (var context = new MerchantEntities())
             {
                 if (!string.IsNullOrEmpty(selectedId) && int.TryParse(selectedId, out int id))
                 {
-                    // Retrieve the existing CommonData entity by its primary key (id)
                     var existingData = await context.CommonDatas.FindAsync(id);
                     if (existingData != null)
                     {
-                        // Update the properties of the existing entity
                         existingData.ControlType = controlType;
                         existingData.ControlValue = controlValue;
                         existingData.IsActive = isActive;
 
-                        // Save changes to the database
                         await context.SaveChangesAsync();
                     }
                 }
                 else
                 {
-                    // Create a new CommonData entity if selectedId is not provided or invalid
                     var newData = new CommonData
                     {
                         ControlType = controlType,
@@ -41,10 +48,8 @@ namespace MerchantDAL
                     };
 
                     context.CommonDatas.Add(newData);
-                    await context.SaveChangesAsync(); // Use asynchronous SaveChanges method
+                    await context.SaveChangesAsync();
                 }
-
-                // Retrieve all CommonData entities from the database
                 var allData = await context.CommonDatas.ToListAsync();
                 return allData;
             }
@@ -57,13 +62,13 @@ namespace MerchantDAL
                 var query = context.CommonDatas.AsQueryable();
 
                 // Apply filters conditionally based on provided parameters
-                if (controlType != null)
+                if (!string.IsNullOrWhiteSpace(controlType))
                 {
-                    query = query.Where(s => s.ControlType == controlType);
+                    query = query.Where(s => s.ControlType.ToLower() == controlType.ToLower() || s.ControlType.ToLower().Contains(controlType.ToLower()));
                 }
-                if (controlValue != null)
+                if (!string.IsNullOrWhiteSpace(controlValue))
                 {
-                    query = query.Where(s => s.ControlValue == controlValue);
+                    query = query.Where(s => s.ControlValue.ToLower() == controlValue.ToLower() || s.ControlValue.ToLower().Contains(controlValue.ToLower()));
                 }
                 if (isActive != null)
                 {

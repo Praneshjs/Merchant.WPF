@@ -27,6 +27,10 @@ namespace Merchant.ViewModel
             get { return _isActive; }
             set { _isActive = value; OnPropertyChanged(); }
         }
+        public ProductMasterViewModel()
+        {
+            IsActive = true; // Set the property value to true
+        }
 
         // Collection to bind to DataGrid
         public ObservableCollection<CommonData> CommonData { get; set; } = new ObservableCollection<CommonData>();

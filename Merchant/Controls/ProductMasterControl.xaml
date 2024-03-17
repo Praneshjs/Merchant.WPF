@@ -3,46 +3,133 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Merchant.Controls" xmlns:local1="clr-namespace:Merchant.ViewModel"
+             xmlns:local="clr-namespace:Merchant.Controls"
+             xmlns:local1="clr-namespace:Merchant.ViewModel"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <!--<Label Content="Product Master" HorizontalAlignment="Center" Margin="10,10,0,0" VerticalAlignment="Top" Width="132" FontSize="16" FontWeight="Bold" Background="White" Foreground="#FF686DE0"/>-->
-    <Grid Background="#FF718093">
+    <UserControl.Resources>
+        <Style TargetType="TextBox">
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Grid>
+                            <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Padding="{TemplateBinding Padding}"
+                                CornerRadius="5">
+                                <!-- Adjust the CornerRadius value as needed -->
+                                <ScrollViewer x:Name="PART_ContentHost" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden"/>
+                            </Border>
+                            <TextBlock x:Name="CaretElement" Visibility="Collapsed" Foreground="{TemplateBinding CaretBrush}" VerticalAlignment="Center" TextAlignment="Left" Text="_"/>
+                        </Grid>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter TargetName="CaretElement" Property="Visibility" Value="Visible"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid>
+                            <Border x:Name="Border" Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        Padding="{TemplateBinding Padding}"
+                        CornerRadius="5">
+                                <!-- Adjust the CornerRadius value as needed -->
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <Grid.Effect>
+                                <DropShadowEffect ShadowDepth="2" Direction="320" Color="Black" Opacity="0.5"/>
+                            </Grid.Effect>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </UserControl.Resources>
+    <Grid Background="#ccc">
         <!-- Left side for data submission -->
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="3*" />
-            <ColumnDefinition Width="7*" />
+            <ColumnDefinition Width="2.5*" />
+            <ColumnDefinition Width="7.5*" />
         </Grid.ColumnDefinitions>
-        <StackPanel Grid.Column="0" Margin="10">
+        <StackPanel Grid.Column="0" Margin="20 30">
+            <!-- Reserve space for validation message -->
+            <Border x:Name="ValidationPlaceholder" Background="#f7f1e3" CornerRadius="5" Padding="8" Margin="0 0 0 10"
+         HorizontalAlignment="Center" VerticalAlignment="Top" Visibility="Collapsed" >
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="" VerticalAlignment="Center" Foreground="#84817a" />
+                    <TextBlock Text="x" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10,-7,-3,0" Cursor="Hand"
+                               Foreground="#84817a"
+               FontWeight="Bold" FontSize="12" MouseDown="CloseValidationBox_Click"/>
+                </StackPanel>
+            </Border>
             <!-- Add your controls for data submission here -->
-            <TextBox Name="txtControlType" Text="{Binding ControlType}" Margin="0,0,0,10"/>
-            <TextBox Name="txtControlValue" Text="{Binding ControlValue}" Margin="0,0,0,10"/>
-            <CheckBox Name="chkIsActive" IsChecked="{Binding IsActive}" Content="IsActive"  Margin="0,0,0,10"/>
-            <Button Content="Submit" Click="SubmitButton_Click" HorizontalAlignment="Left" Width="105"/>
+            <Label Margin="0,0,0,10" Content="Control Name" FontWeight="Bold" Background="#f7f1e3" Foreground="#84817a"></Label>
+            <TextBox Name="txtControlType" Text="{Binding ControlType}" Margin="0,0,0,10" MaxLength="50" Height="40" PreviewTextInput="txtControlType_PreviewTextInput"/>
+            <Label Margin="0,0,0,10" Content="Control Value" FontWeight="Bold" Background="#f7f1e3" Foreground="#84817a"></Label>
+            <TextBox Name="txtControlValue" Text="{Binding ControlValue}" Margin="0,0,0,10"  MaxLength="100" Height="40"  PreviewTextInput="txtControlType_PreviewTextInput"/>
+            <CheckBox Name="chkIsActive" IsChecked="{Binding IsActive}" Content="IsActive" Margin="0,0,0,10" Height="40" Background="#f7f1e3" Foreground="#84817a" FontWeight="Bold"/>
+
             <TextBox x:Name="txtSelectedId" Visibility="Hidden" Height="23" TextWrapping="Wrap" Text="TextBox"/>
-            <Button Content="Clear" Click="ClearButton_Click" HorizontalAlignment="Left" Width="105"/>
+
+            <StackPanel Orientation="Horizontal">
+                <Button Content="Submit" Click="SubmitButton_Click" Width="74" Margin="0 0 10 0" Height="40" Background="#f7f1e3" Foreground="#84817a" FontWeight="Bold"/>
+                <Button Content="Clear" Click="ClearButton_Click" Width="74" Margin="0 0 10 0" Height="40" Background="#f7f1e3" Foreground="#84817a" FontWeight="Bold"/>
+            </StackPanel>
         </StackPanel>
 
         <!-- Right side for displaying data -->
-        <Grid Grid.Column="1">
-            <DataGrid Name="productDataGrid" ItemsSource="{Binding CommonData}" AutoGenerateColumns="False" CanUserAddRows="False"  HorizontalAlignment="Left">
-                <DataGrid.Columns>
-                    <!-- Custom columns with custom titles -->
-                    <DataGridTextColumn Header="Control Name" Binding="{Binding ControlType}" />
-                    <DataGridTextColumn Header="Control Value" Binding="{Binding ControlValue}" />
-                    <DataGridTextColumn Header="Is Active" Binding="{Binding IsActive}" />
-                    <!-- Other columns -->
-                    <DataGridTemplateColumn Header="Select">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <Button Content="Select" Click="SelectButton_Click" Tag="{Binding}" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                </DataGrid.Columns>
-            </DataGrid>
+        <Grid Grid.Column="1" Background="#ccc">
+            <StackPanel>
+                <local:PaginationControl x:Name="productMasterPagination" PageInfo="{Binding PaginationInfo}" 
+                                     FirstPageClicked="productMasterPagination_FirstPageClicked"
+                                     PreviousPageClicked="productMasterPagination_PreviousPageClicked"
+                                     NextPageClicked="productMasterPagination_NextPageClicked"
+                                     LastPageClicked="productMasterPagination_LastPageClicked"
+                                             HorizontalAlignment="Left"
+                                             Margin="150,5,0,0" Height="40" VerticalAlignment="Top"/>
+
+
+                <ScrollViewer MinHeight="150" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20 10 0 3" MaxHeight="650" MaxWidth="1000">
+                    <DataGrid Name="productDataGrid" ItemsSource="{Binding CurrentPageData}" AutoGenerateColumns="False" 
+                              CanUserAddRows="False"  HorizontalAlignment="Left">
+                        <DataGrid.Columns>
+                            <!-- Custom columns with custom titles -->
+                            <DataGridTextColumn Header="Control Name" Binding="{Binding ControlType}" />
+                            <DataGridTextColumn Header="Control Value" Binding="{Binding ControlValue}" />
+                            <DataGridTextColumn Header="Is Active" Binding="{Binding IsActive}" />
+                            <!-- Other columns -->
+                            <DataGridTemplateColumn Header="Select">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="Select" Click="SelectButton_Click" Background="#f7f1e3" Foreground="#84817a" Tag="{Binding}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </ScrollViewer>
+
+                <!-- Pagination control -->
+
+            </StackPanel>
+            <Button Name="btnSearch" Content="Search" Click="btnSearch_Click" HorizontalAlignment="Left" VerticalAlignment="Top" Width="74" Height="40" Background="#f7f1e3" Foreground="#84817a" Margin="22,10,504,0" FontWeight="Bold"/>
         </Grid>
     </Grid>
+
+    <!-- Set the DataContext for the UserControl -->
     <UserControl.DataContext>
         <local1:ProductMasterViewModel/>
     </UserControl.DataContext>
