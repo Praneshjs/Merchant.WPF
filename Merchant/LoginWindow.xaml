@@ -64,14 +64,46 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            Padding="{TemplateBinding Padding}"
-                            CornerRadius="5">
-                            <!-- Adjust the CornerRadius value as needed -->
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <Grid>
+                            <Border x:Name="Border" Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        Padding="{TemplateBinding Padding}"
+                        CornerRadius="5">
+                                <!-- Adjust the CornerRadius value as needed -->
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <Grid.Effect>
+                                <DropShadowEffect ShadowDepth="2" Direction="320" Color="Black" Opacity="0.5"/>
+                            </Grid.Effect>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="Label">
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Background" Value="#f7f1e3"/>
+            <Setter Property="Foreground" Value="#84817a"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Label}">
+                        <Border BorderBrush="{TemplateBinding BorderBrush}" 
+            BorderThickness="{TemplateBinding BorderThickness}" 
+            Background="{TemplateBinding Background}" 
+            Padding="{TemplateBinding Padding}" 
+            SnapsToDevicePixels="true" 
+            CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                         </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
@@ -79,23 +111,23 @@
     </Window.Resources>
 
 
-    <Grid Background="{DynamicResource {x:Static SystemColors.InactiveCaptionBrushKey}}">
-        <Label Name="lblUserName" Content="User Name" HorizontalAlignment="Left" Margin="188,107,0,0" VerticalAlignment="Top" Height="42" Width="97" FontSize="16" Foreground="#FF4B44B4" FontWeight="Bold"/>
+    <Grid Background="#ccc">
+        <Label Name="lblUserName" Content="User Name" HorizontalAlignment="Left" Margin="188,107,0,0" VerticalAlignment="Top" Height="42" Width="97" FontSize="16" />
         <TextBox Name="txtUserName" Loaded="TextBox_Loaded" KeyDown="Login_KeyDown" HorizontalAlignment="Left" Height="42" Margin="308,107,0,0" TextWrapping="Wrap" 
                  Text="" VerticalAlignment="Top" Width="161" FontSize="16" FontWeight="Bold"/>
-        <Label Content="Password" HorizontalAlignment="Left" Margin="188,163,0,0" VerticalAlignment="Top" Height="42" Width="89" FontSize="16" Foreground="#FF4B44B4" FontWeight="Bold"/>
+        <Label Content="Password" HorizontalAlignment="Left" Margin="188,163,0,0" VerticalAlignment="Top" Height="42" Width="89" FontSize="16" />
         <PasswordBox Name="txtPassword" Loaded="PasswordBox_Loaded" KeyDown="Login_KeyDown" HorizontalAlignment="Left" Height="42" Margin="309,165,0,0" VerticalAlignment="Top" Width="161" FontSize="16" FontWeight="Bold"/>
 
-        <Button Name="btnLogin" Click="btnLogin_Click" HorizontalAlignment="Left" Margin="308,222,0,0" VerticalAlignment="Top" Width="161" Height="37" FontWeight="Bold" Foreground="#FF4B44B4">
+        <Button Name="btnLogin" Click="btnLogin_Click" HorizontalAlignment="Left" Margin="308,222,0,0" VerticalAlignment="Top" Width="161" Height="37">
             <Grid >
                 <!-- Loader -->
                 <local1:CircularLoader x:Name="loader" Width="20" Height="20" Visibility="Collapsed"/>
                 <!-- Button text -->
-                <TextBlock x:Name="buttonText" Text="Submit" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="1"/>
+                <TextBlock x:Name="buttonText" Text="Login" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="1"/>
             </Grid>
         </Button>
-        <Label Content="Merchant Login" Margin="171,41,0,0" VerticalAlignment="Top" Height="38" Width="132" FontSize="16" FontWeight="Bold" HorizontalAlignment="Left" Foreground="#FF4B44B4"/>
-        <Label Name="lblCurrentDate" Content="" HorizontalAlignment="Left" Margin="318,14,0,0" VerticalAlignment="Top" Width="172" Foreground="#FF4B44B4"/>
+        <Label Content="Merchant Login" Margin="171,41,0,0" VerticalAlignment="Top" Height="38" Width="132" FontSize="16" HorizontalAlignment="Left" />
+        <Label Name="lblCurrentDate" Content="" HorizontalAlignment="Left" Margin="318,14,0,0" VerticalAlignment="Top" Width="172" Background="{x:Null}"/>
         <Image Source="/Assets/entrepreneur.png" Name="imgAppLogo" HorizontalAlignment="Left" Height="145" Margin="21,94,0,0" VerticalAlignment="Top" Width="145"/>
     </Grid>
 </Window>
