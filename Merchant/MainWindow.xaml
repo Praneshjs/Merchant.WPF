@@ -48,7 +48,7 @@
 
         <!-- Application title -->
         <TextBlock Text="ஸ்ரீ பாலாஜி அரிசி மண்டி, புஞ்சை புளியம்பட்டி" HorizontalAlignment="Center" 
-                   VerticalAlignment="Center" FontSize="24" FontWeight="Bold" Grid.Row="0" Height="32" Foreground="#FFE17055"/>
+                   VerticalAlignment="Center" FontSize="24" FontWeight="Bold" Grid.Row="0" Height="32" Foreground="#3742fa" />
         <TextBlock Text="Version 1.0" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" Grid.Row="1" Height="21" Margin="358,3.8,358.6,11.2" Width="77"/>
 
         <TabControl TabStripPlacement="Top" Grid.Row="2" Background="{DynamicResource {x:Static SystemColors.GradientInactiveCaptionBrushKey}}">

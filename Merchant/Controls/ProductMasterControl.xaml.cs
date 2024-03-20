@@ -3,6 +3,7 @@ using MerchantDAL.EntityModel;
 using MerchantService.Services;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Timers;
@@ -20,6 +21,8 @@ namespace Merchant.Controls
         public ProductMasterControl()
         {
             InitializeComponent();
+            if (DesignerProperties.GetIsInDesignMode(this))
+                return;
             GetAllProductMasterAsync(currentPageIndex);
 
             timer = new Timer(3000);
