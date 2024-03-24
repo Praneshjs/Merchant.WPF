@@ -9,6 +9,7 @@
     <UserControl.Resources>
         <Style TargetType="Button">
             <Setter Property="Padding" Value="5"/>
+            <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">

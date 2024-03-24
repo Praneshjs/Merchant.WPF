@@ -9,35 +9,43 @@
         Title="அரிசி மண்டி" Height="450" Width="800">
     <Window.Resources>
         <Style x:Key="TabItemStyle" TargetType="TabItem">
-            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="Foreground" Value="#84817a"/>
             <Setter Property="FontSize" Value="16"/>
             <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="BorderBrush" Value="#00d2d3"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="TabItem">
                         <Grid>
                             <Border Name="Border" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="10,10,0,0" Background="{TemplateBinding Background}">
-                                <ContentPresenter x:Name="ContentSite"
-                                        VerticalAlignment="Center"
-                                        HorizontalAlignment="Center"
-                                        ContentSource="Header"
-                                        Margin="10,5"/>
+                                <ContentPresenter x:Name="ContentSite" VerticalAlignment="Center" HorizontalAlignment="Center" ContentSource="Header" Margin="10,5"/>
                             </Border>
                         </Grid>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsSelected" Value="True">
-                                <Setter TargetName="Border" Property="Background" Value="#f7f1e3"/>
+                                <Setter TargetName="Border" Property="Background" Value="#00d2d3"/>
                                 <Setter TargetName="Border" Property="BorderThickness" Value="1,1,1,0"/>
+                                <Setter Property="Foreground" Value="White"/>
+                                <!-- Set foreground color when selected -->
                             </Trigger>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Border" Property="Background" Value="LightGray"/>
+                                <!-- Apply DropShadowEffect when mouse is over the TabItem -->
+                                <Setter TargetName="Border" Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect ShadowDepth="3" Direction="45" Color="#ccc" Opacity="0.2"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="False">
+                                <Setter TargetName="Border" Property="Effect" Value="{x:Null}"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
+
     </Window.Resources>
     <Grid Background="{DynamicResource {x:Static SystemColors.InfoBrushKey}}">
         <Grid.RowDefinitions>
@@ -46,14 +54,21 @@
         </Grid.RowDefinitions>
         <TextBlock Text="ஸ்ரீ பாலாஜி அரிசி மண்டி, புஞ்சை புளியம்பட்டி" HorizontalAlignment="Center" 
                    VerticalAlignment="Center" FontSize="24" FontWeight="Bold" Grid.Row="0" Height="32" Foreground="#3742fa" />
-        <TextBlock Text="V 1.0" HorizontalAlignment="Right" VerticalAlignment="Bottom" Foreground="#2ed573" FontSize="16" Grid.Row="0" Height="21" Width="77"/>
+        <TextBlock Text="V 1.0" HorizontalAlignment="Right" VerticalAlignment="Bottom" Foreground="#3742fa" FontSize="16" Grid.Row="0" Height="21" Width="77"/>
 
         <TabControl TabStripPlacement="Top" Grid.Row="2" Background="{DynamicResource {x:Static SystemColors.GradientInactiveCaptionBrushKey}}">
-            <TabItem Header="Master Data" Style="{StaticResource TabItemStyle}" Background="#f7f1e3" Foreground="#84817a">
+            <TabItem Header="Master Data" Style="{StaticResource TabItemStyle}" ><!--Background="#f7f1e3" Foreground="#84817a"-->
                 <local1:ProductMasterControl Background="#FFDFF9FB"/>
             </TabItem>
-            <TabItem Header="Purchase" Style="{StaticResource TabItemStyle}" Background="#f7f1e3" Foreground="#84817a">
+            <TabItem Header="Purchase" Style="{StaticResource TabItemStyle}">
                 <local1:PurchaseControl  Background="#FFDFF9FB"/>
+            </TabItem>
+            <TabItem Header="Purchase" Style="{StaticResource TabItemStyle}">
+                <local1:PurchaseControl  Background="#FFDFF9FB"/>
+            </TabItem>
+            <TabItem Header="Master Data" Style="{StaticResource TabItemStyle}" >
+                <!--Background="#f7f1e3" Foreground="#84817a"-->
+                <local1:ProductMasterControl Background="#FFDFF9FB"/>
             </TabItem>
             <!-- Other tab items for different functionalities -->
         </TabControl>
