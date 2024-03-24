@@ -7,11 +7,12 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
-        Title="Merchant Login" Height="350" Width="500">
+        Title="App Login" Height="350" Width="500">
     <Window.Resources>
         <!-- Style for TextBox -->
         <Style TargetType="TextBox">
             <Setter Property="Padding" Value="5"/>
+            <Setter Property="Height"  Value="40"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="TextBox">
@@ -40,6 +41,7 @@
         <!-- Style for PasswordBox -->
         <Style TargetType="PasswordBox">
             <Setter Property="Padding" Value="5"/>
+            <Setter Property="Height"  Value="40"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="PasswordBox">
@@ -60,26 +62,40 @@
 
         <!-- Style for Button -->
         <Style TargetType="Button">
-            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="Height"  Value="40"/>
+            <Setter Property="Background" Value="#f7f1e3"/>
+            <Setter Property="Foreground" Value="#84817a"/>
+            <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Grid>
-                            <Border x:Name="Border" Background="{TemplateBinding Background}"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}"
-                        Padding="{TemplateBinding Padding}"
-                        CornerRadius="5">
-                                <!-- Adjust the CornerRadius value as needed -->
-                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            </Border>
-                            <Grid.Effect>
-                                <DropShadowEffect ShadowDepth="2" Direction="320" Color="Black" Opacity="0.5"/>
-                            </Grid.Effect>
-                        </Grid>
+                        <Border x:Name="Border"
+                    Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    Padding="{TemplateBinding Padding}"
+                    CornerRadius="5">
+                            <!-- Adjust the CornerRadius value as needed -->
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Border" Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect ShadowDepth="2" Direction="320" Color="Black" Opacity="0.5"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="False">
+                                <Setter TargetName="Border" Property="Effect" Value="{x:Null}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
+
+
         </Style>
 
         <Style TargetType="Label">
@@ -112,22 +128,49 @@
 
 
     <Grid Background="#ccc">
-        <Label Name="lblUserName" Content="User Name" HorizontalAlignment="Left" Margin="188,107,0,0" VerticalAlignment="Top" Height="42" Width="97" FontSize="16" />
-        <TextBox Name="txtUserName" Loaded="TextBox_Loaded" KeyDown="Login_KeyDown" HorizontalAlignment="Left" Height="42" Margin="308,107,0,0" TextWrapping="Wrap" 
-                 Text="" VerticalAlignment="Top" Width="161" FontSize="16" FontWeight="Bold"/>
-        <Label Content="Password" HorizontalAlignment="Left" Margin="188,163,0,0" VerticalAlignment="Top" Height="42" Width="89" FontSize="16" />
-        <PasswordBox Name="txtPassword" Loaded="PasswordBox_Loaded" KeyDown="Login_KeyDown" HorizontalAlignment="Left" Height="42" Margin="309,165,0,0" VerticalAlignment="Top" Width="161" FontSize="16" FontWeight="Bold"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40*"/>
+            <!-- Row for the logo and title -->
+            <RowDefinition Height="20*"/>
+            <!-- Row for the input fields -->
+            <RowDefinition Height="20*"/>
+            <!-- Row for the login button -->
+            <RowDefinition Height="20*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <!-- Column for the logo -->
+            <ColumnDefinition Width="*"/>
+            <!-- Column for the form elements -->
+        </Grid.ColumnDefinitions>
+        
+        <!-- Logo and title -->
+        <Image Source="/Assets/entrepreneur.png" Name="imgAppLogo" Grid.Row="0" Grid.Column="0" Height="100" Width="100"/>
+        <!-- Current date label -->
+        <!--<Label Name="lblCurrentDate" Grid.Row="0" Grid.Column="1" Margin="0,10,10,0" VerticalAlignment="Top" HorizontalAlignment="Right"/>-->
+        <Border Grid.Row="0" Grid.Column="1" Margin="0,10,10,0" VerticalAlignment="Top" HorizontalAlignment="Right">
+            <Label Name="lblCurrentDate" VerticalAlignment="Top" HorizontalAlignment="Right" Background="{x:Null}"/>
+        </Border>
+        <Label Content="App Login" Grid.Row="0" Grid.Column="1" Margin="10,0,0,0" Foreground="#3742fa" Background="{x:Null}"
+ VerticalAlignment="Center" FontSize="16" HorizontalContentAlignment="Center"/>
+        <TextBlock Text="" HorizontalAlignment="Center" 
+                   VerticalAlignment="Center" FontSize="24" FontWeight="Bold" Grid.Row="0" Height="32" Foreground="#3742fa" />
+        <!-- Input fields -->
+        <Label Name="lblUserName" Content="User Name" Grid.Row="1" Grid.Column="0" Margin="10,0,0,0" VerticalAlignment="Center" FontSize="16"/>
+        <TextBox Name="txtUserName" Grid.Row="1" Grid.Column="1" Margin="10,0,10,0" TextWrapping="Wrap" Text="" FontSize="16"/>
+        <Label Content="Password" Grid.Row="2" Grid.Column="0" Margin="10,0,0,0" VerticalAlignment="Center" FontSize="16"/>
+        <PasswordBox Name="txtPassword" Grid.Row="2" Grid.Column="1" Margin="10,0,10,0" FontSize="16"/>
 
-        <Button Name="btnLogin" Click="btnLogin_Click" HorizontalAlignment="Left" Margin="308,222,0,0" VerticalAlignment="Top" Width="161" Height="37">
-            <Grid >
+        <!-- Login button -->
+        <Button Name="btnLogin" Grid.Row="4" Grid.Column="2" Margin="10,0,10,0" Click="btnLogin_Click">
+            <Grid>
                 <!-- Loader -->
                 <local1:CircularLoader x:Name="loader" Width="20" Height="20" Visibility="Collapsed"/>
                 <!-- Button text -->
-                <TextBlock x:Name="buttonText" Text="Login" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="1"/>
+                <TextBlock x:Name="buttonText" Text="Login" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             </Grid>
         </Button>
-        <Label Content="Merchant Login" Margin="171,41,0,0" VerticalAlignment="Top" Height="38" Width="132" FontSize="16" HorizontalAlignment="Left" />
-        <Label Name="lblCurrentDate" Content="" HorizontalAlignment="Left" Margin="318,14,0,0" VerticalAlignment="Top" Width="172" Background="{x:Null}"/>
-        <Image Source="/Assets/entrepreneur.png" Name="imgAppLogo" HorizontalAlignment="Left" Height="145" Margin="21,94,0,0" VerticalAlignment="Top" Width="145"/>
+       
+
     </Grid>
 </Window>
