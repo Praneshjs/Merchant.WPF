@@ -166,7 +166,7 @@
                 <TextBox x:Name="txtSelectedId" Visibility="Hidden" TextWrapping="Wrap" Text="TextBox"/>
             </StackPanel>
         </Grid>
-       
+
 
         <!-- Right side for displaying data -->
         <Grid Grid.Column="1" Background="#ccc" Margin="20 0 0 0">
@@ -176,12 +176,12 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <StackPanel Margin="20 30">
-            <!-- Search Button -->
-            <Button Grid.Row="0" Name="btnSearch" Content="Search" Click="btnSearch_Click" 
-            HorizontalAlignment="Left" VerticalAlignment="Top" Width="74" Height="40" 
-            Background="#f7f1e3" Foreground="#84817a" FontWeight="Bold"/>
-            <!-- Pagination Control -->
-            <local:PaginationControl Grid.Row="1" x:Name="productMasterPagination" 
+                <!-- Search Button -->
+                <Button Grid.Row="0" Name="btnSearch" Content="Search" Click="btnSearch_Click" 
+                        HorizontalAlignment="Left" VerticalAlignment="Top" Width="74" Height="40" 
+                        Background="#f7f1e3" Foreground="#84817a" FontWeight="Bold"/>
+                <!-- Pagination Control -->
+                <local:PaginationControl Grid.Row="1" x:Name="productMasterPagination" 
                              PageInfo="{Binding PaginationInfo}" 
                              FirstPageClicked="productMasterPagination_FirstPageClicked"
                              PreviousPageClicked="productMasterPagination_PreviousPageClicked"
@@ -190,8 +190,8 @@
                              HorizontalAlignment="Left"
                              Height="40" VerticalAlignment="Top"/>
 
-            <!-- DataGrid inside a ScrollViewer -->
-            <ScrollViewer Grid.Row="2" MaxHeight="650" MaxWidth="1000" 
+                <!-- DataGrid inside a ScrollViewer -->
+                <ScrollViewer Grid.Row="2" MaxHeight="650" MaxWidth="1000" 
                   HorizontalAlignment="Left" VerticalAlignment="Top">
                     <DataGrid Name="productDataGrid" ItemsSource="{Binding CurrentPageData}" 
                               AutoGenerateColumns="False" CanUserAddRows="False" HorizontalAlignment="Left">
@@ -234,7 +234,6 @@
                                 </DataGridTemplateColumn.CellStyle>
                             </DataGridTemplateColumn>
                         </DataGrid.Columns>
-                        
                         <DataGrid.ColumnHeaderStyle>
                             <Style TargetType="DataGridColumnHeader">
                                 <Setter Property="Background" Value="#f7f1e3" />
@@ -259,9 +258,8 @@
                                     </Trigger>
                                 </Style.Triggers>
                             </Style>
-                            
                         </DataGrid.RowStyle>
-                                               
+
                         <DataGrid.AlternatingRowBackground>
                             <SolidColorBrush Color="#dcdde1"/>
                         </DataGrid.AlternatingRowBackground>
