@@ -7,7 +7,12 @@
              mc:Ignorable="d" 
              d:DesignHeight="20" Width="220">
     <UserControl.Resources>
-        <Style TargetType="Button">
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#f7f1e3"/>
+            <Setter Property="Foreground" Value="#84817a"/>
+            <Setter Property="Margin" Value="3"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            
             <Setter Property="Padding" Value="5"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Template">
@@ -38,17 +43,44 @@
                 </Setter.Value>
             </Setter>
         </Style>
-
+        <Style x:Key="TextBlockStyle" TargetType="TextBlock">
+            <Setter Property="Background" Value="#f7f1e3"/>
+            <Setter Property="Foreground" Value="#84817a"/>
+            <Setter Property="Margin" Value="3"/>
+            <Setter Property="Width" Value="55"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="TextAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+        </Style>
     </UserControl.Resources>
-    
-    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-        <Button Name="btnFirst" Content="&lt;&lt;" Click="FirstPage_Click" Width="35" Margin="3" FontWeight="Bold" Background="#f7f1e3" Foreground="#84817a"/>
-        <Button Name="btnPrevious" Content="&lt;" Click="PreviousPage_Click" Margin="3" Width="30"  FontWeight="Bold" Background="#f7f1e3" Foreground="#84817a"/>
-        <Border Background="#f7f1e3" CornerRadius="5" Margin="3,3,4,3" VerticalAlignment="Center">
-            <TextBlock Name="txtBlock" Text="{Binding PageInfo}" Background="#f7f1e3" Margin="3,3,4,3" Width="55" Height="40"
-           FontWeight="Bold" Foreground="#84817a" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <!-- Left margin -->
+            <ColumnDefinition Width="Auto"/>
+            <!-- First button -->
+            <ColumnDefinition Width="Auto"/>
+            <!-- Previous button -->
+            <ColumnDefinition Width="Auto"/>
+            <!-- Page info -->
+            <ColumnDefinition Width="Auto"/>
+            <!-- Next button -->
+            <ColumnDefinition Width="Auto"/>
+            <!-- Last button -->
+            <ColumnDefinition Width="Auto"/>
+            <!-- Right margin -->
+        </Grid.ColumnDefinitions>
+
+        <!-- Pagination buttons -->
+        <Button Grid.Column="1" Name="btnFirst" Content="&lt;&lt;" Click="FirstPage_Click" Width="35" Style="{StaticResource ButtonStyle}" />
+        <Button Grid.Column="2" Name="btnPrevious" Content="&lt;" Click="PreviousPage_Click" Width="30" Style="{StaticResource ButtonStyle}"/>
+        <Border Grid.Column="3" Background="#f7f1e3" CornerRadius="5" Margin="3" VerticalAlignment="Center">
+            <TextBlock Name="txtBlock" Text="{Binding PageInfo}" Style="{StaticResource TextBlockStyle}" />
         </Border>
-        <Button Name="btnNext" Content="&gt;" Click="NextPage_Click" Margin="3" Width="30"  FontWeight="Bold" Background="#f7f1e3" Foreground="#84817a"/>
-        <Button Name="btnLast" Content="&gt;&gt;" Click="LastPage_Click" Margin="3" Width="33" FontWeight="Bold" Background="#f7f1e3" Foreground="#84817a" />
-    </StackPanel>
+        <Button Grid.Column="4" Name="btnNext" Content="&gt;" Click="NextPage_Click" Width="30" Style="{StaticResource ButtonStyle}" />
+        <Button Grid.Column="5" Name="btnLast" Content="&gt;&gt;" Click="LastPage_Click" Width="33" Style="{StaticResource ButtonStyle}" />
+    </Grid>
 </UserControl>
