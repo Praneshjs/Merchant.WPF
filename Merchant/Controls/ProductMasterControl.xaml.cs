@@ -99,12 +99,23 @@ namespace Merchant.Controls
 
         private void SelectButton_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is Button button && button.Tag is CommonData selectedData)
+            if (sender is Image image && image.Tag is CommonData selectedData)
             {
                 txtControlType.Text = selectedData.ControlType;
                 txtControlValue.Text = selectedData.ControlValue;
                 chkIsActive.IsChecked = selectedData.IsActive;
                 txtSelectedId.Text = selectedData.Id.ToString();
+            }
+        }
+        private void Row_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is DataGridRow row && row.DataContext is CommonData rowData)
+            {
+                // Handle the event here using the row data
+                txtControlType.Text = rowData.ControlType;
+                txtControlValue.Text = rowData.ControlValue;
+                chkIsActive.IsChecked = rowData.IsActive;
+                txtSelectedId.Text = rowData.Id.ToString();
             }
         }
 
@@ -186,6 +197,11 @@ namespace Merchant.Controls
             var isActive = chkIsActive.IsChecked;
 
             GetAllProductMasterAsync(currentIndex, controlName, controlValue, (bool)isActive);
+        }
+
+        private void productDataGrid_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+
         }
     }
 }

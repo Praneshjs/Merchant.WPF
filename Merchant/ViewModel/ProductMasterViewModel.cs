@@ -27,6 +27,18 @@ namespace Merchant.ViewModel
             get { return _isActive; }
             set { _isActive = value; OnPropertyChanged(); }
         }
+
+        private bool _showNoRecordsMessage;
+        public bool ShowNoRecordsMessage
+        {
+            get { return _showNoRecordsMessage; }
+            set
+            {
+                _showNoRecordsMessage = value;
+                OnPropertyChanged(nameof(ShowNoRecordsMessage));
+            }
+        }
+
         public ProductMasterViewModel()
         {
             IsActive = true; // Set the property value to true
