@@ -56,21 +56,16 @@
                    VerticalAlignment="Center" FontSize="24" FontWeight="Bold" Grid.Row="0" Height="32" Foreground="#3742fa" />
         <TextBlock Text="V 1.0" HorizontalAlignment="Right" VerticalAlignment="Bottom" Foreground="#3742fa" FontSize="16" Grid.Row="0" Height="21" Width="77"/>
 
-        <TabControl TabStripPlacement="Top" Grid.Row="2" Background="{DynamicResource {x:Static SystemColors.GradientInactiveCaptionBrushKey}}">
+        <TabControl TabStripPlacement="Top" Grid.Row="2">
             <TabItem Header="Master Data" Style="{StaticResource TabItemStyle}" ><!--Background="#f7f1e3" Foreground="#84817a"-->
                 <local1:ProductMasterControl Background="#FFDFF9FB"/>
             </TabItem>
-            <TabItem Header="Purchase" Style="{StaticResource TabItemStyle}">
-                <local1:PurchaseControl  Background="#FFDFF9FB"/>
+            <TabItem Header="Customer" Style="{StaticResource TabItemStyle}">
+                <local1:CustomerControl Background="#FFDFF9FB"/>
             </TabItem>
             <TabItem Header="Purchase" Style="{StaticResource TabItemStyle}">
-                <local1:PurchaseControl  Background="#FFDFF9FB"/>
+                <local1:PurchaseControl Background="#FFDFF9FB"/>
             </TabItem>
-            <TabItem Header="Master Data" Style="{StaticResource TabItemStyle}" >
-                <!--Background="#f7f1e3" Foreground="#84817a"-->
-                <local1:ProductMasterControl Background="#FFDFF9FB"/>
-            </TabItem>
-            <!-- Other tab items for different functionalities -->
         </TabControl>
         <TextBlock Name="lblLoggedUser" HorizontalAlignment="Right" VerticalAlignment="Center" 
                    FontWeight="Bold" Grid.Row="0" Height="26" Margin="10,41,0,0.2" Width="126" 

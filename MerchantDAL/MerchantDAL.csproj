@@ -72,6 +72,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\CustomerEntity.cs" />
     <Compile Include="EntityModel\CommonData.cs">
       <DependentUpon>MerchantEntityModel.tt</DependentUpon>
     </Compile>
@@ -100,9 +101,11 @@
       <DependentUpon>MerchantEntityModel.tt</DependentUpon>
     </Compile>
     <Compile Include="ErrorHandler.cs" />
-    <Compile Include="ProductMasterEntity.cs" />
+    <Compile Include="Models\CustomerModel.cs" />
+    <Compile Include="Models\UserModel.cs" />
+    <Compile Include="Entities\ProductMasterEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UserEntity.cs" />
+    <Compile Include="Entities\UserEntity.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="EntityModel\MerchantEntityModel.Context.tt">

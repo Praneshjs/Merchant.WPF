@@ -52,7 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helpers\EncryptionHelper.cs" />
-    <Compile Include="Models\UserProfile.cs" />
+    <Compile Include="Services\CustomerService.cs" />
     <Compile Include="Services\ProductMasterService.cs" />
     <Compile Include="Services\UserService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

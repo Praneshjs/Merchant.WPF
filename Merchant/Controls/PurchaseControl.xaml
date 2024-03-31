@@ -6,8 +6,169 @@
              xmlns:local="clr-namespace:Merchant.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid Background="#FF718093">
-        <Label Content="Purchase Items" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" Width="132" FontSize="16" FontWeight="Bold" Background="White" Foreground="#FF686DE0"/>
+    <UserControl.Resources>
+        <Style TargetType="TextBox">
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Grid>
+                            <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Padding="{TemplateBinding Padding}"
+                                CornerRadius="5">
+                                <!-- Adjust the CornerRadius value as needed -->
+                                <ScrollViewer x:Name="PART_ContentHost" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden"/>
+                            </Border>
+                            <TextBlock x:Name="CaretElement" Visibility="Collapsed" Foreground="{TemplateBinding CaretBrush}" VerticalAlignment="Center" TextAlignment="Left" Text="_"/>
+                        </Grid>
 
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter TargetName="CaretElement" Property="Visibility" Value="Visible"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="Height"  Value="40"/>
+            <Setter Property="Background" Value="#f7f1e3"/>
+            <Setter Property="Foreground" Value="#84817a"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Border" Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}"
+                                Padding="{TemplateBinding Padding}" CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Border" Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect ShadowDepth="2" Direction="320" Color="Black" Opacity="0.5"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="False">
+                                <Setter TargetName="Border" Property="Effect" Value="{x:Null}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+
+        </Style>
+        <Style TargetType="Label">
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Background" Value="#f7f1e3"/>
+            <Setter Property="Foreground" Value="#84817a"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Label}">
+                        <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" 
+                                Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true" CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" RecognizesAccessKey="True" 
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+    <Grid Background="#ccc" >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3.5*" />
+            <ColumnDefinition Width="6.5*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="0" Margin="20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Label Grid.Row="0" Grid.Column="0" Content="First Name" VerticalAlignment="Center" Margin="0,0,5,0" />
+
+            <Label Grid.Row="1" Grid.Column="0" Content="Last Name" VerticalAlignment="Center" Margin="0,5,5,0" />
+
+            <Label Grid.Row="2" Grid.Column="0" Content="Mobile" VerticalAlignment="Center" Margin="0,5,5,0" />
+
+            <Label Grid.Row="3" Grid.Column="0" Content="Alt Mobile" VerticalAlignment="Center" Margin="0,5,5,0" />
+
+            <Label Grid.Row="4" Grid.Column="0" Content="Landline" VerticalAlignment="Center" Margin="0,5,5,0" />
+
+            <Label Grid.Row="5" Grid.Column="0" Content="Email" VerticalAlignment="Center" Margin="0,5,5,0" />
+
+            <Label Grid.Row="6" Grid.Column="0" Content="Address Line 1" VerticalAlignment="Center" Margin="0,5,5,0" />
+
+            <Label Grid.Row="7" Grid.Column="0" Content="Address Line 2" VerticalAlignment="Center" Margin="0,5,5,0" />
+
+            <Label Grid.Row="8" Grid.Column="0" Content="City" VerticalAlignment="Center" Margin="0,5,5,0" />
+
+            <Label Grid.Row="9" Grid.Column="0" Content="Pin Code" VerticalAlignment="Center" Margin="0,5,5,0" />
+
+            <TextBox Grid.Row="0" Grid.Column="1" x:Name="txtFirstName" MaxLength="70" Margin="5,0,0,0" />
+
+            <TextBox Grid.Row="1" Grid.Column="1" x:Name="txtLastName" MaxLength="70" Margin="5,0,0,0" />
+
+            <TextBox Grid.Row="2" Grid.Column="1" x:Name="txtMobile" MaxLength="10" Margin="5,0,0,0" />
+
+            <TextBox Grid.Row="3" Grid.Column="1" x:Name="txtAltMobile" MaxLength="10" Margin="5,0,0,0" />
+
+            <TextBox Grid.Row="4" Grid.Column="1" x:Name="txtLandLine" MaxLength="15" Margin="5,0,0,0" />
+
+            <TextBox Grid.Row="5" Grid.Column="1" x:Name="txtEmail" MaxLength="75" Margin="5,0,0,0" />
+
+            <TextBox Grid.Row="6" Grid.Column="1" x:Name="txtAddressLineOne" MaxLength="100" Margin="5,0,0,0" />
+
+            <TextBox Grid.Row="7" Grid.Column="1" x:Name="txtAddressLineTwo" MaxLength="100" Margin="5,0,0,0" />
+
+            <TextBox Grid.Row="8" Grid.Column="1" x:Name="txtCity" MaxLength="50" Margin="5,0,0,0" />
+
+            <TextBox Grid.Row="9" Grid.Column="1" x:Name="txtPinCode" MaxLength="6"  Margin="5,0,0,0" />
+
+            <StackPanel Grid.Row="10" Grid.Column="1" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="0,20,0,0">
+                <Button Name="btnAddCustomer" Content="Submit" Click="btnAddCustomer_Click" Margin="0,0,10,0" />
+                <Button Name="btnClearCustomer" Content="Clear" Click="btnClearCustomer_Click" />
+            </StackPanel>
+        </Grid>
+
+        <ListView Grid.Column="1" Margin="20" ItemsSource="{Binding Customers}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="First Name" DisplayMemberBinding="{Binding FirstName}" Width="100"/>
+                    <GridViewColumn Header="Last Name" DisplayMemberBinding="{Binding LastName}" Width="100"/>
+                    <!-- Add columns for other fields as needed -->
+                </GridView>
+            </ListView.View>
+        </ListView>
     </Grid>
 </UserControl>

@@ -24,5 +24,15 @@ namespace Merchant.Controls
         {
             InitializeComponent();
         }
+
+        private void btnAddCustomer_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnClearCustomer_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

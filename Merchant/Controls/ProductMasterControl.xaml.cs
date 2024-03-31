@@ -15,7 +15,6 @@ namespace Merchant.Controls
 {
     public partial class ProductMasterControl : UserControl
     {
-        private Timer timer;
         private int currentPageIndex = 1;
         private int itemsPerPage = 20;
         public ProductMasterControl()
@@ -24,22 +23,13 @@ namespace Merchant.Controls
             if (DesignerProperties.GetIsInDesignMode(this))
                 return;
             GetAllProductMasterAsync(currentPageIndex);
-
-            timer = new Timer(3000);
-            timer.Elapsed += TimerElapsed;
-        }
-
-        private void TimerElapsed(object sender, ElapsedEventArgs e)
-        {
-            Dispatcher.Invoke(() => ValidationPlaceholder.Visibility = Visibility.Collapsed);
-            timer.Stop();
         }
 
         private async void SubmitButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                CloseValidationBox_Click(null, null);
+                validationMsgCtrl.CloseValidationBox_Click(null, null);
                 ProductMasterService fetch = new ProductMasterService();
                 var controlName = txtControlType.Text.Trim().ToTitleCase();
                 var controlValue = txtControlValue.Text.Trim().ToTitleCase();
@@ -52,20 +42,19 @@ namespace Merchant.Controls
                 if (isDataExist) validationMsg.AppendLine($"Master Data: {controlName} and {controlValue} already exist.");
                 if (validationMsg.Length > 0)
                 {
-                    ShowValidationBox(validationMsg.ToString());
+                    validationMsgCtrl.ShowValidationBox(validationMsg.ToString());
                     return;
                 }
 
                 var selectedId = txtSelectedId.Text;
                 var allData = await fetch.SubmitProductMasterAsync(selectedId, controlName, controlValue, (bool)isActive);
                 BindProductMasterGridData(allData, currentPageIndex);
-                MessageBox.Show("Product master created successfully", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-
+                validationMsgCtrl.ShowValidationBox("Product master created successfully");
                 ClearButton_Click(null, null);
             }
             catch (System.Exception)
             {
-                ShowValidationBox("A technical error has occurred, Kindly contact app admin.");
+                validationMsgCtrl.ShowValidationBox("A technical error has occurred, Kindly contact app admin.");
             }
         }
 
@@ -125,28 +114,10 @@ namespace Merchant.Controls
             txtControlValue.Text = string.Empty;
             chkIsActive.IsChecked = true;
             txtSelectedId.Text = string.Empty;
-            CloseValidationBox_Click(null, null);
+            txtProductSearch.Text = string.Empty;
+            validationMsgCtrl.CloseValidationBox_Click(null, null);
             if (sender != null)
                 GetAllProductMasterAsync(currentPageIndex);
-        }
-
-        private void ShowValidationBox(string message)
-        {
-            ValidationPlaceholder.Visibility = Visibility.Visible;
-            ((TextBlock)((StackPanel)ValidationPlaceholder.Child).Children[0]).Text = message;
-            timer.Start();
-        }
-        // Example method for triggering the validation message
-        public void TriggerValidationMessage(string message)
-        {
-            ShowValidationBox(message);
-        }
-
-        private void CloseValidationBox_Click(object sender, RoutedEventArgs e)
-        {
-            // Close button click event handler
-            ValidationPlaceholder.Visibility = Visibility.Collapsed;
-            timer.Stop(); // Stop the timer
         }
 
         // Method to update pagination information
@@ -198,10 +169,23 @@ namespace Merchant.Controls
 
             GetAllProductMasterAsync(currentIndex, controlName, controlValue, (bool)isActive);
         }
-
-        private void productDataGrid_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void txtProductSearch_KeyUp(object sender, KeyEventArgs e)
         {
+            int currentIndex = productMasterPagination.CurrentPage = 1;
+            var controlName = txtProductSearch.Text.Trim().ToTitleCase();
 
+            GetAllProductMasterAsync(currentIndex, controlName, controlName, true);
+        }
+
+        private void txtProductSearch_PreviewKeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Back)
+            {
+                int currentIndex = productMasterPagination.CurrentPage = 1;
+                var controlName = txtProductSearch.Text.Trim().ToTitleCase();
+
+                GetAllProductMasterAsync(currentIndex, controlName, controlName, true);
+            }
         }
     }
 }
