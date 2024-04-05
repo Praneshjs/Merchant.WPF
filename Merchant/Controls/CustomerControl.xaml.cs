@@ -1,4 +1,5 @@
-﻿using MerchantDAL.Models;
+﻿using MerchantDAL.EntityModel;
+using MerchantDAL.Models;
 using MerchantService.Services;
 using System;
 using System.Collections.Generic;
@@ -76,9 +77,10 @@ namespace Merchant.Controls
                     validationMsgCtrl.ShowValidationBox(validationMsg.ToString());
                     return;
                 }
-
+                int.TryParse(btnAddCustomer.Tag?.ToString(), out int customerId);
                 var newData = new CustomerModel
                 {
+                    Id = customerId,
                     AddressLineOne = addressLineOne,
                     AddressLineTwo = addressLineTwo,
                     AltMobile = altMobile,
@@ -105,6 +107,7 @@ namespace Merchant.Controls
 
         private void btnClearCustomer_Click(object sender, RoutedEventArgs e)
         {
+            btnAddCustomer.Tag = string.Empty;
             txtFirstName.Text = string.Empty;
             txtLastName.Text = string.Empty;
             txtMobile.Text = string.Empty;
@@ -120,7 +123,19 @@ namespace Merchant.Controls
 
         private void btnSelectCustomer_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-
+            if (sender is Image image && image.Tag is CustomerModel selectedData)
+            {
+                txtAddressLineOne.Text = selectedData.AddressLineOne;
+                txtAddressLineTwo.Text = selectedData.AddressLineTwo;
+                txtAltMobile.Text = selectedData.AltMobile;
+                txtEmail.Text = selectedData.EmailId;
+                txtFirstName.Text = selectedData.FirstName;
+                txtLastName.Text = selectedData.LastName;
+                txtMobile.Text = selectedData.Mobile;
+                txtCity.Text = selectedData.City;
+                txtPinCode.Text = selectedData.PinCode;
+                btnAddCustomer.Tag = selectedData.Id;
+            }
         }
 
         private void UpdatePaginationInfo(int currentPage, int totalPages)

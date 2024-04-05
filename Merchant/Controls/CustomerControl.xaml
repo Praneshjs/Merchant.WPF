@@ -159,7 +159,11 @@
             <TextBox Grid.Row="10" Grid.Column="1" x:Name="txtPinCode" MaxLength="6"  Margin="5,0,0,0" />
 
             <StackPanel Grid.Row="11" Grid.Column="1" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="0,20,0,0">
-                <Button Name="btnAddCustomer" Content="Submit" Click="btnAddCustomer_Click" Margin="0,0,10,0" />
+                <Button Name="btnAddCustomer" Content="Submit" Click="btnAddCustomer_Click" Margin="0,0,10,0" >
+                    <Button.Tag>
+                        <Binding Path="." FallbackValue="0"/>
+                    </Button.Tag>
+                </Button>
                 <Button Name="btnClearCustomer" Content="Clear" Click="btnClearCustomer_Click" />
             </StackPanel>
         </Grid>
@@ -174,13 +178,14 @@
                     <GridView >
                         <GridViewColumn Header="First Name" DisplayMemberBinding="{Binding FirstName}" />
                         <GridViewColumn Header="Last Name" DisplayMemberBinding="{Binding LastName}"/>
-                        <GridViewColumn Header="Mobile" DisplayMemberBinding="{Binding Mobile}" />
+                        <GridViewColumn Width="Auto" Header="Mobile" DisplayMemberBinding="{Binding Mobile}" />
                         <GridViewColumn Header="Alt Mobile" DisplayMemberBinding="{Binding AltMobile}"/>
                         <GridViewColumn Header="Landline" DisplayMemberBinding="{Binding LandLine}"/>
                         <GridViewColumn Header="Email" DisplayMemberBinding="{Binding EmailId}"/>
                         <GridViewColumn Header="Address Line 1" DisplayMemberBinding="{Binding AddressLineOne}"/>
                         <GridViewColumn Header="City" DisplayMemberBinding="{Binding City}"/>
                         <GridViewColumn Header="Pin" DisplayMemberBinding="{Binding PinCode}"/>
+                        <GridViewColumn Header="IsActive" DisplayMemberBinding="{Binding IsActive}"/>
                         <!-- Select Button Column -->
                         <GridViewColumn Header="Select" Width="Auto">
                             <GridViewColumn.CellTemplate>
