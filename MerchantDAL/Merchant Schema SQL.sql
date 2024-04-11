@@ -44,7 +44,7 @@ Create table Profile(
 	JoinDate datetime,
 	ExitDate datetime,
 	ExitReason datetime,
-	IsActive bit default 1,
+	IsActive bit default 1 not null,
 	CreatedOn datetime NOT NULL,
 	CreatedBy int,
 	ModifiedOn datetime,
@@ -55,20 +55,39 @@ Create table Profile(
 End
 go
 
---insert into Profile (FirstName, LastName, Mobile, EmailId, UserName, Password, IsAdmin, JoinDate, CreatedOn)
---VALUES ('Pranesh','J', '9940926547', 'praneshece@gmail.com', 'admin', 'Admin@123', 1, getdate(), getdate());
+insert into Profile (FirstName, LastName, Mobile, EmailId, UserName, Password, IsAdmin, JoinDate, CreatedOn)
+VALUES ('Pranesh','J', '9940926547', 'praneshece@gmail.com', 'admin', 'Admin@123', 1, getdate(), getdate());
+
+if OBJECT_ID('CommonControl') is null
+Begin
+Create table CommonControl (
+	Id int Identity(1,1) primary key,
+	ControlType Nvarchar(50),
+	IsActive bit not null,
+	CreatedOn datetime,
+	CreatedBy int,
+	ModifiedOn datetime,
+	ModifiedBy int,
+	FOREIGN KEY (CreatedBy) REFERENCES Profile(Id),
+	FOREIGN KEY (ModifiedBy) REFERENCES Profile(Id),
+)
+End
+go
+--insert into CommonControl (ControlType, IsActive, CreatedOn, CreatedBy)
+--values ('Brand',1,Getdate(),1), ('Product Category',1,Getdate(),1)
 
 if OBJECT_ID('CommonData') is null
 Begin
 Create table CommonData (
 	Id int Identity(1,1) primary key,
-	ControlType Nvarchar(50),
+	ControlTypeId int not null,
 	ControlValue Nvarchar(100),
-	IsActive bit,
+	IsActive bit not null,
 	CreatedOn datetime,
 	CreatedBy int,
 	ModifiedOn datetime,
 	ModifiedBy int,
+	FOREIGN KEY (ControlTypeId) REFERENCES CommonControl(Id),
 	FOREIGN KEY (CreatedBy) REFERENCES Profile(Id),
 	FOREIGN KEY (ModifiedBy) REFERENCES Profile(Id),
 )
@@ -89,7 +108,7 @@ Create table Customer (
 	AddressLineTwo nvarchar(100),
 	City nvarchar(50),
 	PinCode NVARCHAR(6),
-	IsActive bit,
+	IsActive bit not null,
 	CreatedOn datetime NOT NULL,
 	CreatedBy int,
 	ModifiedOn datetime,
@@ -106,7 +125,7 @@ Create table Product (
 	Id int Identity(1,1) primary key,
 	BrandId int NOT NULL,
 	ProductTypeId int NOT NULL,
-	IsActive bit,
+	IsActive bit NOT NULL,
 	CreatedOn datetime NOT NULL,
 	CreatedBy int,
 	ModifiedOn datetime,

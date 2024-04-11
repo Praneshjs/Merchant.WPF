@@ -1,12 +1,12 @@
 ﻿using Merchant.Helper;
 using MerchantDAL.EntityModel;
+using MerchantDAL.Models;
 using MerchantService.Services;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
-using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -22,7 +22,31 @@ namespace Merchant.Controls
             InitializeComponent();
             if (DesignerProperties.GetIsInDesignMode(this))
                 return;
+
             GetAllProductMasterAsync(currentPageIndex);
+            LoadControlTypeComboBoxAsync();
+        }
+
+
+        private async void GetAllProductMasterAsync(int pageIndex, int controlTypeId = 0, string controlValue = null, bool? isActive = null)
+        {
+            ProductMasterService fetch = new ProductMasterService();
+            var allData = await fetch.GetProductMasterAsync(controlTypeId, controlValue, isActive);
+            BindProductMasterGridData(allData, pageIndex);
+        }
+
+        private async void LoadControlTypeComboBoxAsync()
+        {
+            var commonControls = new List<CommonControlModel>();
+            commonControls.Add(new CommonControlModel { Id = 0, CommonControlName = "Select" });
+            ProductMasterService fetch = new ProductMasterService();
+            var otherData = await fetch.GetCommonControlAsync();
+            foreach (var item in otherData)
+            {
+                commonControls.Add(item);
+            }
+            cmbControlType.ItemsSource = commonControls;
+            cmbControlType.SelectedIndex = 0;
         }
 
         private async void SubmitButton_Click(object sender, RoutedEventArgs e)
@@ -31,15 +55,15 @@ namespace Merchant.Controls
             {
                 validationMsgCtrl.CloseValidationBox_Click(null, null);
                 ProductMasterService fetch = new ProductMasterService();
-                var controlName = txtControlType.Text.Trim().ToTitleCase();
+                int.TryParse(cmbControlType.SelectedValue?.ToString(), out int controlTypeId);
                 var controlValue = txtControlValue.Text.Trim().ToTitleCase();
                 var isActive = chkIsActive.IsChecked;
 
                 StringBuilder validationMsg = new StringBuilder();
-                if (string.IsNullOrEmpty(controlName)) validationMsg.AppendLine("Master control type is empty");
-                if (string.IsNullOrEmpty(controlValue)) validationMsg.AppendLine("Master control value is empty");
-                var isDataExist = await fetch.IsProductMasterExist(controlName, controlValue);
-                if (isDataExist) validationMsg.AppendLine($"Master Data: {controlName} and {controlValue} already exist.");
+                if (controlTypeId == 0) validationMsg.AppendLine("Control name is empty");
+                if (string.IsNullOrEmpty(controlValue)) validationMsg.AppendLine("Control value is empty");
+                var isDataExist = await fetch.IsProductMasterExist(controlTypeId, controlValue);
+                if (isDataExist) validationMsg.AppendLine($"Master Data: {cmbControlType.SelectedValue} and {controlValue} already exist.");
                 if (validationMsg.Length > 0)
                 {
                     validationMsgCtrl.ShowValidationBox(validationMsg.ToString());
@@ -47,7 +71,7 @@ namespace Merchant.Controls
                 }
 
                 var selectedId = txtSelectedId.Text;
-                var allData = await fetch.SubmitProductMasterAsync(selectedId, controlName, controlValue, (bool)isActive);
+                var allData = await fetch.SubmitProductMasterAsync(selectedId, controlTypeId, controlValue, (bool)isActive);
                 BindProductMasterGridData(allData, currentPageIndex);
                 validationMsgCtrl.ShowValidationBox("Product master created successfully");
                 ClearButton_Click(null, null);
@@ -71,12 +95,6 @@ namespace Merchant.Controls
             productDataGrid.ItemsSource = paginationList;
         }
 
-        private async void GetAllProductMasterAsync(int pageIndex, string controlType = null, string controlValue = null, bool? isActive = null)
-        {
-            ProductMasterService fetch = new ProductMasterService();
-            var allData = await fetch.GetProductMasterAsync(controlType, controlValue, isActive);
-            BindProductMasterGridData(allData, pageIndex);
-        }
 
         private void txtControlType_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
@@ -90,7 +108,7 @@ namespace Merchant.Controls
         {
             if (sender is Image image && image.Tag is CommonData selectedData)
             {
-                txtControlType.Text = selectedData.ControlType;
+                cmbControlType.SelectedItem = selectedData.ControlTypeId;
                 txtControlValue.Text = selectedData.ControlValue;
                 chkIsActive.IsChecked = selectedData.IsActive;
                 txtSelectedId.Text = selectedData.Id.ToString();
@@ -100,8 +118,7 @@ namespace Merchant.Controls
         {
             if (sender is DataGridRow row && row.DataContext is CommonData rowData)
             {
-                // Handle the event here using the row data
-                txtControlType.Text = rowData.ControlType;
+                cmbControlType.SelectedItem = rowData.ControlTypeId;
                 txtControlValue.Text = rowData.ControlValue;
                 chkIsActive.IsChecked = rowData.IsActive;
                 txtSelectedId.Text = rowData.Id.ToString();
@@ -110,7 +127,7 @@ namespace Merchant.Controls
 
         private void ClearButton_Click(object sender, RoutedEventArgs e)
         {
-            txtControlType.Text = string.Empty;
+            cmbControlType.SelectedIndex = 0;
             txtControlValue.Text = string.Empty;
             chkIsActive.IsChecked = true;
             txtSelectedId.Text = string.Empty;
@@ -163,18 +180,18 @@ namespace Merchant.Controls
         private void btnSearch_Click(object sender, RoutedEventArgs e)
         {
             int currentIndex = productMasterPagination.CurrentPage = 1;
-            var controlName = txtControlType.Text.Trim().ToTitleCase();
+            int.TryParse(cmbControlType.SelectedValue?.ToString(), out int controlTypeId);
             var controlValue = txtControlValue.Text.Trim().ToTitleCase();
             var isActive = chkIsActive.IsChecked;
 
-            GetAllProductMasterAsync(currentIndex, controlName, controlValue, (bool)isActive);
+            GetAllProductMasterAsync(currentIndex, controlTypeId, controlValue, (bool)isActive);
         }
         private void txtProductSearch_KeyUp(object sender, KeyEventArgs e)
         {
             int currentIndex = productMasterPagination.CurrentPage = 1;
             var controlName = txtProductSearch.Text.Trim().ToTitleCase();
 
-            GetAllProductMasterAsync(currentIndex, controlName, controlName, true);
+            GetAllProductMasterAsync(currentIndex, 0, controlName, true);
         }
 
         private void txtProductSearch_PreviewKeyUp(object sender, KeyEventArgs e)
@@ -184,7 +201,7 @@ namespace Merchant.Controls
                 int currentIndex = productMasterPagination.CurrentPage = 1;
                 var controlName = txtProductSearch.Text.Trim().ToTitleCase();
 
-                GetAllProductMasterAsync(currentIndex, controlName, controlName, true);
+                GetAllProductMasterAsync(currentIndex, 0, controlName, true);
             }
         }
     }

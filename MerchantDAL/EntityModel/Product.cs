@@ -17,7 +17,7 @@ namespace MerchantDAL.EntityModel
         public int Id { get; set; }
         public int BrandId { get; set; }
         public int ProductTypeId { get; set; }
-        public Nullable<bool> IsActive { get; set; }
+        public bool IsActive { get; set; }
         public System.DateTime CreatedOn { get; set; }
         public Nullable<int> CreatedBy { get; set; }
         public Nullable<System.DateTime> ModifiedOn { get; set; }

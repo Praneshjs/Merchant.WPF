@@ -25,7 +25,7 @@ namespace MerchantDAL.EntityModel
         public string AddressLineTwo { get; set; }
         public string City { get; set; }
         public string PinCode { get; set; }
-        public Nullable<bool> IsActive { get; set; }
+        public bool IsActive { get; set; }
         public System.DateTime CreatedOn { get; set; }
         public Nullable<int> CreatedBy { get; set; }
         public Nullable<System.DateTime> ModifiedOn { get; set; }

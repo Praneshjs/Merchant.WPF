@@ -17,6 +17,8 @@ namespace MerchantDAL.EntityModel
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Profile()
         {
+            this.CommonControls = new HashSet<CommonControl>();
+            this.CommonControls1 = new HashSet<CommonControl>();
             this.CommonDatas = new HashSet<CommonData>();
             this.CommonDatas1 = new HashSet<CommonData>();
             this.Customers = new HashSet<Customer>();
@@ -40,12 +42,16 @@ namespace MerchantDAL.EntityModel
         public Nullable<System.DateTime> JoinDate { get; set; }
         public Nullable<System.DateTime> ExitDate { get; set; }
         public Nullable<System.DateTime> ExitReason { get; set; }
-        public Nullable<bool> IsActive { get; set; }
+        public bool IsActive { get; set; }
         public System.DateTime CreatedOn { get; set; }
         public Nullable<int> CreatedBy { get; set; }
         public Nullable<System.DateTime> ModifiedOn { get; set; }
         public Nullable<int> ModifiedBy { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CommonControl> CommonControls { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CommonControl> CommonControls1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CommonData> CommonDatas { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

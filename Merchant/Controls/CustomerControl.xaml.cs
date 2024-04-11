@@ -1,12 +1,10 @@
-﻿using MerchantDAL.EntityModel;
-using MerchantDAL.Models;
+﻿using MerchantDAL.Models;
 using MerchantService.Services;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
-using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;

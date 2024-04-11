@@ -1,4 +1,5 @@
 ﻿using MerchantDAL.EntityModel;
+using MerchantDAL.Models;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
@@ -11,18 +12,29 @@ namespace MerchantDAL
         public ProductMasterEntity()
         {
         }
+        public async Task<List<CommonControlModel>> GetCommonControlAsync()
+        {
+            using (var context = new MerchantEntities())
+            {
+                return await context.CommonControls.Where(s => s.IsActive).Select(t => new CommonControlModel()
+                {
+                    Id = t.Id,
+                    CommonControlName = t.ControlType
+                }).ToListAsync();
+            }
+        }
 
-        public async Task<bool> IsProductMasterExist(string controlType, string controlValue)
+        public async Task<bool> IsProductMasterExist(int controlTypeId, string controlValue)
         {
             using (var context = new MerchantEntities())
             {
                 return await context.CommonDatas
-                    .AnyAsync(s => s.ControlType == controlType 
+                    .AnyAsync(s => s.ControlTypeId == controlTypeId
                     && s.ControlValue == controlValue);
             }
         }
 
-        public async Task<List<CommonData>> SubmitProductMasterAsync(string selectedId, string controlType, string controlValue, bool isActive)
+        public async Task<List<CommonData>> SubmitProductMasterAsync(string selectedId, int controlType, string controlValue, bool isActive)
         {
             using (var context = new MerchantEntities())
             {
@@ -31,7 +43,7 @@ namespace MerchantDAL
                     var existingData = await context.CommonDatas.FindAsync(id);
                     if (existingData != null)
                     {
-                        existingData.ControlType = controlType;
+                        existingData.ControlTypeId = controlType;
                         existingData.ControlValue = controlValue;
                         existingData.IsActive = isActive;
 
@@ -42,7 +54,7 @@ namespace MerchantDAL
                 {
                     var newData = new CommonData
                     {
-                        ControlType = controlType,
+                        ControlTypeId = controlType,
                         ControlValue = controlValue,
                         IsActive = isActive
                     };
@@ -55,12 +67,12 @@ namespace MerchantDAL
             }
         }
 
-        public async Task<List<CommonData>> GetProductMasterAsync(string controlType, string controlValue, bool? isActive)
+        public async Task<List<CommonData>> GetProductMasterAsync(int controlTypeId, string controlValue, bool? isActive)
         {
             using (var context = new MerchantEntities())
             {
                 var query = context.CommonDatas.AsQueryable();
-                query = query.Where(s => s.ControlType.ToLower() == controlType.ToLower() || s.ControlType.ToLower().Contains(controlType.ToLower()) || string.IsNullOrEmpty(controlType)
+                query = query.Where(s => (s.ControlTypeId == controlTypeId || controlTypeId == 0)
                 || s.ControlValue.ToLower() == controlValue.ToLower() || s.ControlValue.ToLower().Contains(controlValue.ToLower()) || string.IsNullOrEmpty(controlValue));
 
                 // Apply filters conditionally based on provided parameters

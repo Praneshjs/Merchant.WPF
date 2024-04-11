@@ -10,27 +10,22 @@
 namespace MerchantDAL.EntityModel
 {
     using System;
-    using System.Configuration;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
     public partial class MerchantEntities : DbContext
     {
-        //public MerchantEntities()
-        //: base("metadata=res://*/EntityModel.MerchantEntityModel.csdl|res://*/EntityModel.MerchantEntityModel.ssdl|res://*/EntityModel.MerchantEntityModel.msl;provider=System.Data.SqlClient;provider connection string=\"data source=(LocalDB)\\MSSQLLocalDB;attachdbfilename=|DataDirectory|\\Merchant.mdf;integrated security=True;connect timeout=30;MultipleActiveResultSets=True;App=EntityFramework\"")
-        //{
-        //}
-
-        public MerchantEntities() : base("name=MerchantEntities")
+        public MerchantEntities()
+            : base("name=MerchantEntities")
         {
-            Database.SetInitializer<MerchantEntities>(new CreateDatabaseIfNotExists<MerchantEntities>());
         }
-
+    
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<CommonControl> CommonControls { get; set; }
         public virtual DbSet<CommonData> CommonDatas { get; set; }
         public virtual DbSet<Customer> Customers { get; set; }
         public virtual DbSet<Product> Products { get; set; }

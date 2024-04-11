@@ -15,7 +15,7 @@ namespace MerchantDAL
             using (var dbContext = new MerchantEntities())
             {
                 return await dbContext.Profiles
-                    .Where(s => s.UserName == userName && s.Password == password && (s.IsActive ?? false))
+                    .Where(s => s.UserName == userName && s.Password == password && s.IsActive)
                     .FirstAsync();
             }
         }

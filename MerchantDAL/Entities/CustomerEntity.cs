@@ -30,7 +30,7 @@ namespace MerchantDAL
                     || s.City.ToLower() == allInfo || s.City.ToLower().Contains(allInfo)
                     || s.PinCode.ToLower() == allInfo || s.PinCode.ToLower().Contains(allInfo)
                     || string.IsNullOrEmpty(allInfo)
-                    || (s.IsActive ?? false))
+                    || s.IsActive)
                     .ToListAsync();
             }
         }

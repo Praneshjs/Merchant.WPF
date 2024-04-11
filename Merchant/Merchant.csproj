@@ -92,6 +92,9 @@
     <Compile Include="Controls\PaginationControl.xaml.cs">
       <DependentUpon>PaginationControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ProductControl.xaml.cs">
+      <DependentUpon>ProductControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ValidationPlaceholderControl.xaml.cs">
       <DependentUpon>ValidationPlaceholderControl.xaml</DependentUpon>
     </Compile>
@@ -109,11 +112,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\ProductMasterControl.xaml">
+    <Page Include="Controls\ProductControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\PurchaseControl.xaml">
+    <Page Include="Controls\ProductMasterControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -140,9 +143,6 @@
     </Compile>
     <Compile Include="Controls\ProductMasterControl.xaml.cs">
       <DependentUpon>ProductMasterControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\PurchaseControl.xaml.cs">
-      <DependentUpon>PurchaseControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="IErrorHandler.cs" />
     <Compile Include="LoginWindow.xaml.cs">

@@ -8,6 +8,9 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
+        <Style TargetType="ComboBox">
+            <Setter Property="Padding" Value="5"/>
+        </Style>
         <Style TargetType="TextBox">
             <Setter Property="Padding" Value="5"/>
             <Setter Property="Template">
@@ -109,9 +112,17 @@
                 <local:ValidationPlaceholderControl Grid.Row="0" Grid.ColumnSpan="2" x:Name="validationMsgCtrl" />
                 <!-- Add your controls for data submission here -->
                 <Label Grid.Row="0" Margin="0,0,0,10" Content="Control Name" FontWeight="Bold" Background="#f7f1e3" Foreground="#84817a"></Label>
-                <TextBox Grid.Row="1" Name="txtControlType" Text="{Binding ControlType}" Margin="0,0,0,10" MaxLength="50" PreviewTextInput="txtControlType_PreviewTextInput"/>
+                <TextBox Visibility="Collapsed" Grid.Row="1" Name="txtControlType" Text="{Binding ControlType}" Margin="0,0,0,10" MaxLength="50" PreviewTextInput="txtControlType_PreviewTextInput"/>
+                <ComboBox Name="cmbControlType" Grid.Row="1" Margin="0,0,0,10" SelectedValuePath="Id" ItemsSource="{Binding CommonControlModel}" SelectedItem="{Binding SelectedItem}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding CommonControlName}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
                 <Label Grid.Row="2" Margin="0,0,0,10" Content="Control Value" FontWeight="Bold" Background="#f7f1e3" Foreground="#84817a"></Label>
-                <TextBox Grid.Row="3" Name="txtControlValue" Text="{Binding ControlValue}" Margin="0,0,0,10"  MaxLength="100" PreviewTextInput="txtControlType_PreviewTextInput"/>
+                <TextBox Grid.Row="3" Name="txtControlValue" Text="{Binding ControlValue}" Margin="0,0,0,10" 
+                         MaxLength="100" PreviewTextInput="txtControlType_PreviewTextInput"/>
                 <CheckBox Grid.Row="4" Name="chkIsActive" IsChecked="{Binding IsActive}" Content="IsActive" Margin="0,0,0,10" Background="#f7f1e3" Foreground="#84817a" FontWeight="Bold">
                     <CheckBox.Style>
                         <Style TargetType="CheckBox">
@@ -166,99 +177,100 @@
             </Grid.RowDefinitions>
             <StackPanel Margin="20 30">
                 <!-- Search Button -->
-                <StackPanel Grid.Row="0" Orientation="Horizontal">
-                    <TextBox Name="txtProductSearch" Text="{Binding ControlType}" MinWidth="150" Margin="0 0 20 0" KeyUp="txtProductSearch_KeyUp" PreviewKeyUp="txtProductSearch_PreviewKeyUp" />
-                    <Button Name="btnSearch" Content="Search" Click="btnSearch_Click" 
-                        HorizontalAlignment="Left" VerticalAlignment="Top" Width="74" Height="40" 
-                        Background="#f7f1e3" Foreground="#84817a" FontWeight="Bold"/>
+                <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0 0 0 5">
+                    <TextBox Name="txtProductSearch" Text="{Binding ControlType}" MinWidth="150" 
+                             KeyUp="txtProductSearch_KeyUp" PreviewKeyUp="txtProductSearch_PreviewKeyUp" />
+                    <Button Name="btnSearch" Content="Search" Click="btnSearch_Click"/>
                 </StackPanel>
                 <!-- Pagination Control -->
 
-                <!-- DataGrid inside a ScrollViewer -->
-                <ScrollViewer Grid.Row="1" MaxHeight="600" MaxWidth="1000" HorizontalAlignment="Left" VerticalAlignment="Top">
-                    <DataGrid Name="productDataGrid" ItemsSource="{Binding CurrentPageData}" 
+                <DataGrid Name="productDataGrid" ItemsSource="{Binding CurrentPageData}" 
                               AutoGenerateColumns="False" CanUserAddRows="False" HorizontalAlignment="Left">
-                        <DataGrid.Resources>
-                            <ControlTemplate x:Key="NoDataTemplate" TargetType="DataGrid">
-                                <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="*" />
-                                    </Grid.RowDefinitions>
-                                    <DataGridColumnHeadersPresenter x:Name="PART_ColumnHeadersPresenter" Grid.Row="0" 
+                    <DataGrid.Resources>
+                        <ControlTemplate x:Key="NoDataTemplate" TargetType="DataGrid">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <DataGridColumnHeadersPresenter x:Name="PART_ColumnHeadersPresenter" Grid.Row="0" 
                                                                     Visibility="{Binding HeadersVisibility, 
                                         ConverterParameter={x:Static DataGridHeadersVisibility.Column}, 
                                         Converter={x:Static DataGrid.HeadersVisibilityConverter}, 
                                         RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"/>
-                                    <TextBlock Text="No Records found" Background="#f7f1e3" Foreground="#84817a" 
+                                <TextBlock Text="No Records found" Background="#f7f1e3" Foreground="#84817a" 
                                                Padding="5" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                </Grid>
-                            </ControlTemplate>
-                        </DataGrid.Resources>
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Control Name" Binding="{Binding ControlType}" />
-                            <DataGridTextColumn Header="Control Value" Binding="{Binding ControlValue}" />
-                            <DataGridTextColumn Header="Is Active" Binding="{Binding IsActive}" />
-                            <DataGridTemplateColumn Header="Select" Width="Auto">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <Image Source="/Assets/pencil_icon.png" Stretch="Fill" MouseLeftButtonDown="SelectButton_Click" Width="20" Height="20" Tag="{Binding}"/>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                                <DataGridTemplateColumn.CellStyle>
-                                    <Style TargetType="DataGridCell">
-                                        <Setter Property="Cursor" Value="Arrow"/>
-                                        <Style.Triggers>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter Property="Cursor" Value="Hand"/>
-                                            </Trigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </DataGridTemplateColumn.CellStyle>
-                            </DataGridTemplateColumn>
-                        </DataGrid.Columns>
-                        <DataGrid.ColumnHeaderStyle>
-                            <Style TargetType="DataGridColumnHeader">
-                                <Setter Property="Background" Value="#f7f1e3" />
-                                <Setter Property="Foreground" Value="#84817a" />
-                                <Setter Property="Padding" Value="5" />
-                                <Setter Property="BorderThickness" Value="2"/>
-                                <Setter Property="BorderBrush" Value="#ccc"/>
-                            </Style>
-                        </DataGrid.ColumnHeaderStyle>
-                        <DataGrid.RowStyle>
-                            <Style TargetType="DataGridRow">
-                                <Setter Property="Background" Value="White" />
-                                <Setter Property="Foreground" Value="#84817a" />
-                                <Setter Property="Padding" Value="5" />
-                                <Setter Property="BorderThickness" Value="2"/>
-                                <Setter Property="BorderBrush" Value="#ccc"/>
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                                <Setter Property="Cursor" Value="Arrow"/>
-                                <Style.Triggers>
-                                    <Trigger Property="ItemsControl.AlternationIndex" Value="1">
-                                        <Setter Property="Background" Value="#dcdde1"/>
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </DataGrid.RowStyle>
+                            </Grid>
+                        </ControlTemplate>
+                    </DataGrid.Resources>
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn Header="Control Name">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding CommonControl.ControlType}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Header="Control Value" Binding="{Binding ControlValue}" />
+                        <DataGridTextColumn Header="Is Active" Binding="{Binding IsActive}" />
+                        <DataGridTemplateColumn Header="Select" Width="Auto">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Image Source="/Assets/pencil_icon.png" Stretch="Fill" MouseLeftButtonDown="SelectButton_Click" Width="20" Height="20" Tag="{Binding}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                            <DataGridTemplateColumn.CellStyle>
+                                <Style TargetType="DataGridCell">
+                                    <Setter Property="Cursor" Value="Arrow"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Cursor" Value="Hand"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGridTemplateColumn.CellStyle>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                    <DataGrid.ColumnHeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="Background" Value="#f7f1e3" />
+                            <Setter Property="Foreground" Value="#84817a" />
+                            <Setter Property="Padding" Value="5" />
+                            <Setter Property="BorderThickness" Value="2"/>
+                            <Setter Property="BorderBrush" Value="#ccc"/>
+                        </Style>
+                    </DataGrid.ColumnHeaderStyle>
+                    <DataGrid.RowStyle>
+                        <Style TargetType="DataGridRow">
+                            <Setter Property="Background" Value="White" />
+                            <Setter Property="Foreground" Value="#84817a" />
+                            <Setter Property="Padding" Value="5" />
+                            <Setter Property="BorderThickness" Value="2"/>
+                            <Setter Property="BorderBrush" Value="#ccc"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                            <Setter Property="Cursor" Value="Arrow"/>
+                            <Style.Triggers>
+                                <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                                    <Setter Property="Background" Value="#dcdde1"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGrid.RowStyle>
 
-                        <DataGrid.AlternatingRowBackground>
-                            <SolidColorBrush Color="#dcdde1"/>
-                        </DataGrid.AlternatingRowBackground>
-                        <DataGrid.Style>
-                            <Style TargetType="DataGrid">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding HasItems, RelativeSource={RelativeSource Self}}" Value="false">
-                                        <Setter Property="Template" Value="{StaticResource NoDataTemplate}" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </DataGrid.Style>
-                    </DataGrid>
+                    <DataGrid.AlternatingRowBackground>
+                        <SolidColorBrush Color="#dcdde1"/>
+                    </DataGrid.AlternatingRowBackground>
+                    <DataGrid.Style>
+                        <Style TargetType="DataGrid">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding HasItems, RelativeSource={RelativeSource Self}}" Value="false">
+                                    <Setter Property="Template" Value="{StaticResource NoDataTemplate}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGrid.Style>
+                </DataGrid>
 
-                </ScrollViewer>
-               
                 <local:PaginationControl Grid.Row="2" x:Name="productMasterPagination" 
                              PageInfo="{Binding PaginationInfo}" 
                              FirstPageClicked="productMasterPagination_FirstPageClicked"

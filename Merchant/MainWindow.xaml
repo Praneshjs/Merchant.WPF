@@ -63,8 +63,8 @@
             <TabItem Header="Customer" Style="{StaticResource TabItemStyle}">
                 <local1:CustomerControl Background="#FFDFF9FB"/>
             </TabItem>
-            <TabItem Header="Purchase" Style="{StaticResource TabItemStyle}">
-                <local1:PurchaseControl Background="#FFDFF9FB"/>
+            <TabItem Header="Product" Style="{StaticResource TabItemStyle}">
+                <local1:ProductControl Background="#FFDFF9FB"/>
             </TabItem>
         </TabControl>
         <TextBlock Name="lblLoggedUser" HorizontalAlignment="Right" VerticalAlignment="Center" 
