@@ -23,7 +23,7 @@ namespace Merchant
 
         private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            MessageBox.Show("CurrentDomain_UnhandledException");
+            MessageBox.Show("CurrentDomain_UnhandledException" + e.ExceptionObject?.ToString());
             // Handle unhandled exceptions
         }
 
@@ -31,7 +31,7 @@ namespace Merchant
         {
             // Handle unhandled exceptions on the UI thread
             e.Handled = true; // Set to true to prevent application crash
-            MessageBox.Show("App_DispatcherUnhandledException");
+            MessageBox.Show("App_DispatcherUnhandledException"+ e?.Exception?.Message);
         }
     }
 }

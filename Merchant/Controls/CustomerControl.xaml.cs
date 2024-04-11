@@ -17,7 +17,7 @@ namespace Merchant.Controls
     public partial class CustomerControl : UserControl
     {
         private int currentPageIndex = 1;
-        private int itemsPerPage = 20;
+        private int itemsPerPage = 2;
         public CustomerControl()
         {
             InitializeComponent();
@@ -64,18 +64,24 @@ namespace Merchant.Controls
                 StringBuilder validationMsg = new StringBuilder();
                 if (string.IsNullOrEmpty(firstName)) validationMsg.AppendLine("First name is empty");
                 if (string.IsNullOrEmpty(mobile)) validationMsg.AppendLine("Mobile is empty");
-                if (validationMsg.Length == 0)
+                int.TryParse(btnAddCustomer.Tag?.ToString(), out int customerId);
+                if (validationMsg.Length == 0 && customerId == 0)
                 {
                     CustomerService fetch = new CustomerService();
                     var isDataExist = await fetch.IsCustomerDataExist(mobile, altMobile, landLine, email);
-                    if (isDataExist) validationMsg.AppendLine($"Customer info: Mobile {mobile} \n Alt. Mobile {altMobile},\n Landline {landLine},\n Email {email} already exist.");
+                    if (isDataExist)
+                    {
+                        validationMsg.AppendLine($"Customer exist: Mobile {mobile}, ");
+                        if (!string.IsNullOrWhiteSpace(altMobile)) validationMsg.AppendLine($"Alt. Mobile {altMobile}, ");
+                        if (!string.IsNullOrWhiteSpace(landLine)) validationMsg.AppendLine($"Landline {landLine}, ");
+                        if (!string.IsNullOrWhiteSpace(email)) validationMsg.AppendLine($"Email {email}");
+                    }
                 }
                 if (validationMsg.Length > 0)
                 {
                     validationMsgCtrl.ShowValidationBox(validationMsg.ToString());
                     return;
                 }
-                int.TryParse(btnAddCustomer.Tag?.ToString(), out int customerId);
                 var newData = new CustomerModel
                 {
                     Id = customerId,
@@ -94,11 +100,19 @@ namespace Merchant.Controls
                 CustomerService fetchService = new CustomerService();
                 var allData = await fetchService.SubmitCustomerAsync(newData);
                 BindCustomerGridData(allData, currentPageIndex);
-                validationMsgCtrl.ShowValidationBox("New customer added successfully");
+                if (customerId == 0)
+                {
+                    validationMsgCtrl.ShowValidationBox($"New customer {newData.FirstName} {newData.Mobile} added.");
+                }
+                else
+                {
+                    validationMsgCtrl.ShowValidationBox($"Customer info {newData.FirstName} {newData.Mobile} updated.");
+                }
                 btnClearCustomer_Click(null, null);
             }
             catch (Exception ex)
             {
+                MessageBox.Show(ex.Message);
                 throw ex;
             }
         }
@@ -143,22 +157,32 @@ namespace Merchant.Controls
 
         private void customerPagination_FirstPageClicked(object sender, EventArgs e)
         {
-
+            GetAllCustomerAsync(1);
         }
 
         private void customerPagination_PreviousPageClicked(object sender, EventArgs e)
         {
-
+            if (customerPagination.CurrentPage > 1)
+            {
+                --customerPagination.CurrentPage;
+            }
+            int currentIndex = customerPagination.CurrentPage;
+            GetAllCustomerAsync(currentIndex);
         }
 
         private void customerPagination_NextPageClicked(object sender, EventArgs e)
         {
-
+            if (customerPagination.CurrentPage != customerPagination.TotalPages)
+            {
+                var currentIndex = ++customerPagination.CurrentPage;
+                GetAllCustomerAsync(currentIndex);
+            }
         }
 
         private void customerPagination_LastPageClicked(object sender, EventArgs e)
         {
-
+            int totalPages = customerPagination.TotalPages;
+            GetAllCustomerAsync(totalPages);
         }
     }
 }

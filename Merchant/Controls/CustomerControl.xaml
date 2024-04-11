@@ -7,8 +7,11 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
-        <Style TargetType="TextBox">
+        <Style TargetType="ComboBox">
             <Setter Property="Padding" Value="5"/>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="Padding" Value="3"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="TextBox">
@@ -177,10 +180,10 @@
             <ListView x:Name="lstViewCustomer" Grid.Column="1" Grid.Row="0"  ItemsSource="{Binding Customers}">
                 <ListView.View>
                     <GridView >
-                        <GridViewColumn Header="First Name" DisplayMemberBinding="{Binding FirstName}" />
+                        <GridViewColumn Header="First Name" DisplayMemberBinding="{Binding FirstName}" Width="150" />
                         <GridViewColumn Header="Last Name" DisplayMemberBinding="{Binding LastName}"/>
                         <GridViewColumn Width="Auto" Header="Mobile" DisplayMemberBinding="{Binding Mobile}" />
-                        <GridViewColumn Header="Alt Mobile" DisplayMemberBinding="{Binding AltMobile}"/>
+                        <GridViewColumn Header="Alt Mobile" DisplayMemberBinding="{Binding AltMobile}" Width="110"/>
                         <GridViewColumn Header="Landline" DisplayMemberBinding="{Binding LandLine}"/>
                         <GridViewColumn Header="Email" DisplayMemberBinding="{Binding EmailId}"/>
                         <GridViewColumn Header="Address Line 1" DisplayMemberBinding="{Binding AddressLineOne}"/>

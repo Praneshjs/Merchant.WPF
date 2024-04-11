@@ -105,6 +105,7 @@
     </Compile>
     <Compile Include="ErrorHandler.cs" />
     <Compile Include="Models\CommonControlModel.cs" />
+    <Compile Include="Models\CommonDataModel.cs" />
     <Compile Include="Models\CustomerModel.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Entities\ProductMasterEntity.cs" />

@@ -24,7 +24,7 @@ namespace Merchant.Controls
                 return;
 
             GetAllProductMasterAsync(currentPageIndex);
-            LoadControlTypeComboBoxAsync();
+            LoadControlTypeAsync();
         }
 
 
@@ -35,7 +35,7 @@ namespace Merchant.Controls
             BindProductMasterGridData(allData, pageIndex);
         }
 
-        private async void LoadControlTypeComboBoxAsync()
+        private async void LoadControlTypeAsync()
         {
             var commonControls = new List<CommonControlModel>();
             commonControls.Add(new CommonControlModel { Id = 0, CommonControlName = "Select" });
@@ -62,15 +62,18 @@ namespace Merchant.Controls
                 StringBuilder validationMsg = new StringBuilder();
                 if (controlTypeId == 0) validationMsg.AppendLine("Control name is empty");
                 if (string.IsNullOrEmpty(controlValue)) validationMsg.AppendLine("Control value is empty");
-                var isDataExist = await fetch.IsProductMasterExist(controlTypeId, controlValue);
-                if (isDataExist) validationMsg.AppendLine($"Master Data: {cmbControlType.SelectedValue} and {controlValue} already exist.");
+                var selectedId = txtSelectedId.Text;
+                if (string.IsNullOrEmpty(selectedId))
+                {
+                    var isDataExist = await fetch.IsProductMasterExist(controlTypeId, controlValue);
+                    if (isDataExist) validationMsg.AppendLine($"Master Data: {cmbControlType.SelectedValue} and {controlValue} already exist.");
+                }
                 if (validationMsg.Length > 0)
                 {
                     validationMsgCtrl.ShowValidationBox(validationMsg.ToString());
                     return;
                 }
-
-                var selectedId = txtSelectedId.Text;
+                
                 var allData = await fetch.SubmitProductMasterAsync(selectedId, controlTypeId, controlValue, (bool)isActive);
                 BindProductMasterGridData(allData, currentPageIndex);
                 validationMsgCtrl.ShowValidationBox("Product master created successfully");
@@ -108,7 +111,8 @@ namespace Merchant.Controls
         {
             if (sender is Image image && image.Tag is CommonData selectedData)
             {
-                cmbControlType.SelectedItem = selectedData.ControlTypeId;
+                cmbControlType.SelectedValue = selectedData.ControlTypeId;
+                cmbControlType.Items.Refresh();
                 txtControlValue.Text = selectedData.ControlValue;
                 chkIsActive.IsChecked = selectedData.IsActive;
                 txtSelectedId.Text = selectedData.Id.ToString();
@@ -137,7 +141,6 @@ namespace Merchant.Controls
                 GetAllProductMasterAsync(currentPageIndex);
         }
 
-        // Method to update pagination information
         private void UpdatePaginationInfo(int currentPage, int totalPages)
         {
             productMasterPagination.SetPageInfo(currentPage, totalPages);
@@ -145,13 +148,11 @@ namespace Merchant.Controls
 
         private void productMasterPagination_FirstPageClicked(object sender, EventArgs e)
         {
-            // Handle first page clicked event
             GetAllProductMasterAsync(1);
         }
 
         private void productMasterPagination_PreviousPageClicked(object sender, EventArgs e)
         {
-            // Handle previous page clicked event
             if (productMasterPagination.CurrentPage > 1)
             {
                 --productMasterPagination.CurrentPage;
@@ -162,7 +163,6 @@ namespace Merchant.Controls
 
         private void productMasterPagination_NextPageClicked(object sender, EventArgs e)
         {
-            // Handle next page clicked event
             if (productMasterPagination.CurrentPage != productMasterPagination.TotalPages)
             {
                 var currentIndex = ++productMasterPagination.CurrentPage;
@@ -172,7 +172,6 @@ namespace Merchant.Controls
 
         private void productMasterPagination_LastPageClicked(object sender, EventArgs e)
         {
-            // Handle last page clicked event
             int totalPages = productMasterPagination.TotalPages;
             GetAllProductMasterAsync(totalPages);
         }

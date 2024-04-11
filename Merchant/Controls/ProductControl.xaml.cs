@@ -1,4 +1,5 @@
 ﻿using MerchantDAL.Models;
+using MerchantService.QR;
 using MerchantService.Services;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Drawing;
 
 namespace Merchant.Controls
 {
@@ -25,6 +27,23 @@ namespace Merchant.Controls
                 return;
 
             GetAllCustomerAsync(currentPageIndex);
+            LoadControlTypeAsync();
+        }
+        private async void LoadControlTypeAsync()
+        {
+            ProductMasterService fetch = new ProductMasterService();
+            var masterDatas = await fetch.GetProductMasterAsync(0, null, null);
+            var brandList = masterDatas.Where(s => s.CommonControl.ControlType == "Brand")
+                .Select(t => new CommonDataModel() { Id = t.Id, ControlValue = t.ControlValue }).ToList();
+            brandList.Add(new CommonDataModel { Id = 0, ControlValue = "Select Brand" });
+            cmbBrandName.ItemsSource = brandList.OrderBy(s => s.Id);
+            cmbBrandName.SelectedIndex = 0;
+
+            var productCategoryList = masterDatas.Where(s => s.CommonControl.ControlType == "Product Category")
+                .Select(t => new CommonDataModel() { Id = t.Id, ControlValue = t.ControlValue }).ToList();
+            productCategoryList.Add(new CommonDataModel { Id = 0, ControlValue = "Select Product Type" });
+            cmbProductType.ItemsSource = productCategoryList.OrderBy(s => s.Id);
+            cmbProductType.SelectedIndex = 0;
         }
 
         private async void GetAllCustomerAsync(int pageIndex, string allInfo = null, bool? isActive = null)
@@ -46,36 +65,34 @@ namespace Merchant.Controls
             lstViewCustomer.ItemsSource = paginationList;
         }
 
-        private void btnAddCustomer_Click(object sender, RoutedEventArgs e)
+        private void btnProductList_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                //var firstName = txtFirstName.Text;
-                //var lastName = txtLastName.Text;
-                //var mobile = txtMobile.Text;
-                //var altMobile = txtAltMobile.Text;
-                //var landLine = txtLandLine.Text;
-                //var email = txtEmail.Text;
-                //var addressLineOne = txtAddressLineOne.Text;
-                //var addressLineTwo = txtAddressLineTwo.Text;
-                //var city = txtCity.Text;
-                //var pinCode = txtPinCode.Text;
+                int.TryParse(cmbBrandName.SelectedValue?.ToString(), out int brandNameId);
+                int.TryParse(cmbProductType.SelectedValue?.ToString(), out int productTypeId);
+                var weight = txtWeight.Text;
+                var quantity = txtQuantity.Text;
+                var stockPrice = txtStockPrice.Text;
+                var sellingPrice = txtSellingPrice.Text;
 
-                //StringBuilder validationMsg = new StringBuilder();
-                //if (string.IsNullOrEmpty(firstName)) validationMsg.AppendLine("First name is empty");
-                //if (string.IsNullOrEmpty(mobile)) validationMsg.AppendLine("Mobile is empty");
-                //if (validationMsg.Length == 0)
-                //{
-                //    CustomerService fetch = new CustomerService();
-                //    var isDataExist = await fetch.IsCustomerDataExist(mobile, altMobile, landLine, email);
-                //    if (isDataExist) validationMsg.AppendLine($"Customer info: Mobile {mobile} \n Alt. Mobile {altMobile},\n Landline {landLine},\n Email {email} already exist.");
-                //}
-                //if (validationMsg.Length > 0)
-                //{
-                //    validationMsgCtrl.ShowValidationBox(validationMsg.ToString());
-                //    return;
-                //}
-                //int.TryParse(btnAddCustomer.Tag?.ToString(), out int customerId);
+                StringBuilder validationMsg = new StringBuilder();
+                if (string.IsNullOrEmpty(weight)) validationMsg.AppendLine("Product weight is empty");
+                if (string.IsNullOrEmpty(quantity)) validationMsg.AppendLine("Product quantity is empty");
+                if (string.IsNullOrEmpty(stockPrice)) validationMsg.AppendLine("Stock price is empty");
+                if (string.IsNullOrEmpty(sellingPrice)) validationMsg.AppendLine("Selling price is empty");
+                if (brandNameId == 0) validationMsg.AppendLine("Select a brand name");
+                if (productTypeId == 0) validationMsg.AppendLine("Select a product type");
+                
+                if (validationMsg.Length > 0)
+                {
+                    validationMsgCtrl.ShowValidationBox(validationMsg.ToString());
+                    return;
+                }
+                
+                //QRService productQR = new QRService();
+                //var qrImage = productQR.GenerateQRCode(new Guid().ToString());
+
                 //var newData = new CustomerModel
                 //{
                 //    Id = customerId,
@@ -95,7 +112,7 @@ namespace Merchant.Controls
                 //var allData = await fetchService.SubmitCustomerAsync(newData);
                 //BindCustomerGridData(allData, currentPageIndex);
                 //validationMsgCtrl.ShowValidationBox("New customer added successfully");
-                //btnClearCustomer_Click(null, null);
+                btnClearCustomer_Click(null, null);
             }
             catch (Exception ex)
             {
@@ -105,6 +122,9 @@ namespace Merchant.Controls
 
         private void btnClearCustomer_Click(object sender, RoutedEventArgs e)
         {
+            cmbBrandName.SelectedIndex = 0;
+            cmbProductType.SelectedIndex = 0;
+            txtWeight.Text = string.Empty;
             //btnAddCustomer.Tag = string.Empty;
             //txtFirstName.Text = string.Empty;
             //txtLastName.Text = string.Empty;
@@ -117,6 +137,7 @@ namespace Merchant.Controls
             //txtCity.Text = string.Empty;
             //txtPinCode.Text = string.Empty;
             //validationMsgCtrl.CloseValidationBox_Click(null, null);
+            LoadControlTypeAsync();
         }
 
         private void btnSelectCustomer_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -136,6 +157,27 @@ namespace Merchant.Controls
             //}
         }
 
+        private void txtWeight_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            if (txtWeight.Text.IndexOf('.') > 0 && e.Text == ".")
+            {
+                e.Handled = true;
+                return;
+            }
+            if (!System.Text.RegularExpressions.Regex.IsMatch(e.Text, "^[0-9]*\\.?[0-9]*$"))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void txtQuantity_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            if (!System.Text.RegularExpressions.Regex.IsMatch(e.Text, "^[0-9]+$"))
+            {
+                e.Handled = true;
+            }
+
+        }
         private void UpdatePaginationInfo(int currentPage, int totalPages)
         {
             customerPagination.SetPageInfo(currentPage, totalPages);
@@ -160,5 +202,6 @@ namespace Merchant.Controls
         {
 
         }
+
     }
 }

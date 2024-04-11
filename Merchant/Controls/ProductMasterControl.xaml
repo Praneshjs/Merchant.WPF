@@ -12,7 +12,7 @@
             <Setter Property="Padding" Value="5"/>
         </Style>
         <Style TargetType="TextBox">
-            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Padding" Value="3"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="TextBox">
@@ -113,7 +113,7 @@
                 <!-- Add your controls for data submission here -->
                 <Label Grid.Row="0" Margin="0,0,0,10" Content="Control Name" FontWeight="Bold" Background="#f7f1e3" Foreground="#84817a"></Label>
                 <TextBox Visibility="Collapsed" Grid.Row="1" Name="txtControlType" Text="{Binding ControlType}" Margin="0,0,0,10" MaxLength="50" PreviewTextInput="txtControlType_PreviewTextInput"/>
-                <ComboBox Name="cmbControlType" Grid.Row="1" Margin="0,0,0,10" SelectedValuePath="Id" ItemsSource="{Binding CommonControlModel}" SelectedItem="{Binding SelectedItem}">
+                <ComboBox Name="cmbControlType"  SelectedValuePath="Id" Grid.Row="1" Margin="0,0,0,10" ItemsSource="{Binding CommonControlModel}" SelectedItem="{Binding SelectedItem}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding CommonControlName}"/>

@@ -7,8 +7,12 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
-        <Style TargetType="TextBox">
+        <Style TargetType="ComboBox">
             <Setter Property="Padding" Value="5"/>
+        </Style>
+
+        <Style TargetType="TextBox">
+            <Setter Property="Padding" Value="3"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="TextBox">
@@ -33,7 +37,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        
+
         <Style TargetType="Button">
             <Setter Property="Padding" Value="10"/>
             <Setter Property="Height"  Value="40"/>
@@ -88,7 +92,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
-       
+
     </UserControl.Resources>
     <Grid Background="#ccc" >
         <Grid.ColumnDefinitions>
@@ -97,46 +101,67 @@
         </Grid.ColumnDefinitions>
 
         <Grid Grid.Column="0" Margin="20">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-
+           
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
             <local:ValidationPlaceholderControl Grid.Row="0" Grid.ColumnSpan="2" x:Name="validationMsgCtrl" />
+            <Label Grid.Row="1" Grid.ColumnSpan="2" Content="Brand" />
+            <ComboBox Name="cmbBrandName" Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" Background="White" Margin="0,5,0,5"
+                      SelectedValuePath="Id" ItemsSource="{Binding CommonDataModel}" SelectedItem="{Binding SelectedItem}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding ControlValue}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <Label Grid.Row="3" Grid.ColumnSpan="2" Content="Product Type" />
+            <ComboBox Name="cmbProductType"  Grid.Row="4" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" Background="White" Margin="0,5,0,5"
+                      SelectedValuePath="Id" ItemsSource="{Binding CommonDataModel}" SelectedItem="{Binding SelectedItem}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding ControlValue}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <Label Grid.Row="5" Grid.Column="0" Content="Weight (Kg.)" HorizontalAlignment="Left" />
+            <Label Grid.Row="5" Grid.Column="1" Content="Quantity" HorizontalAlignment="Left" Margin="5,0,0,0"  />
 
-            <Label Grid.Row="1" Grid.Column="0" Content="Brand" VerticalAlignment="Center" Margin="0,0,5,0" />
+            <!-- StackPanel for text boxes -->
+            <TextBox Grid.Row="6" Grid.Column="0" Name="txtWeight" PreviewTextInput="txtWeight_PreviewTextInput" HorizontalAlignment="Stretch" Margin="0,5,5,5" />
+            <TextBox Grid.Row="6" Grid.Column="1" Name="txtQuantity" PreviewTextInput="txtQuantity_PreviewTextInput" HorizontalAlignment="Stretch" Margin="5,5,0,5" />
 
-            <Label Grid.Row="2" Grid.Column="0" Content="Product Type" VerticalAlignment="Center" Margin="0,5,5,0" />
+            <Label Grid.Row="7" Grid.Column="0" Content="Stock (Rs.)" HorizontalAlignment="Left" />
+            <Label Grid.Row="7" Grid.Column="1" Content="Selling (Rs.)" HorizontalAlignment="Left" Margin="5,0,0,0"  />
 
-            <Label Grid.Row="3" Grid.Column="0" Content="Weight" VerticalAlignment="Center" Margin="0,5,5,0" />
+            <!-- StackPanel for text boxes -->
+            <TextBox Grid.Row="8" Grid.Column="0" Name="txtStockPrice" PreviewTextInput="txtWeight_PreviewTextInput" HorizontalAlignment="Stretch" Margin="0,5,5,5" />
+            <TextBox Grid.Row="8" Grid.Column="1" Name="txtSellingPrice" PreviewTextInput="txtQuantity_PreviewTextInput" HorizontalAlignment="Stretch" Margin="5,5,0,5" />
 
-            <ComboBox Name="cmbBrandName" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
-            <ComboBox Name="cmbProductType" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
-            
-            <TextBox Grid.Row="3" Grid.Column="1" x:Name="txtMobile" MaxLength="10" Margin="5,0,0,0" />
-
-            <StackPanel Grid.Row="4" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="0,20,0,0">
-                <Button Name="btnAddCustomer" Content="Submit" Click="btnAddCustomer_Click" Margin="0,0,10,0" >
-                    <Button.Tag>
-                        <Binding Path="." FallbackValue="0"/>
-                    </Button.Tag>
-                </Button>
-                <Button Name="btnClearCustomer" Content="Clear" Click="btnClearCustomer_Click" />
-            </StackPanel>
-            
+            <Button Grid.Row="9" Grid.Column="0" Name="btnProductList" Content="Submit" Click="btnProductList_Click" Margin="0,15,5,5"  >
+                <Button.Tag>
+                    <Binding Path="." FallbackValue="0"/>
+                </Button.Tag>
+            </Button>
+            <Button Grid.Row="9" Grid.Column="1" Name="btnClearCustomer" Content="Clear" Click="btnClearCustomer_Click" Margin="5,15,0,5" />
         </Grid>
         <Grid Grid.Column="1" Margin="20">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
             <ListView x:Name="lstViewCustomer" Grid.Column="1" Grid.Row="0"  ItemsSource="{Binding Customers}">
