@@ -1,6 +1,8 @@
-﻿using MerchantDAL.Models;
+﻿using MerchantDAL.EntityModel;
+using MerchantDAL.Models;
 using MerchantService.QR;
 using MerchantService.Services;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,7 +11,6 @@ using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Drawing;
 
 namespace Merchant.Controls
 {
@@ -26,9 +27,17 @@ namespace Merchant.Controls
             if (DesignerProperties.GetIsInDesignMode(this))
                 return;
 
-            GetAllCustomerAsync(currentPageIndex);
+            GetAllProductAsync(currentPageIndex);
             LoadControlTypeAsync();
+            SetDefaultValue();
         }
+
+        private void SetDefaultValue()
+        {
+            txtExpiryDate.SelectedDate = DateTime.Now.AddMonths(6);
+            txtMfgDate.SelectedDate = DateTime.Now.AddDays(-10);
+        }
+
         private async void LoadControlTypeAsync()
         {
             ProductMasterService fetch = new ProductMasterService();
@@ -46,13 +55,13 @@ namespace Merchant.Controls
             cmbProductType.SelectedIndex = 0;
         }
 
-        private async void GetAllCustomerAsync(int pageIndex, string allInfo = null, bool? isActive = null)
+        private async void GetAllProductAsync(int pageIndex, DateTime? expiryDate = null, string allInfo = null, bool? isActive = null)
         {
-            CustomerService fetch = new CustomerService();
-            var allData = await fetch.GetCustomerAsync(allInfo);
-            BindCustomerGridData(allData, pageIndex);
+            ProductService fetchService = new ProductService();
+            var allData = await fetchService.GetProductAsync(0, 0, expiryDate, allInfo, isActive);
+            BindProductGridData(allData, pageIndex);
         }
-        private void BindCustomerGridData(List<CustomerModel> allData, int pageIndex)
+        private void BindProductGridData(List<ProductModel> allData, int pageIndex)
         {
             int startIndex = (pageIndex * itemsPerPage) - itemsPerPage + 1;
             int endIndex = (startIndex - 1) + itemsPerPage;
@@ -61,58 +70,70 @@ namespace Merchant.Controls
             UpdatePaginationInfo(pageIndex, totalPages);
             var paginationList = allData.Skip(skipCount).Take(itemsPerPage);
 
-            lstViewCustomer.ItemsSource = null;
-            lstViewCustomer.ItemsSource = paginationList;
+            lstProduct.ItemsSource = null;
+            lstProduct.ItemsSource = paginationList;
         }
 
-        private void btnProductList_Click(object sender, RoutedEventArgs e)
+        private async void btnProductList_Click(object sender, RoutedEventArgs e)
         {
             try
             {
                 int.TryParse(cmbBrandName.SelectedValue?.ToString(), out int brandNameId);
                 int.TryParse(cmbProductType.SelectedValue?.ToString(), out int productTypeId);
-                var weight = txtWeight.Text;
-                var quantity = txtQuantity.Text;
-                var stockPrice = txtStockPrice.Text;
-                var sellingPrice = txtSellingPrice.Text;
+                decimal.TryParse(txtWeight.Text, out decimal weightKgs);
+                int.TryParse(txtQuantity.Text, out int quantity);
+                decimal.TryParse(txtStockPrice.Text, out decimal stockPrice);
+                decimal.TryParse(txtSellingPrice.Text, out decimal sellingPrice);
+                DateTime.TryParse(txtMfgDate.Text, out DateTime manufacturedDate);
+                DateTime.TryParse(txtExpiryDate.Text, out DateTime expiryDate);
 
                 StringBuilder validationMsg = new StringBuilder();
-                if (string.IsNullOrEmpty(weight)) validationMsg.AppendLine("Product weight is empty");
-                if (string.IsNullOrEmpty(quantity)) validationMsg.AppendLine("Product quantity is empty");
-                if (string.IsNullOrEmpty(stockPrice)) validationMsg.AppendLine("Stock price is empty");
-                if (string.IsNullOrEmpty(sellingPrice)) validationMsg.AppendLine("Selling price is empty");
+                if (quantity == 0) quantity = 1;
                 if (brandNameId == 0) validationMsg.AppendLine("Select a brand name");
                 if (productTypeId == 0) validationMsg.AppendLine("Select a product type");
-                
+                if (manufacturedDate == DateTime.MinValue) validationMsg.AppendLine("Invalid Mfg. date");
+                if (expiryDate == DateTime.MinValue) validationMsg.AppendLine("Invalid expiry date");
+                if (weightKgs == 0) validationMsg.AppendLine("Product weight is empty");
+                if (stockPrice == 0) validationMsg.AppendLine("Stock price is empty");
+                if (sellingPrice == 0) validationMsg.AppendLine("Selling price is empty");
+
                 if (validationMsg.Length > 0)
                 {
                     validationMsgCtrl.ShowValidationBox(validationMsg.ToString());
                     return;
                 }
-                
-                //QRService productQR = new QRService();
-                //var qrImage = productQR.GenerateQRCode(new Guid().ToString());
+                var qrGuid = Guid.NewGuid();
+                var newData = new ProductModel
+                {
+                    BrandId = brandNameId,
+                    CreatedBy = 1, //UserSession.Instance.UserId
+                    CreatedOn = DateTime.Now,
+                    ExpiryDate = expiryDate,
+                    IsActive = true,
+                    MfgDate = manufacturedDate,
+                    ProductTypeId = productTypeId,
+                    QRId = qrGuid,
+                    SellingPrice = sellingPrice,
+                    StockPrice = stockPrice,
+                    WeightKgs = weightKgs
+                };
+                string productInfo = JsonConvert.SerializeObject(newData, Formatting.Indented);
 
-                //var newData = new CustomerModel
-                //{
-                //    Id = customerId,
-                //    AddressLineOne = addressLineOne,
-                //    AddressLineTwo = addressLineTwo,
-                //    AltMobile = altMobile,
-                //    EmailId = email,
-                //    FirstName = firstName,
-                //    LastName = lastName,
-                //    Mobile = mobile,
-                //    City = city,
-                //    CreatedById = 1,//UserSession.Instance.UserId,
-                //    PinCode = pinCode,
-                //    IsActive = true,
-                //};
-                //CustomerService fetchService = new CustomerService();
-                //var allData = await fetchService.SubmitCustomerAsync(newData);
-                //BindCustomerGridData(allData, currentPageIndex);
-                //validationMsgCtrl.ShowValidationBox("New customer added successfully");
-                btnClearCustomer_Click(null, null);
+                QRService productQR = new QRService();
+                var imageStatus = productQR.GenerateQRCode(qrGuid.ToString(), productInfo);
+
+                List<ProductModel> productList = new List<ProductModel>();
+                for (int i = 0; i < quantity; i++)
+                {
+                    var clonedData = CloneProductModel(newData);
+                    productList.Add(clonedData);
+                }
+
+                ProductService fetchService = new ProductService();
+                var allData = await fetchService.SubmitProductListAsync(productList);
+                BindProductGridData(allData, currentPageIndex);
+                validationMsgCtrl.ShowValidationBox("New product stocks added successfully");
+                btnClearProduct_Click(null, null);
             }
             catch (Exception ex)
             {
@@ -120,41 +141,60 @@ namespace Merchant.Controls
             }
         }
 
-        private void btnClearCustomer_Click(object sender, RoutedEventArgs e)
+        ProductModel CloneProductModel(ProductModel original)
+        {
+            return new ProductModel
+            {
+                BrandId = original.BrandId,
+                CreatedBy = original.CreatedBy,
+                CreatedOn = original.CreatedOn,
+                ExpiryDate = original.ExpiryDate,
+                IsActive = original.IsActive,
+                MfgDate = original.MfgDate,
+                ProductTypeId = original.ProductTypeId,
+                QRId = original.QRId,
+                SellingPrice = original.SellingPrice,
+                StockPrice = original.StockPrice,
+                WeightKgs = original.WeightKgs
+            };
+        }
+
+        
+
+        private void btnClearProduct_Click(object sender, RoutedEventArgs e)
         {
             cmbBrandName.SelectedIndex = 0;
             cmbProductType.SelectedIndex = 0;
             txtWeight.Text = string.Empty;
-            //btnAddCustomer.Tag = string.Empty;
-            //txtFirstName.Text = string.Empty;
-            //txtLastName.Text = string.Empty;
-            //txtMobile.Text = string.Empty;
-            //txtAltMobile.Text = string.Empty;
-            //txtLandLine.Text = string.Empty;
-            //txtEmail.Text = string.Empty;
-            //txtAddressLineOne.Text = string.Empty;
-            //txtAddressLineTwo.Text = string.Empty;
-            //txtCity.Text = string.Empty;
-            //txtPinCode.Text = string.Empty;
-            //validationMsgCtrl.CloseValidationBox_Click(null, null);
+            txtQuantity.Text = string.Empty;
+            txtSellingPrice.Text = string.Empty;
+            txtStockPrice.Text = string.Empty;
+            SetDefaultValue();
+            validationMsgCtrl.CloseValidationBox_Click(null, null);
             LoadControlTypeAsync();
         }
 
-        private void btnSelectCustomer_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void btnSelectProduct_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            //if (sender is Image image && image.Tag is CustomerModel selectedData)
-            //{
-            //    txtAddressLineOne.Text = selectedData.AddressLineOne;
-            //    txtAddressLineTwo.Text = selectedData.AddressLineTwo;
-            //    txtAltMobile.Text = selectedData.AltMobile;
-            //    txtEmail.Text = selectedData.EmailId;
-            //    txtFirstName.Text = selectedData.FirstName;
-            //    txtLastName.Text = selectedData.LastName;
-            //    txtMobile.Text = selectedData.Mobile;
-            //    txtCity.Text = selectedData.City;
-            //    txtPinCode.Text = selectedData.PinCode;
-            //    btnAddCustomer.Tag = selectedData.Id;
-            //}
+            if (sender is Image image && image.Tag is Product selectedData)
+            {
+                cmbBrandName.SelectedIndex = 0;
+                cmbProductType.SelectedIndex = 0;
+                txtWeight.Text = string.Empty;
+                txtQuantity.Text = string.Empty;
+                txtSellingPrice.Text = string.Empty;
+                txtStockPrice.Text = string.Empty;
+                //txtAddressLineOne.Text = selectedData.AddressLineOne;
+                //txtAddressLineTwo.Text = selectedData.AddressLineTwo;
+                //txtAltMobile.Text = selectedData.AltMobile;
+                //txtEmail.Text = selectedData.EmailId;
+                //txtFirstName.Text = selectedData.FirstName;
+                //txtLastName.Text = selectedData.LastName;
+                //txtMobile.Text = selectedData.Mobile;
+                //txtCity.Text = selectedData.City;
+                //txtPinCode.Text = selectedData.PinCode;
+                //btnAddCustomer.Tag = selectedData.Id;
+            }
         }
 
         private void txtWeight_PreviewTextInput(object sender, TextCompositionEventArgs e)
@@ -202,6 +242,5 @@ namespace Merchant.Controls
         {
 
         }
-
     }
 }

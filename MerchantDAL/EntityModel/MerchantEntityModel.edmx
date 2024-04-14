@@ -56,8 +56,14 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="QRId" Type="uniqueidentifier" />
           <Property Name="BrandId" Type="int" Nullable="false" />
           <Property Name="ProductTypeId" Type="int" Nullable="false" />
+          <Property Name="WeightKgs" Type="decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="StockPrice" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="SellingPrice" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="MfgDate" Type="date" />
+          <Property Name="ExpiryDate" Type="date" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
           <Property Name="CreatedOn" Type="datetime" Nullable="false" />
           <Property Name="CreatedBy" Type="int" />
@@ -171,7 +177,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Product__BrandId__0880433F">
+        <Association Name="FK__Product__BrandId__2EA5EC27">
           <End Role="CommonData" Type="Self.CommonData" Multiplicity="1" />
           <End Role="Product" Type="Self.Product" Multiplicity="*" />
           <ReferentialConstraint>
@@ -183,7 +189,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Product__Created__0A688BB1">
+        <Association Name="FK__Product__Created__308E3499">
           <End Role="Profile" Type="Self.Profile" Multiplicity="0..1" />
           <End Role="Product" Type="Self.Product" Multiplicity="*" />
           <ReferentialConstraint>
@@ -195,7 +201,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Product__Modifie__0B5CAFEA">
+        <Association Name="FK__Product__Modifie__318258D2">
           <End Role="Profile" Type="Self.Profile" Multiplicity="0..1" />
           <End Role="Product" Type="Self.Product" Multiplicity="*" />
           <ReferentialConstraint>
@@ -207,7 +213,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Product__Product__09746778">
+        <Association Name="FK__Product__Product__2F9A1060">
           <End Role="CommonData" Type="Self.CommonData" Multiplicity="1" />
           <End Role="Product" Type="Self.Product" Multiplicity="*" />
           <ReferentialConstraint>
@@ -277,19 +283,19 @@
             <End Role="Profile" EntitySet="Profile" />
             <End Role="Customer" EntitySet="Customer" />
           </AssociationSet>
-          <AssociationSet Name="FK__Product__BrandId__0880433F" Association="Self.FK__Product__BrandId__0880433F">
+          <AssociationSet Name="FK__Product__BrandId__2EA5EC27" Association="Self.FK__Product__BrandId__2EA5EC27">
             <End Role="CommonData" EntitySet="CommonData" />
             <End Role="Product" EntitySet="Product" />
           </AssociationSet>
-          <AssociationSet Name="FK__Product__Created__0A688BB1" Association="Self.FK__Product__Created__0A688BB1">
+          <AssociationSet Name="FK__Product__Created__308E3499" Association="Self.FK__Product__Created__308E3499">
             <End Role="Profile" EntitySet="Profile" />
             <End Role="Product" EntitySet="Product" />
           </AssociationSet>
-          <AssociationSet Name="FK__Product__Modifie__0B5CAFEA" Association="Self.FK__Product__Modifie__0B5CAFEA">
+          <AssociationSet Name="FK__Product__Modifie__318258D2" Association="Self.FK__Product__Modifie__318258D2">
             <End Role="Profile" EntitySet="Profile" />
             <End Role="Product" EntitySet="Product" />
           </AssociationSet>
-          <AssociationSet Name="FK__Product__Product__09746778" Association="Self.FK__Product__Product__09746778">
+          <AssociationSet Name="FK__Product__Product__2F9A1060" Association="Self.FK__Product__Product__2F9A1060">
             <End Role="CommonData" EntitySet="CommonData" />
             <End Role="Product" EntitySet="Product" />
           </AssociationSet>
@@ -437,6 +443,12 @@
           <NavigationProperty Name="CommonData1" Relationship="MerchantModel.FK__Product__Product__09746778" FromRole="Product" ToRole="CommonData" />
           <NavigationProperty Name="Profile" Relationship="MerchantModel.FK__Product__Created__0A688BB1" FromRole="Product" ToRole="Profile" />
           <NavigationProperty Name="Profile1" Relationship="MerchantModel.FK__Product__Modifie__0B5CAFEA" FromRole="Product" ToRole="Profile" />
+          <Property Name="QRId" Type="Guid" />
+          <Property Name="StockPrice" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="SellingPrice" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="MfgDate" Type="DateTime" Precision="0" />
+          <Property Name="ExpiryDate" Type="DateTime" Precision="0" />
+          <Property Name="WeightKgs" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
         </EntityType>
         <EntityType Name="Profile">
           <Key>
@@ -687,6 +699,12 @@
           <EntitySetMapping Name="Products">
             <EntityTypeMapping TypeName="MerchantModel.Product">
               <MappingFragment StoreEntitySet="Product">
+                <ScalarProperty Name="WeightKgs" ColumnName="WeightKgs" />
+                <ScalarProperty Name="ExpiryDate" ColumnName="ExpiryDate" />
+                <ScalarProperty Name="MfgDate" ColumnName="MfgDate" />
+                <ScalarProperty Name="SellingPrice" ColumnName="SellingPrice" />
+                <ScalarProperty Name="StockPrice" ColumnName="StockPrice" />
+                <ScalarProperty Name="QRId" ColumnName="QRId" />
                 <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
                 <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
                 <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />

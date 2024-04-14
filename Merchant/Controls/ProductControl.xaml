@@ -37,7 +37,13 @@
                 </Setter.Value>
             </Setter>
         </Style>
-
+        <Style TargetType="DatePicker">
+            <Setter Property="Padding" Value="3"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="BorderBrush" Value="#84817a"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+        
         <Style TargetType="Button">
             <Setter Property="Padding" Value="10"/>
             <Setter Property="Height"  Value="40"/>
@@ -101,8 +107,10 @@
         </Grid.ColumnDefinitions>
 
         <Grid Grid.Column="0" Margin="20">
-           
+
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -142,7 +150,7 @@
 
             <!-- StackPanel for text boxes -->
             <TextBox Grid.Row="6" Grid.Column="0" Name="txtWeight" PreviewTextInput="txtWeight_PreviewTextInput" HorizontalAlignment="Stretch" Margin="0,5,5,5" />
-            <TextBox Grid.Row="6" Grid.Column="1" Name="txtQuantity" PreviewTextInput="txtQuantity_PreviewTextInput" HorizontalAlignment="Stretch" Margin="5,5,0,5" />
+            <TextBox Grid.Row="6" Grid.Column="1" Name="txtQuantity" Text="1" PreviewTextInput="txtQuantity_PreviewTextInput" HorizontalAlignment="Stretch" Margin="5,5,0,5" />
 
             <Label Grid.Row="7" Grid.Column="0" Content="Stock (Rs.)" HorizontalAlignment="Left" />
             <Label Grid.Row="7" Grid.Column="1" Content="Selling (Rs.)" HorizontalAlignment="Left" Margin="5,0,0,0"  />
@@ -151,12 +159,19 @@
             <TextBox Grid.Row="8" Grid.Column="0" Name="txtStockPrice" PreviewTextInput="txtWeight_PreviewTextInput" HorizontalAlignment="Stretch" Margin="0,5,5,5" />
             <TextBox Grid.Row="8" Grid.Column="1" Name="txtSellingPrice" PreviewTextInput="txtQuantity_PreviewTextInput" HorizontalAlignment="Stretch" Margin="5,5,0,5" />
 
-            <Button Grid.Row="9" Grid.Column="0" Name="btnProductList" Content="Submit" Click="btnProductList_Click" Margin="0,15,5,5"  >
+            <Label Grid.Row="9" Grid.Column="0" Content="Mfg. Date" HorizontalAlignment="Left" />
+            <Label Grid.Row="9" Grid.Column="1" Content="Expiry Date" HorizontalAlignment="Left" Margin="5,0,0,0"  />
+
+            <!-- StackPanel for text boxes -->
+            <DatePicker Grid.Row="10" Grid.Column="0" Name="txtMfgDate" HorizontalAlignment="Stretch" Margin="0,5,5,5"  />
+            <DatePicker Grid.Row="10" Grid.Column="1" Name="txtExpiryDate" HorizontalAlignment="Stretch" Margin="0,5,5,5"  />
+
+            <Button Grid.Row="11" Grid.Column="0" Name="btnProductList" Content="Submit" Click="btnProductList_Click" Margin="0,15,5,5"  >
                 <Button.Tag>
                     <Binding Path="." FallbackValue="0"/>
                 </Button.Tag>
             </Button>
-            <Button Grid.Row="9" Grid.Column="1" Name="btnClearCustomer" Content="Clear" Click="btnClearCustomer_Click" Margin="5,15,0,5" />
+            <Button Grid.Row="11" Grid.Column="1" Name="btnClearProduct" Content="Clear" Click="btnClearProduct_Click" Margin="5,15,0,5" />
         </Grid>
         <Grid Grid.Column="1" Margin="20">
             <Grid.RowDefinitions>
@@ -164,24 +179,22 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <ListView x:Name="lstViewCustomer" Grid.Column="1" Grid.Row="0"  ItemsSource="{Binding Customers}">
+            <ListView x:Name="lstProduct" Grid.Column="1" Grid.Row="0"  ItemsSource="{Binding Product}">
                 <ListView.View>
                     <GridView >
-                        <GridViewColumn Header="First Name" DisplayMemberBinding="{Binding FirstName}" />
-                        <GridViewColumn Header="Last Name" DisplayMemberBinding="{Binding LastName}"/>
-                        <GridViewColumn Width="Auto" Header="Mobile" DisplayMemberBinding="{Binding Mobile}" />
-                        <GridViewColumn Header="Alt Mobile" DisplayMemberBinding="{Binding AltMobile}"/>
-                        <GridViewColumn Header="Landline" DisplayMemberBinding="{Binding LandLine}"/>
-                        <GridViewColumn Header="Email" DisplayMemberBinding="{Binding EmailId}"/>
-                        <GridViewColumn Header="Address Line 1" DisplayMemberBinding="{Binding AddressLineOne}"/>
-                        <GridViewColumn Header="City" DisplayMemberBinding="{Binding City}"/>
-                        <GridViewColumn Header="Pin" DisplayMemberBinding="{Binding PinCode}"/>
+                        <GridViewColumn Header="Brand" DisplayMemberBinding="{Binding CommonData.ControlValue}" />
+                        <GridViewColumn Header="Product Type" DisplayMemberBinding="{Binding CommonData1.ControlValue}"/>
+                        <GridViewColumn Header="Weight Kgs." DisplayMemberBinding="{Binding WeightKgs}" />
+                        <GridViewColumn Header="SellingPrice" DisplayMemberBinding="{Binding SellingPrice}"/>
+                        <GridViewColumn Header="StockPrice" DisplayMemberBinding="{Binding StockPrice}"/>
+                        <GridViewColumn Header="Mfg.Date" DisplayMemberBinding="{Binding MfgDate}"/>
+                        <GridViewColumn Header="ExpiryDate" DisplayMemberBinding="{Binding ExpiryDate}"/>
                         <GridViewColumn Header="IsActive" DisplayMemberBinding="{Binding IsActive}"/>
                         <!-- Select Button Column -->
                         <GridViewColumn Header="Select" Width="Auto">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Image Source="/Assets/pencil_icon.png" Stretch="Fill" Name="btnSelectCustomer" MouseLeftButtonDown="btnSelectCustomer_MouseLeftButtonDown"
+                                    <Image Source="/Assets/pencil_icon.png" Stretch="Fill" Name="btnSelectProduct" MouseLeftButtonDown="btnSelectProduct_MouseLeftButtonDown"
                                            HorizontalAlignment="Center" Width="20" Height="20" Tag="{Binding}"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>

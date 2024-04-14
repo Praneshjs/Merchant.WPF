@@ -1,4 +1,7 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using ZXing;
 using ZXing.Common;
 
@@ -6,21 +9,44 @@ namespace MerchantService.QR
 {
     public class QRService
     {
-        public Bitmap GenerateQRCode(string content)
+        public bool GenerateQRCode(string content, string productInfo)
         {
-            BarcodeWriter barcodeWriter = new BarcodeWriter
+            try
             {
-                Format = BarcodeFormat.QR_CODE,
-                Options = new EncodingOptions
+                BarcodeWriter barcodeWriter = new BarcodeWriter
                 {
-                    Height = 200,
-                    Width = 200
-                }
-            };
+                    Format = BarcodeFormat.QR_CODE,
+                    Options = new EncodingOptions
+                    {
+                        Height = 200,
+                        Width = 200
+                    }
+                };
 
-            Bitmap qrCodeImage = barcodeWriter.Write(content);
-            return qrCodeImage;
+                Bitmap qrCodeImage = barcodeWriter.Write(content);
+                SaveQRImage(qrCodeImage, content, productInfo);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
+
+        public void SaveQRImage(Bitmap qrImage, string imageId, string productInfo)
+        {
+            string currentDate = DateTime.Now.ToString("yyyy-MM-dd");
+
+            string directoryPath = @"D:\ProductQR\" + currentDate + @"\";
+            Directory.CreateDirectory(directoryPath);
+            string imagePath = Path.Combine(directoryPath, imageId.ToString() + ".png");
+            qrImage.Save(imagePath, ImageFormat.Png);
+
+            string textFilePath = Path.Combine(directoryPath, "QRInfoReadMe.txt");
+            File.WriteAllText(textFilePath, productInfo);
+
+        }
+
     }
 
 }

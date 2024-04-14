@@ -62,6 +62,7 @@
     <Compile Include="QR\QRService.cs" />
     <Compile Include="Services\CustomerService.cs" />
     <Compile Include="Services\ProductMasterService.cs" />
+    <Compile Include="Services\ProductService.cs" />
     <Compile Include="Services\UserService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

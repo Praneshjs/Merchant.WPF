@@ -49,6 +49,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper, Version=10.0.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.10.1.1\lib\net461\AutoMapper.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -73,6 +76,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entities\CustomerEntity.cs" />
+    <Compile Include="Entities\ProductEntity.cs" />
     <Compile Include="EntityModel\CommonControl.cs">
       <DependentUpon>MerchantEntityModel.tt</DependentUpon>
     </Compile>
@@ -107,6 +111,8 @@
     <Compile Include="Models\CommonControlModel.cs" />
     <Compile Include="Models\CommonDataModel.cs" />
     <Compile Include="Models\CustomerModel.cs" />
+    <Compile Include="Models\MappingProfile.cs" />
+    <Compile Include="Models\ProductModel.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Entities\ProductMasterEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

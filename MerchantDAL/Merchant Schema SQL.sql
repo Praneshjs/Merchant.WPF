@@ -123,8 +123,14 @@ if OBJECT_ID('Product') is null
 begin
 Create table Product (
 	Id int Identity(1,1) primary key,
+	QRId uniqueidentifier,
 	BrandId int NOT NULL,
 	ProductTypeId int NOT NULL,
+	WeightKgs decimal not null,
+	StockPrice decimal,
+	SellingPrice decimal,
+	MfgDate date,
+	ExpiryDate date,
 	IsActive bit NOT NULL,
 	CreatedOn datetime NOT NULL,
 	CreatedBy int,
