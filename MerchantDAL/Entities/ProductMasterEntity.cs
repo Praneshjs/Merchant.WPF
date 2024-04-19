@@ -73,8 +73,9 @@ namespace MerchantDAL
             {
                 var query = context.CommonDatas.AsQueryable();
                 query = query.Where(s => (s.ControlTypeId == controlTypeId || controlTypeId == 0)
-                || s.ControlValue.ToLower() == controlValue.ToLower() || s.ControlValue.ToLower().Contains(controlValue.ToLower()) || string.IsNullOrEmpty(controlValue));
-               
+                && (s.ControlValue.ToLower() == controlValue.ToLower()
+                || s.ControlValue.ToLower().Contains(controlValue.ToLower()) || string.IsNullOrEmpty(controlValue)));
+
                 if (isActive != null)
                 {
                     query = query.Where(s => s.IsActive == isActive);

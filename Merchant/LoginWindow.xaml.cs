@@ -26,9 +26,9 @@ namespace Merchant
             txtUserName.Focus();
 
             //test bypass login -- remove it 
-            MainWindow mainWindow = new MainWindow();
-            mainWindow.Show();
-            Close();
+            //MainWindow mainWindow = new MainWindow();
+            //mainWindow.Show();
+            //Close();
         }
 
         private void UpdateDateLabel()

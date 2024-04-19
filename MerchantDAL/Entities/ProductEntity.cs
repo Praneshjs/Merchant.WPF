@@ -17,7 +17,12 @@ namespace MerchantDAL.Entities
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile<MappingProfile>();
-                cfg.CreateMap<ProductModel, Product>();
+                cfg.CreateMap<Product, ProductModel>()
+                .ForMember(dest => dest.BrandName, opt => opt.MapFrom(src => src.CommonData.ControlValue))
+                .ForMember(dest => dest.ProductCategoryName, opt => opt.MapFrom(src => src.CommonData1.ControlValue));
+
+                cfg.CreateMap<CommonDataModel, CommonData>();
+                cfg.CreateMap<UserModel, MerchantDAL.EntityModel.Profile>();
             });
             _mapper = config.CreateMapper();
         }
@@ -39,8 +44,9 @@ namespace MerchantDAL.Entities
                     query = query.Where(s => s.IsActive == isActive);
                 }
 
-                var allData = await query.Include(t => t.CommonData).ToListAsync();
-                return _mapper.Map<List<ProductModel>>(allData);
+                var allData = await query.Include(t => t.CommonData).Include(t => t.CommonData1).ToListAsync();
+                var result = _mapper.Map<List<ProductModel>>(allData);
+                return result;
             }
         }
 

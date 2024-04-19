@@ -17,7 +17,7 @@ namespace Merchant.Controls
     public partial class CustomerControl : UserControl
     {
         private int currentPageIndex = 1;
-        private int itemsPerPage = 2;
+        private int itemsPerPage = 10;
         public CustomerControl()
         {
             InitializeComponent();

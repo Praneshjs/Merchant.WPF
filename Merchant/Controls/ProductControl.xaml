@@ -43,7 +43,7 @@
             <Setter Property="BorderBrush" Value="#84817a"/>
             <Setter Property="BorderThickness" Value="1"/>
         </Style>
-        
+
         <Style TargetType="Button">
             <Setter Property="Padding" Value="10"/>
             <Setter Property="Height"  Value="40"/>
@@ -129,16 +129,18 @@
             <local:ValidationPlaceholderControl Grid.Row="0" Grid.ColumnSpan="2" x:Name="validationMsgCtrl" />
             <Label Grid.Row="1" Grid.ColumnSpan="2" Content="Brand" />
             <ComboBox Name="cmbBrandName" Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" Background="White" Margin="0,5,0,5"
-                      SelectedValuePath="Id" ItemsSource="{Binding CommonDataModel}" SelectedItem="{Binding SelectedItem}">
+          SelectedValuePath="Id" ItemsSource="{Binding}">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding ControlValue}"/>
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
+
+
             <Label Grid.Row="3" Grid.ColumnSpan="2" Content="Product Type" />
             <ComboBox Name="cmbProductType"  Grid.Row="4" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" Background="White" Margin="0,5,0,5"
-                      SelectedValuePath="Id" ItemsSource="{Binding CommonDataModel}" SelectedItem="{Binding SelectedItem}">
+                      SelectedValuePath="Id" ItemsSource="{Binding}">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding ControlValue}"/>
@@ -178,31 +180,103 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
+            <Border BorderBrush="#ccc" BorderThickness="1">
+                <ListView x:Name="lstProduct" Grid.Column="1" Grid.Row="0"  ItemsSource="{Binding Product}">
+                    <ListView.View>
+                        <GridView >
+                            <GridViewColumn Header="Brand" Width="150" DisplayMemberBinding="{Binding CommonData.ControlValue}" />
+                            <GridViewColumn Header="Product Type" Width="200" DisplayMemberBinding="{Binding CommonData1.ControlValue}"/>
+                            <GridViewColumn Header="Kgs." Width="75" DisplayMemberBinding="{Binding WeightKgs}" />
+                            <GridViewColumn Header="Sell Rs." Width="75" DisplayMemberBinding="{Binding SellingPrice}"/>
+                            <GridViewColumn Header="Stk. Rs." Width="75" DisplayMemberBinding="{Binding StockPrice}"/>
+                            <GridViewColumn Header="Mfg.Date" Width="100">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding MfgDate, StringFormat={}{0:dd-MMM-yy}}" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="ExpiryDate" Width="100">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding ExpiryDate, StringFormat={}{0:dd-MM-yy}}" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="IsActive"  Width="75" DisplayMemberBinding="{Binding IsActive}"/>
+                            <!-- Select Button Column -->
+                            <GridViewColumn Header="Select" Width="75">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Image Source="/Assets/pencil_icon.png" Stretch="Fill" Name="btnSelectProduct" 
+                   MouseLeftButtonDown="btnSelectProduct_MouseLeftButtonDown"
+                   HorizontalAlignment="Center" Width="20" Height="20" Tag="{Binding}">
+                                            <Image.Style>
+                                                <Style TargetType="Image">
+                                                    <Style.Triggers>
+                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                            <Setter Property="Cursor" Value="Hand"/>
+                                                        </Trigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Image.Style>
+                                        </Image>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
 
-            <ListView x:Name="lstProduct" Grid.Column="1" Grid.Row="0"  ItemsSource="{Binding Product}">
-                <ListView.View>
-                    <GridView >
-                        <GridViewColumn Header="Brand" DisplayMemberBinding="{Binding CommonData.ControlValue}" />
-                        <GridViewColumn Header="Product Type" DisplayMemberBinding="{Binding CommonData1.ControlValue}"/>
-                        <GridViewColumn Header="Weight Kgs." DisplayMemberBinding="{Binding WeightKgs}" />
-                        <GridViewColumn Header="SellingPrice" DisplayMemberBinding="{Binding SellingPrice}"/>
-                        <GridViewColumn Header="StockPrice" DisplayMemberBinding="{Binding StockPrice}"/>
-                        <GridViewColumn Header="Mfg.Date" DisplayMemberBinding="{Binding MfgDate}"/>
-                        <GridViewColumn Header="ExpiryDate" DisplayMemberBinding="{Binding ExpiryDate}"/>
-                        <GridViewColumn Header="IsActive" DisplayMemberBinding="{Binding IsActive}"/>
-                        <!-- Select Button Column -->
-                        <GridViewColumn Header="Select" Width="Auto">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Image Source="/Assets/pencil_icon.png" Stretch="Fill" Name="btnSelectProduct" MouseLeftButtonDown="btnSelectProduct_MouseLeftButtonDown"
-                                           HorizontalAlignment="Center" Width="20" Height="20" Tag="{Binding}"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                    </GridView>
-                </ListView.View>
-            </ListView>
+                        </GridView>
+                    </ListView.View>
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="ListViewItem">
+                                        <Border x:Name="border" BorderBrush="#ccc" BorderThickness="1 0 1 1" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}">
+                                            <GridViewRowPresenter Content="{TemplateBinding Content}" />
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter TargetName="border" Property="Background" Value="#F0F0F0"/>
+                                            </Trigger>
+                                            <Trigger Property="IsSelected" Value="True">
+                                                <Setter TargetName="border" Property="Background" Value="#FFE0E0E0"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    <ListView.Resources>
+                        <Style TargetType="GridViewColumnHeader">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type GridViewColumnHeader}">
+                                        <Border BorderBrush="#ccc" BorderThickness="1 1 1 1">
+                                            <ContentPresenter HorizontalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="ListViewItem">
+                                        <Border BorderBrush="red" BorderThickness="1 1 1 1">
+                                            <!-- Border for top and bottom of the cell -->
+                                            <GridViewRowPresenter Content="{TemplateBinding Content}" />
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ListView.Resources>
 
+
+                </ListView>
+            </Border>
             <local:PaginationControl Grid.Column="1" Grid.Row="1" x:Name="customerPagination" 
                              PageInfo="{Binding PaginationInfo}" 
                              FirstPageClicked="customerPagination_FirstPageClicked"

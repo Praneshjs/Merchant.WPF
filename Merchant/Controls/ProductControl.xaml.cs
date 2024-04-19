@@ -46,13 +46,14 @@ namespace Merchant.Controls
                 .Select(t => new CommonDataModel() { Id = t.Id, ControlValue = t.ControlValue }).ToList();
             brandList.Add(new CommonDataModel { Id = 0, ControlValue = "Select Brand" });
             cmbBrandName.ItemsSource = brandList.OrderBy(s => s.Id);
-            cmbBrandName.SelectedIndex = 0;
+            cmbBrandName.SelectedValue = 0;
 
             var productCategoryList = masterDatas.Where(s => s.CommonControl.ControlType == "Product Category")
                 .Select(t => new CommonDataModel() { Id = t.Id, ControlValue = t.ControlValue }).ToList();
             productCategoryList.Add(new CommonDataModel { Id = 0, ControlValue = "Select Product Type" });
             cmbProductType.ItemsSource = productCategoryList.OrderBy(s => s.Id);
             cmbProductType.SelectedIndex = 0;
+            cmbProductType.Items.Refresh();
         }
 
         private async void GetAllProductAsync(int pageIndex, DateTime? expiryDate = null, string allInfo = null, bool? isActive = null)
@@ -159,8 +160,6 @@ namespace Merchant.Controls
             };
         }
 
-        
-
         private void btnClearProduct_Click(object sender, RoutedEventArgs e)
         {
             cmbBrandName.SelectedIndex = 0;
@@ -176,24 +175,18 @@ namespace Merchant.Controls
 
         private void btnSelectProduct_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (sender is Image image && image.Tag is Product selectedData)
+            if (sender is Image image && image.Tag is ProductModel selectedData)
             {
-                cmbBrandName.SelectedIndex = 0;
-                cmbProductType.SelectedIndex = 0;
-                txtWeight.Text = string.Empty;
-                txtQuantity.Text = string.Empty;
-                txtSellingPrice.Text = string.Empty;
-                txtStockPrice.Text = string.Empty;
-                //txtAddressLineOne.Text = selectedData.AddressLineOne;
-                //txtAddressLineTwo.Text = selectedData.AddressLineTwo;
-                //txtAltMobile.Text = selectedData.AltMobile;
-                //txtEmail.Text = selectedData.EmailId;
-                //txtFirstName.Text = selectedData.FirstName;
-                //txtLastName.Text = selectedData.LastName;
-                //txtMobile.Text = selectedData.Mobile;
-                //txtCity.Text = selectedData.City;
-                //txtPinCode.Text = selectedData.PinCode;
-                //btnAddCustomer.Tag = selectedData.Id;
+                cmbBrandName.SelectedValue = selectedData.BrandId;
+                cmbProductType.SelectedValue = selectedData.ProductTypeId;
+                cmbProductType.Items.Refresh();
+                txtWeight.Text = selectedData.WeightKgs.ToString();
+                txtQuantity.Text = "1";
+                txtSellingPrice.Text = selectedData.SellingPrice?.ToString();
+                txtStockPrice.Text = selectedData.StockPrice?.ToString();
+                txtMfgDate.Text = selectedData.MfgDate.ToString();
+                txtExpiryDate.Text = selectedData.ExpiryDate.ToString();
+                btnProductList.Tag = selectedData.Id;
             }
         }
 
@@ -225,22 +218,32 @@ namespace Merchant.Controls
 
         private void customerPagination_FirstPageClicked(object sender, EventArgs e)
         {
-
+            GetAllProductAsync(1);
         }
 
         private void customerPagination_PreviousPageClicked(object sender, EventArgs e)
         {
-
+            if (customerPagination.CurrentPage > 1)
+            {
+                --customerPagination.CurrentPage;
+            }
+            int currentIndex = customerPagination.CurrentPage;
+            GetAllProductAsync(currentIndex);
         }
 
         private void customerPagination_NextPageClicked(object sender, EventArgs e)
         {
-
+            if (customerPagination.CurrentPage != customerPagination.TotalPages)
+            {
+                var currentIndex = ++customerPagination.CurrentPage;
+                GetAllProductAsync(currentIndex);
+            }
         }
 
         private void customerPagination_LastPageClicked(object sender, EventArgs e)
         {
-
+            int totalPages = customerPagination.TotalPages;
+            GetAllProductAsync(totalPages);
         }
     }
 }
