@@ -9,10 +9,10 @@ namespace MerchantService.Services
 {
     public class ProductService
     {
-        public async Task<List<ProductModel>> GetProductAsync(int brandId, int productTypeId, DateTime? expiryDate, string searchText, bool? isActive)
+        public async Task<List<ProductModel>> GetProductAsync(string searchText, bool? isActive)
         {
             ProductEntity productEntites= new ProductEntity();
-            return await productEntites.GetProductAsync(brandId, productTypeId, expiryDate, searchText, isActive);
+            return await productEntites.GetProductAsync(searchText, isActive);
         }
 
         public async Task<List<ProductModel>> SubmitProductListAsync(List<ProductModel> products)

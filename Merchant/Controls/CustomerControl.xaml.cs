@@ -149,6 +149,20 @@ namespace Merchant.Controls
                 btnAddCustomer.Tag = selectedData.Id;
             }
         }
+        private void btnCustomerSearch_Click(object sender, RoutedEventArgs e)
+        {
+            int currentIndex = customerPagination.CurrentPage = 1;
+            var controlName = txtCustomerSearch.Text.Trim().ToLower();
+
+            GetAllCustomerAsync(currentIndex, controlName, true);
+        }
+        private void txtCustomerSearch_PreviewKeyUp(object sender, KeyEventArgs e)
+        {
+            int currentIndex = customerPagination.CurrentPage = 1;
+            var controlName = txtCustomerSearch.Text.Trim().ToLower();
+
+            GetAllCustomerAsync(currentIndex, controlName, true);
+        }
 
         private void UpdatePaginationInfo(int currentPage, int totalPages)
         {

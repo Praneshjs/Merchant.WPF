@@ -59,7 +59,7 @@ namespace Merchant.Controls
         private async void GetAllProductAsync(int pageIndex, DateTime? expiryDate = null, string allInfo = null, bool? isActive = null)
         {
             ProductService fetchService = new ProductService();
-            var allData = await fetchService.GetProductAsync(0, 0, expiryDate, allInfo, isActive);
+            var allData = await fetchService.GetProductAsync(allInfo, isActive);
             BindProductGridData(allData, pageIndex);
         }
         private void BindProductGridData(List<ProductModel> allData, int pageIndex)
@@ -75,7 +75,7 @@ namespace Merchant.Controls
             lstProduct.ItemsSource = paginationList;
         }
 
-        private async void btnProductList_Click(object sender, RoutedEventArgs e)
+        private async void btnAddProducts_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -103,9 +103,11 @@ namespace Merchant.Controls
                     validationMsgCtrl.ShowValidationBox(validationMsg.ToString());
                     return;
                 }
+                int.TryParse(btnAddProducts.Tag?.ToString(), out int productId);
                 var qrGuid = Guid.NewGuid();
                 var newData = new ProductModel
                 {
+                    Id = productId,
                     BrandId = brandNameId,
                     CreatedBy = 1, //UserSession.Instance.UserId
                     CreatedOn = DateTime.Now,
@@ -133,7 +135,14 @@ namespace Merchant.Controls
                 ProductService fetchService = new ProductService();
                 var allData = await fetchService.SubmitProductListAsync(productList);
                 BindProductGridData(allData, currentPageIndex);
-                validationMsgCtrl.ShowValidationBox("New product stocks added successfully");
+                if (productId == 0)
+                {
+                    validationMsgCtrl.ShowValidationBox($"New product stocks {cmbBrandName.SelectedItem}, {cmbProductType.SelectedItem}, {quantity} * {weightKgs} added successfully");
+                }
+                else
+                {
+                    validationMsgCtrl.ShowValidationBox($"product info {cmbBrandName.SelectedItem}, {cmbProductType.SelectedItem} updated.");
+                }
                 btnClearProduct_Click(null, null);
             }
             catch (Exception ex)
@@ -150,6 +159,7 @@ namespace Merchant.Controls
                 CreatedBy = original.CreatedBy,
                 CreatedOn = original.CreatedOn,
                 ExpiryDate = original.ExpiryDate,
+                Id = original.Id,
                 IsActive = original.IsActive,
                 MfgDate = original.MfgDate,
                 ProductTypeId = original.ProductTypeId,
@@ -186,7 +196,7 @@ namespace Merchant.Controls
                 txtStockPrice.Text = selectedData.StockPrice?.ToString();
                 txtMfgDate.Text = selectedData.MfgDate.ToString();
                 txtExpiryDate.Text = selectedData.ExpiryDate.ToString();
-                btnProductList.Tag = selectedData.Id;
+                btnAddProducts.Tag = selectedData.Id;
             }
         }
 
@@ -211,6 +221,23 @@ namespace Merchant.Controls
             }
 
         }
+
+        private void btnProductSearch_Click(object sender, RoutedEventArgs e)
+        {
+            int currentIndex = customerPagination.CurrentPage = 1;
+            var controlName = txtProductSearch.Text.Trim().ToLower();
+
+            GetAllProductAsync(currentIndex, null, controlName, true);
+        }
+
+        private void txtProductSearch_PreviewKeyUp(object sender, KeyEventArgs e)
+        {
+            int currentIndex = customerPagination.CurrentPage = 1;
+            var controlName = txtProductSearch.Text.Trim().ToLower();
+
+            GetAllProductAsync(currentIndex, null, controlName, true);
+        }
+
         private void UpdatePaginationInfo(int currentPage, int totalPages)
         {
             customerPagination.SetPageInfo(currentPage, totalPages);
@@ -245,5 +272,6 @@ namespace Merchant.Controls
             int totalPages = customerPagination.TotalPages;
             GetAllProductAsync(totalPages);
         }
+
     }
 }

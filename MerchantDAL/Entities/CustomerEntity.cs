@@ -18,20 +18,20 @@ namespace MerchantDAL
             using (var dbContext = new MerchantEntities())
             {
                 allInfo = allInfo?.ToLower();
-                return await dbContext.Customers
-                    .Where(s => s.FirstName.ToLower() == allInfo || s.FirstName.ToLower().Contains(allInfo)
-                    || s.LastName.ToLower() == allInfo || s.LastName.ToLower().Contains(allInfo)
-                    || s.Mobile == allInfo || s.Mobile.Contains(allInfo)
-                    || s.AltMobile == allInfo || s.AltMobile.Contains(allInfo)
-                    || s.LandLine == allInfo || s.LandLine.Contains(allInfo)
-                    || s.EmailId.ToLower() == allInfo || s.EmailId.ToLower().Contains(allInfo)
-                    || s.AddressLineOne.ToLower() == allInfo || s.AddressLineOne.ToLower().Contains(allInfo)
-                    || s.AddressLineTwo.ToLower() == allInfo || s.AddressLineTwo.ToLower().Contains(allInfo)
-                    || s.City.ToLower() == allInfo || s.City.ToLower().Contains(allInfo)
-                    || s.PinCode.ToLower() == allInfo || s.PinCode.ToLower().Contains(allInfo)
-                    || string.IsNullOrEmpty(allInfo)
-                    || s.IsActive)
+                var list = await dbContext.Customers
+                    .Where(s => ((s.FirstName.ToLower() == allInfo || s.FirstName.ToLower().Contains(allInfo))
+                    || (s.LastName.ToLower() == allInfo || s.LastName.ToLower().Contains(allInfo))
+                    || (s.Mobile == allInfo || s.Mobile.Contains(allInfo))
+                    || (s.AltMobile == allInfo || s.AltMobile.Contains(allInfo))
+                    || (s.LandLine == allInfo || s.LandLine.Contains(allInfo))
+                    || (s.EmailId.ToLower() == allInfo || s.EmailId.ToLower().Contains(allInfo))
+                    || (s.AddressLineOne.ToLower() == allInfo || s.AddressLineOne.ToLower().Contains(allInfo))
+                    || (s.AddressLineTwo.ToLower() == allInfo || s.AddressLineTwo.ToLower().Contains(allInfo))
+                    || (s.City.ToLower() == allInfo || s.City.ToLower().Contains(allInfo))
+                    || (s.PinCode.ToLower() == allInfo || s.PinCode.ToLower().Contains(allInfo)))
+                    || string.IsNullOrEmpty(allInfo))
                     .ToListAsync();
+                return list;
             }
         }
 

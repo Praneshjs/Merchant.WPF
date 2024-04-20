@@ -182,7 +182,6 @@
                              KeyUp="txtProductSearch_KeyUp" PreviewKeyUp="txtProductSearch_PreviewKeyUp" />
                     <Button Name="btnSearch" Content="Search" Click="btnSearch_Click"/>
                 </StackPanel>
-                <!-- Pagination Control -->
 
                 <DataGrid Name="productDataGrid" ItemsSource="{Binding CurrentPageData}" 
                               AutoGenerateColumns="False" CanUserAddRows="False" HorizontalAlignment="Left">

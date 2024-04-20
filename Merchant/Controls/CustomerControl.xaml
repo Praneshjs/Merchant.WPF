@@ -69,7 +69,7 @@
 
 
         </Style>
-        
+
         <Style TargetType="Label">
             <Setter Property="Padding" Value="5"/>
             <Setter Property="Background" Value="#f7f1e3"/>
@@ -175,11 +175,37 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
+            <!-- Search Button -->
+            <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0 0 0 5">
+                <TextBox Name="txtCustomerSearch" Text="{Binding ControlType}" MinWidth="150" 
+                            PreviewKeyUp="txtCustomerSearch_PreviewKeyUp" />
+                <Button Name="btnCustomerSearch" Content="Search" Click="btnCustomerSearch_Click"/>
+            </StackPanel>
 
-            <ListView x:Name="lstViewCustomer" Grid.Column="1" Grid.Row="0"  ItemsSource="{Binding Customers}">
+            <ListView x:Name="lstViewCustomer" Grid.Column="1" Grid.Row="1"  ItemsSource="{Binding Customers}" HorizontalContentAlignment="Center">
                 <ListView.View>
                     <GridView >
+                        <GridViewColumn Header="Select" Width="75">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                        <Image Source="/Assets/pencil_icon.png" Stretch="Fill" Name="btnSelectCustomer" 
+                                           MouseLeftButtonDown="btnSelectCustomer_MouseLeftButtonDown" 
+                                           HorizontalAlignment="Center" Width="20" Height="20" Tag="{Binding}">
+                                            <Image.Style>
+                                                <Style TargetType="Image">
+                                                    <Style.Triggers>
+                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                            <Setter Property="Cursor" Value="Hand"/>
+                                                        </Trigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Image.Style>
+                                        </Image>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
                         <GridViewColumn Header="First Name" DisplayMemberBinding="{Binding FirstName}" Width="150" />
                         <GridViewColumn Header="Last Name" DisplayMemberBinding="{Binding LastName}"/>
                         <GridViewColumn Width="Auto" Header="Mobile" DisplayMemberBinding="{Binding Mobile}" />
@@ -191,19 +217,12 @@
                         <GridViewColumn Header="Pin" DisplayMemberBinding="{Binding PinCode}"/>
                         <GridViewColumn Header="IsActive" DisplayMemberBinding="{Binding IsActive}"/>
                         <!-- Select Button Column -->
-                        <GridViewColumn Header="Select" Width="Auto">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Image Source="/Assets/pencil_icon.png" Stretch="Fill" Name="btnSelectCustomer" MouseLeftButtonDown="btnSelectCustomer_MouseLeftButtonDown"
-                                           HorizontalAlignment="Center" Width="20" Height="20" Tag="{Binding}"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
+
                     </GridView>
                 </ListView.View>
             </ListView>
 
-            <local:PaginationControl Grid.Column="1" Grid.Row="1" x:Name="customerPagination" 
+            <local:PaginationControl Grid.Column="1" Grid.Row="2" x:Name="customerPagination" 
                              PageInfo="{Binding PaginationInfo}" 
                              FirstPageClicked="customerPagination_FirstPageClicked"
                              PreviousPageClicked="customerPagination_PreviousPageClicked"
@@ -212,6 +231,6 @@
                              HorizontalAlignment="Left"
                              Height="40" VerticalAlignment="Top"/>
         </Grid>
-       
+
     </Grid>
 </UserControl>

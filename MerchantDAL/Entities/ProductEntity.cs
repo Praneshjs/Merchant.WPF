@@ -17,9 +17,10 @@ namespace MerchantDAL.Entities
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile<MappingProfile>();
-                cfg.CreateMap<Product, ProductModel>()
-                .ForMember(dest => dest.BrandName, opt => opt.MapFrom(src => src.CommonData.ControlValue))
-                .ForMember(dest => dest.ProductCategoryName, opt => opt.MapFrom(src => src.CommonData1.ControlValue));
+                cfg.CreateMap<Product, ProductModel>();
+                cfg.CreateMap<ProductModel, Product>();
+                //.ForMember(dest => dest.BrandName, opt => opt.MapFrom(src => src.CommonData.ControlValue))
+                //.ForMember(dest => dest.ProductCategoryName, opt => opt.MapFrom(src => src.CommonData1.ControlValue));
 
                 cfg.CreateMap<CommonDataModel, CommonData>();
                 cfg.CreateMap<UserModel, MerchantDAL.EntityModel.Profile>();
@@ -28,23 +29,30 @@ namespace MerchantDAL.Entities
         }
 
 
-        public async Task<List<ProductModel>> GetProductAsync(int brandId, int productTypeId, DateTime? expiryDate, string searchText, bool? isActive)
+        public async Task<List<ProductModel>> GetProductAsync(string searchText, bool? isActive)
         {
             using (var context = new MerchantEntities())
             {
+                DateTime.TryParse(searchText, out DateTime dateParam);
+
                 var query = context.Products.AsQueryable();
                 query = query.Where(s =>
-                (s.BrandId == brandId || brandId == 0)
-                || (s.ProductTypeId == productTypeId || productTypeId == 0)
-                || (s.ExpiryDate == expiryDate || expiryDate == null)
-                || s.CommonData.ControlValue.ToLower() == searchText.ToLower() || s.CommonData.ControlValue.ToLower().Contains(searchText.ToLower()) || string.IsNullOrEmpty(searchText));
+                (s.CommonData.ControlValue.ToLower() == searchText.ToLower() || s.CommonData.ControlValue.ToLower().Contains(searchText.ToLower()))
+                || (s.CommonData1.ControlValue.ToLower() == searchText.ToLower() || s.CommonData1.ControlValue.ToLower().Contains(searchText.ToLower()))
+                || (s.WeightKgs.ToString() == searchText || s.WeightKgs.ToString().Contains(searchText))
+                || (s.StockPrice.ToString() == searchText || s.StockPrice.ToString().Contains(searchText))
+                || (s.SellingPrice.ToString() == searchText || s.SellingPrice.ToString().Contains(searchText))
+                || ((s.MfgDate.Value.Month == dateParam.Month && s.MfgDate.Value.Year == dateParam.Year) || dateParam == DateTime.MinValue)
+                || ((s.ExpiryDate.Value.Month == dateParam.Month && s.ExpiryDate.Value.Year == dateParam.Year) || dateParam == DateTime.MinValue)
+                || string.IsNullOrEmpty(searchText));
 
                 if (isActive != null)
                 {
                     query = query.Where(s => s.IsActive == isActive);
                 }
 
-                var allData = await query.Include(t => t.CommonData).Include(t => t.CommonData1).ToListAsync();
+                var allData = await query.Include(t => t.CommonData).Include(t => t.CommonData1)
+                    .OrderByDescending(t => t.CreatedOn).ToListAsync();
                 var result = _mapper.Map<List<ProductModel>>(allData);
                 return result;
             }
@@ -70,11 +78,13 @@ namespace MerchantDAL.Entities
                         }
                     }
                 }
+
                 var newDatas = _mapper.Map<List<Product>>(products.Where(p => p.Id == 0));
                 context.Products.AddRange(newDatas);
 
                 await context.SaveChangesAsync();
-                var allData = await context.Products.Include(s => s.CommonData).Include(s => s.CommonData1).ToListAsync();
+                var allData = await context.Products.Include(s => s.CommonData).Include(s => s.CommonData1)
+                    .OrderByDescending(t => t.CreatedOn).ToListAsync();
                 return _mapper.Map<List<ProductModel>>(allData);
             }
         }

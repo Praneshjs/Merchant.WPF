@@ -188,7 +188,7 @@ namespace Merchant.Controls
         private void txtProductSearch_KeyUp(object sender, KeyEventArgs e)
         {
             int currentIndex = productMasterPagination.CurrentPage = 1;
-            var controlName = txtProductSearch.Text.Trim().ToTitleCase();
+            var controlName = txtProductSearch.Text.Trim().ToLower();
 
             GetAllProductMasterAsync(currentIndex, 0, controlName, true);
         }
@@ -198,7 +198,7 @@ namespace Merchant.Controls
             if (e.Key == Key.Back)
             {
                 int currentIndex = productMasterPagination.CurrentPage = 1;
-                var controlName = txtProductSearch.Text.Trim().ToTitleCase();
+                var controlName = txtProductSearch.Text.Trim().ToLower();
 
                 GetAllProductMasterAsync(currentIndex, 0, controlName, true);
             }
