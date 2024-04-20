@@ -99,10 +99,14 @@
     <Compile Include="Controls\ProductControl.xaml.cs">
       <DependentUpon>ProductControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\SalesControl.xaml.cs">
+      <DependentUpon>SalesControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ValidationPlaceholderControl.xaml.cs">
       <DependentUpon>ValidationPlaceholderControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Helper\StaticHelper.cs" />
+    <Compile Include="Controls\ConcatenateConverter.cs" />
     <Compile Include="ViewModel\ProductMasterViewModel.cs" />
     <Page Include="Controls\CircularLoader.xaml">
       <SubType>Designer</SubType>
@@ -121,6 +125,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\ProductMasterControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\SalesControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -66,6 +66,9 @@
             <TabItem Header="Product" Style="{StaticResource TabItemStyle}">
                 <local1:ProductControl Background="#FFDFF9FB"/>
             </TabItem>
+            <TabItem Header="Sales" Style="{StaticResource TabItemStyle}">
+                <local1:SalesControl Background="#FFDFF9FB"/>
+            </TabItem>
         </TabControl>
         <TextBlock Name="lblLoggedUser" HorizontalAlignment="Right" VerticalAlignment="Center" 
                    FontWeight="Bold" Grid.Row="0" Height="26" Margin="10,41,0,0.2" Width="126" 

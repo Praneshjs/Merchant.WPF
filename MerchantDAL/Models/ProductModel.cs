@@ -1,5 +1,6 @@
 ﻿using MerchantDAL.EntityModel;
 using System;
+using System.ComponentModel;
 
 namespace MerchantDAL.Models
 {
@@ -19,9 +20,9 @@ namespace MerchantDAL.Models
         public Nullable<System.DateTime> MfgDate { get; set; }
         public Nullable<System.DateTime> ExpiryDate { get; set; }
         public decimal WeightKgs { get; set; }
-        public string  BrandName { get; set; }
-        public int ProductCategoryName { get; set; }
         public virtual CommonData CommonData { get; set; }
         public virtual CommonData CommonData1 { get; set; }
+        // Calculated property that concatenates Brand and ProductType
+        public string FullProductName => $"{CommonData?.ControlValue} {CommonData1?.ControlValue}";
     }
 }
