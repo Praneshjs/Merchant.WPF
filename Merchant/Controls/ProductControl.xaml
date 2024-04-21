@@ -158,8 +158,8 @@
             <Label Grid.Row="7" Grid.Column="1" Content="Selling (Rs.)" HorizontalAlignment="Left" Margin="5,0,0,0"  />
 
             <!-- StackPanel for text boxes -->
-            <TextBox Grid.Row="8" Grid.Column="0" Name="txtStockPrice" PreviewTextInput="txtWeight_PreviewTextInput" HorizontalAlignment="Stretch" Margin="0,5,5,5" />
-            <TextBox Grid.Row="8" Grid.Column="1" Name="txtSellingPrice" PreviewTextInput="txtQuantity_PreviewTextInput" HorizontalAlignment="Stretch" Margin="5,5,0,5" />
+            <TextBox Grid.Row="8" Grid.Column="0" Name="txtStockPrice" PreviewTextInput="txtStockPrice_PreviewTextInput" HorizontalAlignment="Stretch" Margin="0,5,5,5" />
+            <TextBox Grid.Row="8" Grid.Column="1" Name="txtSellingPrice" PreviewTextInput="txtSellingPrice_PreviewTextInput" HorizontalAlignment="Stretch" Margin="5,5,0,5" />
 
             <Label Grid.Row="9" Grid.Column="0" Content="Mfg. Date" HorizontalAlignment="Left" />
             <Label Grid.Row="9" Grid.Column="1" Content="Expiry Date" HorizontalAlignment="Left" Margin="5,0,0,0"  />
@@ -183,107 +183,92 @@
             </Grid.RowDefinitions>
             <!-- Search Button -->
             <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0 0 0 5">
-                <TextBox Name="txtProductSearch" Text="{Binding ControlType}" MinWidth="150" 
-                              PreviewKeyUp="txtProductSearch_PreviewKeyUp" />
+                <TextBox Name="txtProductSearch" Text="{Binding ControlType}" MinWidth="150" PreviewKeyUp="txtProductSearch_PreviewKeyUp"/>
                 <Button Name="btnProductSearch" Content="Search" Click="btnProductSearch_Click"/>
             </StackPanel>
-            <Border BorderBrush="#ccc" BorderThickness="1"  Grid.Column="1" Grid.Row="1">
-                <ListView x:Name="lstProduct" ItemsSource="{Binding Product}">
-                    <ListView.View>
-                        <GridView >
-                            <GridViewColumn Header="Brand" Width="150" DisplayMemberBinding="{Binding CommonData.ControlValue}" />
-                            <GridViewColumn Header="Product Type" Width="200" DisplayMemberBinding="{Binding CommonData1.ControlValue}"/>
-                            <GridViewColumn Header="Kgs." Width="75" DisplayMemberBinding="{Binding WeightKgs}" />
-                            <GridViewColumn Header="Stk. Rs." Width="75" DisplayMemberBinding="{Binding StockPrice}"/>
-                            <GridViewColumn Header="Sell Rs." Width="75" DisplayMemberBinding="{Binding SellingPrice}"/>
-                            <GridViewColumn Header="Mfg.Date" Width="100">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding MfgDate, StringFormat={}{0:dd-MMM-yy}}" />
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn Header="ExpiryDate" Width="100">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding ExpiryDate, StringFormat={}{0:dd-MM-yy}}" />
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn Header="IsActive"  Width="75" DisplayMemberBinding="{Binding IsActive}"/>
-                            <!-- Select Button Column -->
-                            <GridViewColumn Header="Select" Width="75">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <Image Source="/Assets/pencil_icon.png" Stretch="Fill" Name="btnSelectProduct" 
-                   MouseLeftButtonDown="btnSelectProduct_MouseLeftButtonDown"
-                   HorizontalAlignment="Center" Width="20" Height="20" Tag="{Binding}">
-                                            <Image.Style>
-                                                <Style TargetType="Image">
-                                                    <Style.Triggers>
-                                                        <Trigger Property="IsMouseOver" Value="True">
-                                                            <Setter Property="Cursor" Value="Hand"/>
-                                                        </Trigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </Image.Style>
-                                        </Image>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-
-                        </GridView>
-                    </ListView.View>
-                    <ListView.ItemContainerStyle>
-                        <Style TargetType="ListViewItem">
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="ListViewItem">
-                                        <Border x:Name="border" BorderBrush="#ccc" BorderThickness="1 0 1 1" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}">
-                                            <GridViewRowPresenter Content="{TemplateBinding Content}" />
-                                        </Border>
-                                        <ControlTemplate.Triggers>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter TargetName="border" Property="Background" Value="#F0F0F0"/>
-                                            </Trigger>
-                                            <Trigger Property="IsSelected" Value="True">
-                                                <Setter TargetName="border" Property="Background" Value="#FFE0E0E0"/>
-                                            </Trigger>
-                                        </ControlTemplate.Triggers>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </ListView.ItemContainerStyle>
-                    <ListView.Resources>
-                        <Style TargetType="GridViewColumnHeader">
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="{x:Type GridViewColumnHeader}">
-                                        <Border BorderBrush="#ccc" BorderThickness="1 1 1 1">
-                                            <ContentPresenter HorizontalAlignment="Center"/>
-                                        </Border>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                        <Style TargetType="ListViewItem">
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="ListViewItem">
-                                        <Border BorderBrush="red" BorderThickness="1 1 1 1">
-                                            <!-- Border for top and bottom of the cell -->
-                                            <GridViewRowPresenter Content="{TemplateBinding Content}" />
-                                        </Border>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </ListView.Resources>
+            <ListView x:Name="lstProduct" ItemsSource="{Binding Product}" HorizontalAlignment="Left"  Grid.Column="1" Grid.Row="1">
+                <ListView.View>
+                    <GridView >
+                        <GridViewColumn Header="Product" Width="250" DisplayMemberBinding="{Binding FullProductName}" />
+                        <GridViewColumn Header="Kgs." Width="75" DisplayMemberBinding="{Binding WeightKgs}" />
+                        <GridViewColumn Header="Stk. Rs." Width="75" DisplayMemberBinding="{Binding StockPrice}"/>
+                        <GridViewColumn Header="Sell Rs." Width="75" DisplayMemberBinding="{Binding SellingPrice}"/>
+                        <GridViewColumn Header="Mfg.Date" Width="100">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding MfgDate, StringFormat={}{0:dd-MMM-yy}}" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="ExpiryDate" Width="100">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding ExpiryDate, StringFormat={}{0:dd-MMM-yy}}" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="IsActive"  Width="75" DisplayMemberBinding="{Binding IsActive}"/>
+                        <!-- Select Button Column -->
+                        <GridViewColumn Header="Select" Width="50">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Image Source="/Assets/pencil_icon.png" Stretch="Fill" Name="btnSelectProduct" 
+                                               MouseLeftButtonDown="btnSelectProduct_MouseLeftButtonDown" HorizontalAlignment="Center" Width="20" Height="20" Tag="{Binding}">
+                                        <Image.Style>
+                                            <Style TargetType="Image">
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Cursor" Value="Hand"/>
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Image.Style>
+                                    </Image>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ListViewItem">
+                                    <Border x:Name="border" BorderBrush="#ccc" BorderThickness="0 0 0 1" 
+                                                Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}">
+                                        <GridViewRowPresenter Content="{TemplateBinding Content}" />
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="border" Property="Background" Value="#F0F0F0"/>
+                                        </Trigger>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter TargetName="border" Property="Background" Value="#FFE0E0E0"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                    
+                </ListView.ItemContainerStyle>
+                <ListView.Resources>
+                    <Style TargetType="GridViewColumnHeader">
+                        <Setter Property="Foreground" Value="#e17055" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type GridViewColumnHeader}">
+                                    <Border BorderBrush="#84817a" BorderThickness="0 0 0 1">
+                                        <ContentPresenter HorizontalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListView.Resources>
 
 
-                </ListView>
-            </Border>
+            </ListView>
             <local:PaginationControl Grid.Column="1" Grid.Row="2" x:Name="customerPagination" 
                              PageInfo="{Binding PaginationInfo}" 
                              FirstPageClicked="customerPagination_FirstPageClicked"

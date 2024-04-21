@@ -200,9 +200,37 @@ namespace Merchant.Controls
             }
         }
 
+        #region Text Char Limiter
+
         private void txtWeight_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             if (txtWeight.Text.IndexOf('.') > 0 && e.Text == ".")
+            {
+                e.Handled = true;
+                return;
+            }
+            if (!System.Text.RegularExpressions.Regex.IsMatch(e.Text, "^[0-9]*\\.?[0-9]*$"))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void txtStockPrice_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            if (txtStockPrice.Text.IndexOf('.') > 0 && e.Text == ".")
+            {
+                e.Handled = true;
+                return;
+            }
+            if (!System.Text.RegularExpressions.Regex.IsMatch(e.Text, "^[0-9]*\\.?[0-9]*$"))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void txtSellingPrice_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            if (txtSellingPrice.Text.IndexOf('.') > 0 && e.Text == ".")
             {
                 e.Handled = true;
                 return;
@@ -219,8 +247,9 @@ namespace Merchant.Controls
             {
                 e.Handled = true;
             }
-
         }
+
+        #endregion
 
         private void btnProductSearch_Click(object sender, RoutedEventArgs e)
         {

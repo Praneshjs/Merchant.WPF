@@ -113,6 +113,9 @@
     <Compile Include="Models\CustomerModel.cs" />
     <Compile Include="Models\MappingProfile.cs" />
     <Compile Include="Models\ProductModel.cs" />
+    <Compile Include="Models\PurchaseItemsModel.cs" />
+    <Compile Include="Models\SalesItemModel.cs" />
+    <Compile Include="Models\SalesManager.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Entities\ProductMasterEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

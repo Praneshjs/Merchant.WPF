@@ -1,4 +1,5 @@
-﻿using MerchantDAL.Models;
+﻿using Merchant.Helper;
+using MerchantDAL.Models;
 using MerchantService.Services;
 using System;
 using System.Collections.Generic;
@@ -56,7 +57,34 @@ namespace Merchant.Controls
 
         private void btnAddProductItem_Click(object sender, RoutedEventArgs e)
         {
+            if (sender is Button button && button.Tag is ProductModel selectedData)
+            {
+                var container = ListViewHelper.FindAncestor<ListViewItem>(button);
+                var textBox = ListViewHelper.FindChild<TextBox>(container, "txtQuantityInGrid");
 
+                if (textBox != null && decimal.TryParse(textBox.Text, out decimal quantity))
+                {
+                    SalesItemModel sale = new SalesItemModel
+                    {
+                        ProductId = selectedData.Id,
+                        BrandId = selectedData.BrandId,
+                        ProductTypeId = selectedData.ProductTypeId,
+                        FullProductName = selectedData.FullProductName,
+                        SellingPrice = selectedData.SellingPrice,
+                        Weight = selectedData.WeightKgs,
+                        Quantity = quantity
+                    };
+
+                    UserSession.Instance.SalesManager.AddSale(1, sale);
+                    var purchaseItems = UserSession.Instance.SalesManager.GetAllSales(1);
+                    lstPurchaseList.ItemsSource = null;
+                    lstPurchaseList.ItemsSource = purchaseItems;
+                }
+                else
+                {
+                    // Handle invalid quantity input
+                }
+            }
         }
     }
 }

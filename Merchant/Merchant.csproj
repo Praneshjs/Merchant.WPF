@@ -105,6 +105,7 @@
     <Compile Include="Controls\ValidationPlaceholderControl.xaml.cs">
       <DependentUpon>ValidationPlaceholderControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Helper\ListViewHelper.cs" />
     <Compile Include="Helper\StaticHelper.cs" />
     <Compile Include="Controls\ConcatenateConverter.cs" />
     <Compile Include="ViewModel\ProductMasterViewModel.cs" />

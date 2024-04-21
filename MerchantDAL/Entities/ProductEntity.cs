@@ -4,6 +4,7 @@ using MerchantDAL.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -28,28 +29,46 @@ namespace MerchantDAL.Entities
             _mapper = config.CreateMapper();
         }
 
-
         public async Task<List<ProductModel>> GetProductAsync(string searchText, bool? isActive)
         {
             using (var context = new MerchantEntities())
             {
-                DateTime.TryParse(searchText, out DateTime dateParam);
+                string[] monthpattern = { "MM-yy", "MMM-yy", "MM-yyyy", "MMM-yyyy", "MM/yy", "MMM/yy", "MM/yyyy", "MMM/yyyy" };
+                var monthFilterStatus = DateTime.TryParseExact(searchText, monthpattern, CultureInfo.InvariantCulture,
+                    DateTimeStyles.None, out DateTime monthParam);
+                string[] datePattern = { "dd-MM-yy", "d-M-yy", "dd/MM/yy", "d/M/yy" };
+                var dateFilterStatus = DateTime.TryParseExact(searchText, datePattern, CultureInfo.InvariantCulture,
+                    DateTimeStyles.None, out DateTime dateParam);
+                var activeFilterStatus = bool.TryParse(searchText, out bool IsActiveFilter);
 
                 var query = context.Products.AsQueryable();
-                query = query.Where(s =>
-                (s.CommonData.ControlValue.ToLower() == searchText.ToLower() || s.CommonData.ControlValue.ToLower().Contains(searchText.ToLower()))
-                || (s.CommonData1.ControlValue.ToLower() == searchText.ToLower() || s.CommonData1.ControlValue.ToLower().Contains(searchText.ToLower()))
-                || (s.WeightKgs.ToString() == searchText || s.WeightKgs.ToString().Contains(searchText))
-                || (s.StockPrice.ToString() == searchText || s.StockPrice.ToString().Contains(searchText))
-                || (s.SellingPrice.ToString() == searchText || s.SellingPrice.ToString().Contains(searchText))
-                || ((s.MfgDate.Value.Month == dateParam.Month && s.MfgDate.Value.Year == dateParam.Year) || dateParam == DateTime.MinValue)
-                || ((s.ExpiryDate.Value.Month == dateParam.Month && s.ExpiryDate.Value.Year == dateParam.Year) || dateParam == DateTime.MinValue)
-                || string.IsNullOrEmpty(searchText));
 
-                if (isActive != null)
+                if (monthFilterStatus)
                 {
-                    query = query.Where(s => s.IsActive == isActive);
+                    query = query.Where(s => (s.ExpiryDate.Value.Month == monthParam.Month && s.ExpiryDate.Value.Year == monthParam.Year)
+                    || (s.MfgDate.Value.Month == monthParam.Month && s.MfgDate.Value.Year == monthParam.Year));
                 }
+                else if (dateFilterStatus)
+                {
+                    query = query.Where(s => (s.ExpiryDate == dateParam) || (s.MfgDate == dateParam));
+                }
+                else if (activeFilterStatus)
+                {
+                    query = query.Where(s => s.IsActive == IsActiveFilter);
+                }
+                else
+                {
+                    query = query.Where(s => (s.CommonData.ControlValue.ToLower() == searchText.ToLower()
+                    || s.CommonData.ControlValue.ToLower().Contains(searchText.ToLower()))
+                    || (s.CommonData1.ControlValue.ToLower() == searchText.ToLower()
+                    || s.CommonData1.ControlValue.ToLower().Contains(searchText.ToLower()))
+                    || (s.WeightKgs.ToString() == searchText || s.WeightKgs.ToString().Contains(searchText))
+                    || (s.StockPrice.ToString() == searchText || s.StockPrice.ToString().Contains(searchText))
+                    || (s.SellingPrice.ToString() == searchText || s.SellingPrice.ToString().Contains(searchText))
+                    || string.IsNullOrEmpty(searchText)
+                    );
+                }
+                
 
                 var allData = await query.Include(t => t.CommonData).Include(t => t.CommonData1)
                     .OrderByDescending(t => t.CreatedOn).ToListAsync();

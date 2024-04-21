@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
-        <Style TargetType="TextBox">
+        <Style TargetType="TextBox" x:Key="txtNonGrid">
             <Setter Property="Padding" Value="3"/>
             <Setter Property="Template">
                 <Setter.Value>
@@ -34,12 +34,68 @@
             </Setter>
         </Style>
 
-        <Style TargetType="Button">
+        <Style TargetType="TextBox" x:Key="txtInGrid">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Grid>
+                            <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="5">
+                                <!-- Adjust the CornerRadius value as needed -->
+                                <ScrollViewer x:Name="PART_ContentHost" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden"/>
+                            </Border>
+                            <TextBlock x:Name="CaretElement" Visibility="Collapsed" Foreground="{TemplateBinding CaretBrush}" VerticalAlignment="Center" TextAlignment="Left" Text="_"/>
+                        </Grid>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter TargetName="CaretElement" Property="Visibility" Value="Visible"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="Button" x:Key="NonGrid">
             <Setter Property="Padding" Value="10"/>
             <Setter Property="Height"  Value="40"/>
             <Setter Property="Background" Value="#f7f1e3"/>
             <Setter Property="Foreground" Value="#84817a"/>
             <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Border" Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}"
+                                Padding="{TemplateBinding Padding}" CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Border" Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect ShadowDepth="2" Direction="320" Color="Black" Opacity="0.5"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="False">
+                                <Setter TargetName="Border" Property="Effect" Value="{x:Null}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <Style TargetType="Button" x:Key="InGrid">
+            <Setter Property="Padding" Value="3"/>
+            <Setter Property="Background" Value="#badc58"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="15"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Template">
                 <Setter.Value>
@@ -71,8 +127,8 @@
 
     <Grid Background="#ccc" >
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="3*" />
-            <ColumnDefinition Width="4*" />
+            <ColumnDefinition Width="3.4*" />
+            <ColumnDefinition Width="3.6*" />
             <ColumnDefinition Width="3*" />
         </Grid.ColumnDefinitions>
 
@@ -82,44 +138,119 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0 0 0 5">
-                <TextBox Name="txtProductSearch" Text="{Binding ControlType}" MinWidth="150" 
+                <TextBox Name="txtProductSearch" Text="{Binding ControlType}" Style="{StaticResource txtNonGrid}" MinWidth="150" 
                               PreviewKeyUp="txtProductSearch_PreviewKeyUp" />
-                <Button Name="btnProductSearch" Content="Search" Click="btnProductSearch_Click"/>
+                <Button Name="btnProductSearch" Content="Search" Click="btnProductSearch_Click" Style="{StaticResource NonGrid}"/>
             </StackPanel>
-            <ListView Grid.Row="1" x:Name="lstProductSearch" ItemsSource="{Binding Product}" MaxHeight="400" VerticalAlignment="Top">
+            <ListView Grid.Row="1" x:Name="lstProductSearch" ItemsSource="{Binding Product}" MaxHeight="400" VerticalAlignment="Top" HorizontalAlignment="Left">
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn Header="Product" Width="200" DisplayMemberBinding="{Binding FullProductName}" />
+                        <GridViewColumn Header="Product" Width="250" DisplayMemberBinding="{Binding FullProductName}" />
                         <GridViewColumn Header="Kgs." Width="50" DisplayMemberBinding="{Binding WeightKgs}" />
                         <GridViewColumn Header="Rs." Width="50" DisplayMemberBinding="{Binding SellingPrice}" />
-                        <GridViewColumn Header="Quantity" Width="70">
+                        <GridViewColumn Header="Qnty." Width="75">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBox Text="{Binding Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MinWidth="55" />
+                                    <TextBox Name="txtQuantityInGrid" Text="{Binding Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource txtInGrid}" MinWidth="55" />
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn Header="Action" Width="75">
+                        <GridViewColumn Header="Add" Width="50">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Button Content="Add" Name="btnAddProductItem" Click="btnAddProductItem_Click" Tag="{Binding}" />
+                                    <Button Content="Add" Name="btnAddProductItem" Click="btnAddProductItem_Click" Tag="{Binding}" Style="{StaticResource InGrid}" />
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
                     </GridView>
                 </ListView.View>
+                 <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ListViewItem">
+                                    <Border x:Name="border" BorderBrush="#ccc" BorderThickness="0 0 0 1" 
+                                                Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}">
+                                        <GridViewRowPresenter Content="{TemplateBinding Content}" />
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="border" Property="Background" Value="#F0F0F0"/>
+                                        </Trigger>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter TargetName="border" Property="Background" Value="#FFE0E0E0"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.Resources>
+                    <Style TargetType="GridViewColumnHeader">
+                        <Setter Property="Foreground" Value="#e17055" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type GridViewColumnHeader}">
+                                    <Border BorderBrush="#84817a" BorderThickness="0 0 0 1">
+                                        <ContentPresenter HorizontalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListView.Resources>
             </ListView>
 
         </Grid>
         <Grid Grid.Column="1" Margin="20">
             <!-- ListView to display purchase list -->
-            <ListView x:Name="lstPurchaseList" ItemsSource="{Binding PurchaseList}">
+            <ListView x:Name="lstPurchaseList" ItemsSource="{Binding SalesModel}">
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn Header="Product Name" DisplayMemberBinding="{Binding Name}" />
-                        <GridViewColumn Header="Quantity" DisplayMemberBinding="{Binding Quantity}" />
+                        <GridViewColumn Header="Product Name" Width="200" DisplayMemberBinding="{Binding FullProductName}" />
+                        <GridViewColumn Header="Wt. Kgs" Width="75" DisplayMemberBinding="{Binding Weight}" />
+                        <GridViewColumn Header="Unit Rs." Width="75" DisplayMemberBinding="{Binding SellingPrice}" />
+                        <GridViewColumn Header="Qnty." Width="75" DisplayMemberBinding="{Binding Quantity}" />
+                        <GridViewColumn Header="Total" Width="100" DisplayMemberBinding="{Binding ItemSetPrice}" />
                     </GridView>
                 </ListView.View>
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ListViewItem">
+                                    <Border x:Name="border" BorderBrush="#ccc" BorderThickness="0 0 0 1" 
+                                                Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}">
+                                        <GridViewRowPresenter Content="{TemplateBinding Content}" />
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="border" Property="Background" Value="#F0F0F0"/>
+                                        </Trigger>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter TargetName="border" Property="Background" Value="#FFE0E0E0"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.Resources>
+                    <Style TargetType="GridViewColumnHeader">
+                        <Setter Property="Foreground" Value="#4b7bec" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type GridViewColumnHeader}">
+                                    <Border BorderBrush="#84817a" BorderThickness="0 0 0 1">
+                                        <ContentPresenter HorizontalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListView.Resources>
             </ListView>
         </Grid>
         <Grid Grid.Column="2" Margin="20">
