@@ -41,7 +41,7 @@ namespace Merchant.Controls
         private async void LoadControlTypeAsync()
         {
             ProductMasterService fetch = new ProductMasterService();
-            var masterDatas = await fetch.GetProductMasterAsync(0, null, null);
+            var masterDatas = await fetch.GetProductMasterAsync(0, null, true);
             var brandList = masterDatas.Where(s => s.CommonControl.ControlType == "Brand")
                 .Select(t => new CommonDataModel() { Id = t.Id, ControlValue = t.ControlValue }).ToList();
             brandList.Add(new CommonDataModel { Id = 0, ControlValue = "Select Brand" });
@@ -54,6 +54,12 @@ namespace Merchant.Controls
             cmbProductType.ItemsSource = productCategoryList.OrderBy(s => s.Id);
             cmbProductType.SelectedIndex = 0;
             cmbProductType.Items.Refresh();
+
+            var productWeightType = masterDatas.Where(s => s.CommonControl.ControlType == "Weight Type")
+               .Select(t => new CommonDataModel() { Id = t.Id, ControlValue = t.ControlValue }).ToList();
+            productWeightType.Add(new CommonDataModel { Id = 0, ControlValue = "Select Weight Type" });
+            cmbWeightType.ItemsSource = productWeightType.OrderBy(s => s.Id);
+            cmbWeightType.SelectedIndex = 1; //Default as Kgs
         }
 
         private async void GetAllProductAsync(int pageIndex, DateTime? expiryDate = null, string allInfo = null, bool? isActive = null)
@@ -81,8 +87,9 @@ namespace Merchant.Controls
             {
                 int.TryParse(cmbBrandName.SelectedValue?.ToString(), out int brandNameId);
                 int.TryParse(cmbProductType.SelectedValue?.ToString(), out int productTypeId);
-                decimal.TryParse(txtWeight.Text, out decimal weightKgs);
+                int.TryParse(cmbWeightType.SelectedValue?.ToString(), out int weightTypeId);
                 int.TryParse(txtQuantity.Text, out int quantity);
+                decimal.TryParse(txtWeight.Text, out decimal weight);
                 decimal.TryParse(txtStockPrice.Text, out decimal stockPrice);
                 decimal.TryParse(txtSellingPrice.Text, out decimal sellingPrice);
                 DateTime.TryParse(txtMfgDate.Text, out DateTime manufacturedDate);
@@ -94,9 +101,10 @@ namespace Merchant.Controls
                 if (productTypeId == 0) validationMsg.AppendLine("Select a product type");
                 if (manufacturedDate == DateTime.MinValue) validationMsg.AppendLine("Invalid Mfg. date");
                 if (expiryDate == DateTime.MinValue) validationMsg.AppendLine("Invalid expiry date");
-                if (weightKgs == 0) validationMsg.AppendLine("Product weight is empty");
+                if (weightTypeId == 0) validationMsg.AppendLine("Select Product weight");
                 if (stockPrice == 0) validationMsg.AppendLine("Stock price is empty");
                 if (sellingPrice == 0) validationMsg.AppendLine("Selling price is empty");
+                if (weight == 0) validationMsg.AppendLine("Item weight is empty");
 
                 if (validationMsg.Length > 0)
                 {
@@ -104,7 +112,8 @@ namespace Merchant.Controls
                     return;
                 }
                 int.TryParse(btnAddProducts.Tag?.ToString(), out int productId);
-                var qrGuid = Guid.NewGuid();
+                if (quantity > 1) productId = 0;//for copy data comfort
+                 var qrGuid = Guid.NewGuid();
                 var newData = new ProductModel
                 {
                     Id = productId,
@@ -118,7 +127,8 @@ namespace Merchant.Controls
                     QRId = qrGuid,
                     SellingPrice = sellingPrice,
                     StockPrice = stockPrice,
-                    WeightKgs = weightKgs
+                    WeightTypeId = weightTypeId,
+                    ItemWeight = weight
                 };
                 string productInfo = JsonConvert.SerializeObject(newData, Formatting.Indented);
 
@@ -137,7 +147,7 @@ namespace Merchant.Controls
                 BindProductGridData(allData, currentPageIndex);
                 if (productId == 0)
                 {
-                    validationMsgCtrl.ShowValidationBox($"New product stocks {cmbBrandName.SelectedItem}, {cmbProductType.SelectedItem}, {quantity} * {weightKgs} added successfully");
+                    validationMsgCtrl.ShowValidationBox($"New product stocks {cmbBrandName.SelectedItem}, {cmbProductType.SelectedItem}, {quantity} * {cmbWeightType.SelectedItem} added successfully");
                 }
                 else
                 {
@@ -166,7 +176,8 @@ namespace Merchant.Controls
                 QRId = original.QRId,
                 SellingPrice = original.SellingPrice,
                 StockPrice = original.StockPrice,
-                WeightKgs = original.WeightKgs
+                WeightTypeId = original.WeightTypeId,
+                ItemWeight = original.ItemWeight
             };
         }
 
@@ -174,10 +185,12 @@ namespace Merchant.Controls
         {
             cmbBrandName.SelectedIndex = 0;
             cmbProductType.SelectedIndex = 0;
+            cmbWeightType.SelectedIndex = 1;
             txtWeight.Text = string.Empty;
             txtQuantity.Text = string.Empty;
             txtSellingPrice.Text = string.Empty;
             txtStockPrice.Text = string.Empty;
+            txtQuantity.Text = "1";
             SetDefaultValue();
             validationMsgCtrl.CloseValidationBox_Click(null, null);
             LoadControlTypeAsync();
@@ -190,7 +203,8 @@ namespace Merchant.Controls
                 cmbBrandName.SelectedValue = selectedData.BrandId;
                 cmbProductType.SelectedValue = selectedData.ProductTypeId;
                 cmbProductType.Items.Refresh();
-                txtWeight.Text = selectedData.WeightKgs.ToString();
+                cmbWeightType.SelectedValue = selectedData.WeightTypeId;
+                txtWeight.Text = selectedData.ItemWeight.ToString();
                 txtQuantity.Text = "1";
                 txtSellingPrice.Text = selectedData.SellingPrice?.ToString();
                 txtStockPrice.Text = selectedData.StockPrice?.ToString();

@@ -56,19 +56,24 @@ namespace MerchantDAL.Entities
                 {
                     query = query.Where(s => s.IsActive == IsActiveFilter);
                 }
+                else if (isActive != null)
+                {
+                    query = query.Where(s => s.IsActive == isActive);
+                }
                 else
                 {
                     query = query.Where(s => (s.CommonData.ControlValue.ToLower() == searchText.ToLower()
                     || s.CommonData.ControlValue.ToLower().Contains(searchText.ToLower()))
                     || (s.CommonData1.ControlValue.ToLower() == searchText.ToLower()
                     || s.CommonData1.ControlValue.ToLower().Contains(searchText.ToLower()))
-                    || (s.WeightKgs.ToString() == searchText || s.WeightKgs.ToString().Contains(searchText))
+                    || (s.CommonData2.ControlValue.ToLower() == searchText.ToLower()
+                    || s.CommonData2.ControlValue.ToLower().Contains(searchText.ToLower()))
                     || (s.StockPrice.ToString() == searchText || s.StockPrice.ToString().Contains(searchText))
                     || (s.SellingPrice.ToString() == searchText || s.SellingPrice.ToString().Contains(searchText))
                     || string.IsNullOrEmpty(searchText)
                     );
                 }
-                
+
 
                 var allData = await query.Include(t => t.CommonData).Include(t => t.CommonData1)
                     .OrderByDescending(t => t.CreatedOn).ToListAsync();

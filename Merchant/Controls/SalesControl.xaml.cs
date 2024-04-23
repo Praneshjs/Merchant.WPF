@@ -47,7 +47,7 @@ namespace Merchant.Controls
             ProductService fetchService = new ProductService();
             var allData = await fetchService.GetProductAsync(allInfo, isActive);
             var groupedData = allData
-                .GroupBy(p => new { p.FullProductName, p.WeightKgs, p.SellingPrice })
+                .GroupBy(p => new { p.FullProductName, p.WeightTypeId, p.SellingPrice })
                 .Select(group => group.First())
                 .OrderBy(t => t.FullProductName)
                 .ToList();
@@ -71,7 +71,7 @@ namespace Merchant.Controls
                         ProductTypeId = selectedData.ProductTypeId,
                         FullProductName = selectedData.FullProductName,
                         SellingPrice = selectedData.SellingPrice,
-                        Weight = selectedData.WeightKgs,
+                        Weight = selectedData.ItemWeight,
                         Quantity = quantity
                     };
 

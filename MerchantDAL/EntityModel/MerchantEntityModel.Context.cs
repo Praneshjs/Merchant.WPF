@@ -12,34 +12,23 @@ namespace MerchantDAL.EntityModel
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
-
+    
     public partial class MerchantEntities : DbContext
     {
         public MerchantEntities()
             : base("name=MerchantEntities")
         {
         }
-
+    
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            throw new UnintentionalCodeFirstException();
+        }
+    
         public virtual DbSet<CommonControl> CommonControls { get; set; }
         public virtual DbSet<CommonData> CommonDatas { get; set; }
         public virtual DbSet<Customer> Customers { get; set; }
-        public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<Profile> Profiles { get; set; }
-
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<Product>()
-                .Property(p => p.WeightKgs) 
-                .HasColumnType("decimal(8, 2)");
-
-            modelBuilder.Entity<Product>()
-                .Property(p => p.SellingPrice)
-                .HasColumnType("decimal(8, 2)");
-            
-            modelBuilder.Entity<Product>()
-               .Property(p => p.StockPrice)
-               .HasColumnType("decimal(8, 2)");
-        }
+        public virtual DbSet<Product> Products { get; set; }
     }
-
 }

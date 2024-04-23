@@ -8,21 +8,22 @@
         <EntityTypeShape EntityType="MerchantModel.CommonControl" Width="1.5" PointX="3" PointY="1.5" />
         <EntityTypeShape EntityType="MerchantModel.CommonData" Width="1.5" PointX="5.25" PointY="3.5" />
         <EntityTypeShape EntityType="MerchantModel.Customer" Width="1.5" PointX="3" PointY="5.25" />
-        <EntityTypeShape EntityType="MerchantModel.Product" Width="1.5" PointX="7.5" PointY="4" />
         <EntityTypeShape EntityType="MerchantModel.Profile" Width="1.5" PointX="0.75" PointY="2.25" />
         <AssociationConnector Association="MerchantModel.FK__CommonCon__Creat__7C1A6C5A" />
         <AssociationConnector Association="MerchantModel.FK__CommonCon__Modif__7D0E9093" />
         <AssociationConnector Association="MerchantModel.FK__CommonDat__Contr__7FEAFD3E" />
         <AssociationConnector Association="MerchantModel.FK__CommonDat__Creat__00DF2177" />
         <AssociationConnector Association="MerchantModel.FK__CommonDat__Modif__01D345B0" />
-        <AssociationConnector Association="MerchantModel.FK__Product__BrandId__0880433F" />
-        <AssociationConnector Association="MerchantModel.FK__Product__Product__09746778" />
         <AssociationConnector Association="MerchantModel.FK__Customer__Create__04AFB25B" />
         <AssociationConnector Association="MerchantModel.FK__Customer__Modifi__05A3D694" />
-        <AssociationConnector Association="MerchantModel.FK__Product__Created__0A688BB1" />
-        <AssociationConnector Association="MerchantModel.FK__Product__Modifie__0B5CAFEA" />
         <AssociationConnector Association="MerchantModel.FK__Profile__Created__7849DB76" />
         <AssociationConnector Association="MerchantModel.FK__Profile__Modifie__793DFFAF" />
+        <EntityTypeShape EntityType="MerchantModel.Product" Width="1.5" PointX="7.5" PointY="3.125" />
+        <AssociationConnector Association="MerchantModel.FK__Product__BrandId__55BFB948" />
+        <AssociationConnector Association="MerchantModel.FK__Product__Product__56B3DD81" />
+        <AssociationConnector Association="MerchantModel.FK__Product__WeightT__57A801BA" />
+        <AssociationConnector Association="MerchantModel.FK__Product__Created__589C25F3" />
+        <AssociationConnector Association="MerchantModel.FK__Product__Modifie__59904A2C" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

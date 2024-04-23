@@ -23,10 +23,10 @@ namespace MerchantDAL.EntityModel
             this.CommonDatas1 = new HashSet<CommonData>();
             this.Customers = new HashSet<Customer>();
             this.Customers1 = new HashSet<Customer>();
-            this.Products = new HashSet<Product>();
-            this.Products1 = new HashSet<Product>();
             this.Profile1 = new HashSet<Profile>();
             this.Profile11 = new HashSet<Profile>();
+            this.Products = new HashSet<Product>();
+            this.Products1 = new HashSet<Product>();
         }
     
         public int Id { get; set; }
@@ -61,14 +61,14 @@ namespace MerchantDAL.EntityModel
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Customer> Customers1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Product> Products { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Product> Products1 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Profile> Profile1 { get; set; }
         public virtual Profile Profile2 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Profile> Profile11 { get; set; }
         public virtual Profile Profile3 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Product> Products { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Product> Products1 { get; set; }
     }
 }

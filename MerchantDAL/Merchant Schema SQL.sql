@@ -30,7 +30,7 @@ GO
 
 if OBJECT_ID('Profile') is null
 Begin
-Create table Profile(
+CREATE TABLE Profile(
 	Id int Identity(1,1) primary key,
 	FirstName nvarchar(50),
 	LastName  nvarchar(50),
@@ -55,12 +55,12 @@ Create table Profile(
 End
 go
 
-insert into Profile (FirstName, LastName, Mobile, EmailId, UserName, Password, IsAdmin, JoinDate, CreatedOn)
+INSERT INTO Profile (FirstName, LastName, Mobile, EmailId, UserName, Password, IsAdmin, JoinDate, CreatedOn)
 VALUES ('Pranesh','J', '9940926547', 'praneshece@gmail.com', 'admin', 'Admin@123', 1, getdate(), getdate());
 
-if OBJECT_ID('CommonControl') is null
+IF OBJECT_ID('CommonControl') is null
 Begin
-Create table CommonControl (
+CREATE TABLE CommonControl (
 	Id int Identity(1,1) primary key,
 	ControlType Nvarchar(50),
 	IsActive bit not null,
@@ -73,12 +73,13 @@ Create table CommonControl (
 )
 End
 go
---insert into CommonControl (ControlType, IsActive, CreatedOn, CreatedBy)
---values ('Brand',1,Getdate(),1), ('Product Category',1,Getdate(),1)
 
-if OBJECT_ID('CommonData') is null
+--insert into CommonControl (ControlType, IsActive, CreatedOn, CreatedBy)
+--values ('Brand',1,Getdate(),1), ('Product Category',1,Getdate(),1), ('Weight Type',1,Getdate(),1)
+
+IF OBJECT_ID('CommonData') is null
 Begin
-Create table CommonData (
+CREATE TABLE CommonData (
 	Id int Identity(1,1) primary key,
 	ControlTypeId int not null,
 	ControlValue Nvarchar(100),
@@ -94,9 +95,10 @@ Create table CommonData (
 End
 go
 
-if OBJECT_ID('Customer') is null
+
+IF OBJECT_ID('Customer') is null
 Begin
-Create table Customer (
+CREATE TABLE Customer (
 	Id int Identity(1,1) primary key,
 	FirstName nvarchar(70),
 	LastName Nvarchar(70),
@@ -119,17 +121,18 @@ Create table Customer (
 End
 go
 
-if OBJECT_ID('Product') is null
-begin
-Create table Product (
-	Id int Identity(1,1) primary key,
-	QRId uniqueidentifier,
+
+IF OBJECT_ID('Product') IS NULL
+BEGIN
+CREATE TABLE Product (
+	Id int Identity(1,1) PRIMARY KEY,
+	QRId UNIQUEIDENTIFIER,
 	BrandId int NOT NULL,
 	ProductTypeId int NOT NULL,
-	WeightTypeId int not null,
-	ItemWeight decimal(8,2) not null,
+	WeightTypeId int NOT NULL,
+	ItemWeight decimal(8,2) NOT NULL,
 	StockPrice decimal(8,2),
-	SellingPrice decimal(8,2) not null,
+	SellingPrice decimal(8,2) NOT NULL,
 	MfgDate date,
 	ExpiryDate date,
 	IsActive bit NOT NULL,
@@ -140,9 +143,9 @@ Create table Product (
 	ModifiedBy int,
 	FOREIGN KEY (BrandId) REFERENCES CommonData(Id),
 	FOREIGN KEY (ProductTypeId) REFERENCES CommonData(Id),
+	FOREIGN KEY (WeightTypeId) REFERENCES CommonData(Id),
 	FOREIGN KEY (CreatedBy) REFERENCES Profile(Id),
 	FOREIGN KEY (ModifiedBy) REFERENCES Profile(Id),
 )
 End
 go
-

@@ -59,12 +59,14 @@
           <Property Name="QRId" Type="uniqueidentifier" />
           <Property Name="BrandId" Type="int" Nullable="false" />
           <Property Name="ProductTypeId" Type="int" Nullable="false" />
-          <Property Name="WeightKgs" Type="decimal" Precision="18" Scale="0" Nullable="false" />
-          <Property Name="StockPrice" Type="decimal" Precision="18" Scale="0" />
-          <Property Name="SellingPrice" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="WeightTypeId" Type="int" Nullable="false" />
+          <Property Name="ItemWeight" Type="decimal" Precision="8" Scale="2" Nullable="false" />
+          <Property Name="StockPrice" Type="decimal" Precision="8" Scale="2" />
+          <Property Name="SellingPrice" Type="decimal" Precision="8" Scale="2" Nullable="false" />
           <Property Name="MfgDate" Type="date" />
           <Property Name="ExpiryDate" Type="date" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="IsSold" Type="bit" />
           <Property Name="CreatedOn" Type="datetime" Nullable="false" />
           <Property Name="CreatedBy" Type="int" />
           <Property Name="ModifiedOn" Type="datetime" />
@@ -177,7 +179,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Product__BrandId__2EA5EC27">
+        <Association Name="FK__Product__BrandId__55BFB948">
           <End Role="CommonData" Type="Self.CommonData" Multiplicity="1" />
           <End Role="Product" Type="Self.Product" Multiplicity="*" />
           <ReferentialConstraint>
@@ -189,7 +191,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Product__Created__308E3499">
+        <Association Name="FK__Product__Created__589C25F3">
           <End Role="Profile" Type="Self.Profile" Multiplicity="0..1" />
           <End Role="Product" Type="Self.Product" Multiplicity="*" />
           <ReferentialConstraint>
@@ -201,7 +203,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Product__Modifie__318258D2">
+        <Association Name="FK__Product__Modifie__59904A2C">
           <End Role="Profile" Type="Self.Profile" Multiplicity="0..1" />
           <End Role="Product" Type="Self.Product" Multiplicity="*" />
           <ReferentialConstraint>
@@ -213,7 +215,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Product__Product__2F9A1060">
+        <Association Name="FK__Product__Product__56B3DD81">
           <End Role="CommonData" Type="Self.CommonData" Multiplicity="1" />
           <End Role="Product" Type="Self.Product" Multiplicity="*" />
           <ReferentialConstraint>
@@ -222,6 +224,18 @@
             </Principal>
             <Dependent Role="Product">
               <PropertyRef Name="ProductTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Product__WeightT__57A801BA">
+          <End Role="CommonData" Type="Self.CommonData" Multiplicity="1" />
+          <End Role="Product" Type="Self.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CommonData">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="WeightTypeId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -283,19 +297,23 @@
             <End Role="Profile" EntitySet="Profile" />
             <End Role="Customer" EntitySet="Customer" />
           </AssociationSet>
-          <AssociationSet Name="FK__Product__BrandId__2EA5EC27" Association="Self.FK__Product__BrandId__2EA5EC27">
+          <AssociationSet Name="FK__Product__BrandId__55BFB948" Association="Self.FK__Product__BrandId__55BFB948">
             <End Role="CommonData" EntitySet="CommonData" />
             <End Role="Product" EntitySet="Product" />
           </AssociationSet>
-          <AssociationSet Name="FK__Product__Created__308E3499" Association="Self.FK__Product__Created__308E3499">
+          <AssociationSet Name="FK__Product__Created__589C25F3" Association="Self.FK__Product__Created__589C25F3">
             <End Role="Profile" EntitySet="Profile" />
             <End Role="Product" EntitySet="Product" />
           </AssociationSet>
-          <AssociationSet Name="FK__Product__Modifie__318258D2" Association="Self.FK__Product__Modifie__318258D2">
+          <AssociationSet Name="FK__Product__Modifie__59904A2C" Association="Self.FK__Product__Modifie__59904A2C">
             <End Role="Profile" EntitySet="Profile" />
             <End Role="Product" EntitySet="Product" />
           </AssociationSet>
-          <AssociationSet Name="FK__Product__Product__2F9A1060" Association="Self.FK__Product__Product__2F9A1060">
+          <AssociationSet Name="FK__Product__Product__56B3DD81" Association="Self.FK__Product__Product__56B3DD81">
+            <End Role="CommonData" EntitySet="CommonData" />
+            <End Role="Product" EntitySet="Product" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Product__WeightT__57A801BA" Association="Self.FK__Product__WeightT__57A801BA">
             <End Role="CommonData" EntitySet="CommonData" />
             <End Role="Product" EntitySet="Product" />
           </AssociationSet>
@@ -316,7 +334,6 @@
           <EntitySet Name="CommonControls" EntityType="MerchantModel.CommonControl" />
           <EntitySet Name="CommonDatas" EntityType="MerchantModel.CommonData" />
           <EntitySet Name="Customers" EntityType="MerchantModel.Customer" />
-          <EntitySet Name="Products" EntityType="MerchantModel.Product" />
           <EntitySet Name="Profiles" EntityType="MerchantModel.Profile" />
           <AssociationSet Name="FK__CommonCon__Creat__7C1A6C5A" Association="MerchantModel.FK__CommonCon__Creat__7C1A6C5A">
             <End Role="Profile" EntitySet="Profiles" />
@@ -338,14 +355,6 @@
             <End Role="Profile" EntitySet="Profiles" />
             <End Role="CommonData" EntitySet="CommonDatas" />
           </AssociationSet>
-          <AssociationSet Name="FK__Product__BrandId__0880433F" Association="MerchantModel.FK__Product__BrandId__0880433F">
-            <End Role="CommonData" EntitySet="CommonDatas" />
-            <End Role="Product" EntitySet="Products" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Product__Product__09746778" Association="MerchantModel.FK__Product__Product__09746778">
-            <End Role="CommonData" EntitySet="CommonDatas" />
-            <End Role="Product" EntitySet="Products" />
-          </AssociationSet>
           <AssociationSet Name="FK__Customer__Create__04AFB25B" Association="MerchantModel.FK__Customer__Create__04AFB25B">
             <End Role="Profile" EntitySet="Profiles" />
             <End Role="Customer" EntitySet="Customers" />
@@ -354,14 +363,6 @@
             <End Role="Profile" EntitySet="Profiles" />
             <End Role="Customer" EntitySet="Customers" />
           </AssociationSet>
-          <AssociationSet Name="FK__Product__Created__0A688BB1" Association="MerchantModel.FK__Product__Created__0A688BB1">
-            <End Role="Profile" EntitySet="Profiles" />
-            <End Role="Product" EntitySet="Products" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Product__Modifie__0B5CAFEA" Association="MerchantModel.FK__Product__Modifie__0B5CAFEA">
-            <End Role="Profile" EntitySet="Profiles" />
-            <End Role="Product" EntitySet="Products" />
-          </AssociationSet>
           <AssociationSet Name="FK__Profile__Created__7849DB76" Association="MerchantModel.FK__Profile__Created__7849DB76">
             <End Role="Profile" EntitySet="Profiles" />
             <End Role="Profile1" EntitySet="Profiles" />
@@ -369,6 +370,27 @@
           <AssociationSet Name="FK__Profile__Modifie__793DFFAF" Association="MerchantModel.FK__Profile__Modifie__793DFFAF">
             <End Role="Profile" EntitySet="Profiles" />
             <End Role="Profile1" EntitySet="Profiles" />
+          </AssociationSet>
+          <EntitySet Name="Products" EntityType="MerchantModel.Product" />
+          <AssociationSet Name="FK__Product__BrandId__55BFB948" Association="MerchantModel.FK__Product__BrandId__55BFB948">
+            <End Role="CommonData" EntitySet="CommonDatas" />
+            <End Role="Product" EntitySet="Products" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Product__Product__56B3DD81" Association="MerchantModel.FK__Product__Product__56B3DD81">
+            <End Role="CommonData" EntitySet="CommonDatas" />
+            <End Role="Product" EntitySet="Products" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Product__WeightT__57A801BA" Association="MerchantModel.FK__Product__WeightT__57A801BA">
+            <End Role="CommonData" EntitySet="CommonDatas" />
+            <End Role="Product" EntitySet="Products" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Product__Created__589C25F3" Association="MerchantModel.FK__Product__Created__589C25F3">
+            <End Role="Profile" EntitySet="Profiles" />
+            <End Role="Product" EntitySet="Products" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Product__Modifie__59904A2C" Association="MerchantModel.FK__Product__Modifie__59904A2C">
+            <End Role="Profile" EntitySet="Profiles" />
+            <End Role="Product" EntitySet="Products" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="CommonControl">
@@ -401,9 +423,10 @@
           <NavigationProperty Name="CommonControl" Relationship="MerchantModel.FK__CommonDat__Contr__7FEAFD3E" FromRole="CommonData" ToRole="CommonControl" />
           <NavigationProperty Name="Profile" Relationship="MerchantModel.FK__CommonDat__Creat__00DF2177" FromRole="CommonData" ToRole="Profile" />
           <NavigationProperty Name="Profile1" Relationship="MerchantModel.FK__CommonDat__Modif__01D345B0" FromRole="CommonData" ToRole="Profile" />
-          <NavigationProperty Name="Products" Relationship="MerchantModel.FK__Product__BrandId__0880433F" FromRole="CommonData" ToRole="Product" />
-          <NavigationProperty Name="Products1" Relationship="MerchantModel.FK__Product__Product__09746778" FromRole="CommonData" ToRole="Product" />
-        </EntityType>
+          <NavigationProperty Name="Products" Relationship="MerchantModel.FK__Product__BrandId__55BFB948" FromRole="CommonData" ToRole="Product" />
+          <NavigationProperty Name="Products1" Relationship="MerchantModel.FK__Product__Product__56B3DD81" FromRole="CommonData" ToRole="Product" />
+          <NavigationProperty Name="Products2" Relationship="MerchantModel.FK__Product__WeightT__57A801BA" FromRole="CommonData" ToRole="Product" />
+          </EntityType>
         <EntityType Name="Customer">
           <Key>
             <PropertyRef Name="Id" />
@@ -426,29 +449,6 @@
           <Property Name="ModifiedBy" Type="Int32" />
           <NavigationProperty Name="Profile" Relationship="MerchantModel.FK__Customer__Create__04AFB25B" FromRole="Customer" ToRole="Profile" />
           <NavigationProperty Name="Profile1" Relationship="MerchantModel.FK__Customer__Modifi__05A3D694" FromRole="Customer" ToRole="Profile" />
-        </EntityType>
-        <EntityType Name="Product">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="BrandId" Type="Int32" Nullable="false" />
-          <Property Name="ProductTypeId" Type="Int32" Nullable="false" />
-          <Property Name="IsActive" Type="Boolean" Nullable="false" />
-          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="CreatedBy" Type="Int32" />
-          <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
-          <Property Name="ModifiedBy" Type="Int32" />
-          <NavigationProperty Name="CommonData" Relationship="MerchantModel.FK__Product__BrandId__0880433F" FromRole="Product" ToRole="CommonData" />
-          <NavigationProperty Name="CommonData1" Relationship="MerchantModel.FK__Product__Product__09746778" FromRole="Product" ToRole="CommonData" />
-          <NavigationProperty Name="Profile" Relationship="MerchantModel.FK__Product__Created__0A688BB1" FromRole="Product" ToRole="Profile" />
-          <NavigationProperty Name="Profile1" Relationship="MerchantModel.FK__Product__Modifie__0B5CAFEA" FromRole="Product" ToRole="Profile" />
-          <Property Name="QRId" Type="Guid" />
-          <Property Name="StockPrice" Type="Decimal" Precision="18" Scale="0" />
-          <Property Name="SellingPrice" Type="Decimal" Precision="18" Scale="0" />
-          <Property Name="MfgDate" Type="DateTime" Precision="0" />
-          <Property Name="ExpiryDate" Type="DateTime" Precision="0" />
-          <Property Name="WeightKgs" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
         </EntityType>
         <EntityType Name="Profile">
           <Key>
@@ -478,12 +478,12 @@
           <NavigationProperty Name="CommonDatas1" Relationship="MerchantModel.FK__CommonDat__Modif__01D345B0" FromRole="Profile" ToRole="CommonData" />
           <NavigationProperty Name="Customers" Relationship="MerchantModel.FK__Customer__Create__04AFB25B" FromRole="Profile" ToRole="Customer" />
           <NavigationProperty Name="Customers1" Relationship="MerchantModel.FK__Customer__Modifi__05A3D694" FromRole="Profile" ToRole="Customer" />
-          <NavigationProperty Name="Products" Relationship="MerchantModel.FK__Product__Created__0A688BB1" FromRole="Profile" ToRole="Product" />
-          <NavigationProperty Name="Products1" Relationship="MerchantModel.FK__Product__Modifie__0B5CAFEA" FromRole="Profile" ToRole="Product" />
           <NavigationProperty Name="Profile1" Relationship="MerchantModel.FK__Profile__Created__7849DB76" FromRole="Profile" ToRole="Profile1" />
           <NavigationProperty Name="Profile2" Relationship="MerchantModel.FK__Profile__Created__7849DB76" FromRole="Profile1" ToRole="Profile" />
           <NavigationProperty Name="Profile11" Relationship="MerchantModel.FK__Profile__Modifie__793DFFAF" FromRole="Profile" ToRole="Profile1" />
           <NavigationProperty Name="Profile3" Relationship="MerchantModel.FK__Profile__Modifie__793DFFAF" FromRole="Profile1" ToRole="Profile" />
+          <NavigationProperty Name="Products" Relationship="MerchantModel.FK__Product__Created__589C25F3" FromRole="Profile" ToRole="Product" />
+          <NavigationProperty Name="Products1" Relationship="MerchantModel.FK__Product__Modifie__59904A2C" FromRole="Profile" ToRole="Product" />
         </EntityType>
         <Association Name="FK__CommonCon__Creat__7C1A6C5A">
           <End Type="MerchantModel.Profile" Role="Profile" Multiplicity="0..1" />
@@ -545,30 +545,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Product__BrandId__0880433F">
-          <End Type="MerchantModel.CommonData" Role="CommonData" Multiplicity="1" />
-          <End Type="MerchantModel.Product" Role="Product" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CommonData">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Product">
-              <PropertyRef Name="BrandId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Product__Product__09746778">
-          <End Type="MerchantModel.CommonData" Role="CommonData" Multiplicity="1" />
-          <End Type="MerchantModel.Product" Role="Product" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CommonData">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Product">
-              <PropertyRef Name="ProductTypeId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK__Customer__Create__04AFB25B">
           <End Type="MerchantModel.Profile" Role="Profile" Multiplicity="0..1" />
           <End Type="MerchantModel.Customer" Role="Customer" Multiplicity="*" />
@@ -593,30 +569,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Product__Created__0A688BB1">
-          <End Type="MerchantModel.Profile" Role="Profile" Multiplicity="0..1" />
-          <End Type="MerchantModel.Product" Role="Product" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Profile">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Product">
-              <PropertyRef Name="CreatedBy" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Product__Modifie__0B5CAFEA">
-          <End Type="MerchantModel.Profile" Role="Profile" Multiplicity="0..1" />
-          <End Type="MerchantModel.Product" Role="Product" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Profile">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Product">
-              <PropertyRef Name="ModifiedBy" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK__Profile__Created__7849DB76">
           <End Type="MerchantModel.Profile" Role="Profile" Multiplicity="0..1" />
           <End Type="MerchantModel.Profile" Role="Profile1" Multiplicity="*" />
@@ -637,6 +589,92 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="Profile1">
+              <PropertyRef Name="ModifiedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="QRId" Type="Guid" />
+          <Property Name="BrandId" Type="Int32" Nullable="false" />
+          <Property Name="ProductTypeId" Type="Int32" Nullable="false" />
+          <Property Name="WeightTypeId" Type="Int32" Nullable="false" />
+          <Property Name="ItemWeight" Type="Decimal" Nullable="false" Precision="8" Scale="2" />
+          <Property Name="StockPrice" Type="Decimal" Precision="8" Scale="2" />
+          <Property Name="SellingPrice" Type="Decimal" Nullable="false" Precision="8" Scale="2" />
+          <Property Name="MfgDate" Type="DateTime" Precision="0" />
+          <Property Name="ExpiryDate" Type="DateTime" Precision="0" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="IsSold" Type="Boolean" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="ModifiedOn" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int32" />
+          <NavigationProperty Name="CommonData" Relationship="MerchantModel.FK__Product__BrandId__55BFB948" FromRole="Product" ToRole="CommonData" />
+          <NavigationProperty Name="CommonData1" Relationship="MerchantModel.FK__Product__Product__56B3DD81" FromRole="Product" ToRole="CommonData" />
+          <NavigationProperty Name="CommonData2" Relationship="MerchantModel.FK__Product__WeightT__57A801BA" FromRole="Product" ToRole="CommonData" />
+          <NavigationProperty Name="Profile" Relationship="MerchantModel.FK__Product__Created__589C25F3" FromRole="Product" ToRole="Profile" />
+          <NavigationProperty Name="Profile1" Relationship="MerchantModel.FK__Product__Modifie__59904A2C" FromRole="Product" ToRole="Profile" />
+        </EntityType>
+        <Association Name="FK__Product__BrandId__55BFB948">
+          <End Type="MerchantModel.CommonData" Role="CommonData" Multiplicity="1" />
+          <End Type="MerchantModel.Product" Role="Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CommonData">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="BrandId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Product__Product__56B3DD81">
+          <End Type="MerchantModel.CommonData" Role="CommonData" Multiplicity="1" />
+          <End Type="MerchantModel.Product" Role="Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CommonData">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="ProductTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Product__WeightT__57A801BA">
+          <End Type="MerchantModel.CommonData" Role="CommonData" Multiplicity="1" />
+          <End Type="MerchantModel.Product" Role="Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CommonData">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="WeightTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Product__Created__589C25F3">
+          <End Type="MerchantModel.Profile" Role="Profile" Multiplicity="0..1" />
+          <End Type="MerchantModel.Product" Role="Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Profile">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="CreatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Product__Modifie__59904A2C">
+          <End Type="MerchantModel.Profile" Role="Profile" Multiplicity="0..1" />
+          <End Type="MerchantModel.Product" Role="Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Profile">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Product">
               <PropertyRef Name="ModifiedBy" />
             </Dependent>
           </ReferentialConstraint>
@@ -696,26 +734,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Products">
-            <EntityTypeMapping TypeName="MerchantModel.Product">
-              <MappingFragment StoreEntitySet="Product">
-                <ScalarProperty Name="WeightKgs" ColumnName="WeightKgs" />
-                <ScalarProperty Name="ExpiryDate" ColumnName="ExpiryDate" />
-                <ScalarProperty Name="MfgDate" ColumnName="MfgDate" />
-                <ScalarProperty Name="SellingPrice" ColumnName="SellingPrice" />
-                <ScalarProperty Name="StockPrice" ColumnName="StockPrice" />
-                <ScalarProperty Name="QRId" ColumnName="QRId" />
-                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
-                <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
-                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="ProductTypeId" ColumnName="ProductTypeId" />
-                <ScalarProperty Name="BrandId" ColumnName="BrandId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Profiles">
             <EntityTypeMapping TypeName="MerchantModel.Profile">
               <MappingFragment StoreEntitySet="Profile">
@@ -736,6 +754,28 @@
                 <ScalarProperty Name="Mobile" ColumnName="Mobile" />
                 <ScalarProperty Name="LastName" ColumnName="LastName" />
                 <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Products">
+            <EntityTypeMapping TypeName="MerchantModel.Product">
+              <MappingFragment StoreEntitySet="Product">
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="IsSold" ColumnName="IsSold" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="ExpiryDate" ColumnName="ExpiryDate" />
+                <ScalarProperty Name="MfgDate" ColumnName="MfgDate" />
+                <ScalarProperty Name="SellingPrice" ColumnName="SellingPrice" />
+                <ScalarProperty Name="StockPrice" ColumnName="StockPrice" />
+                <ScalarProperty Name="ItemWeight" ColumnName="ItemWeight" />
+                <ScalarProperty Name="WeightTypeId" ColumnName="WeightTypeId" />
+                <ScalarProperty Name="ProductTypeId" ColumnName="ProductTypeId" />
+                <ScalarProperty Name="BrandId" ColumnName="BrandId" />
+                <ScalarProperty Name="QRId" ColumnName="QRId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

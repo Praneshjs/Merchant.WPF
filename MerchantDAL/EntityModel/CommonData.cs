@@ -19,6 +19,7 @@ namespace MerchantDAL.EntityModel
         {
             this.Products = new HashSet<Product>();
             this.Products1 = new HashSet<Product>();
+            this.Products2 = new HashSet<Product>();
         }
     
         public int Id { get; set; }
@@ -37,5 +38,7 @@ namespace MerchantDAL.EntityModel
         public virtual ICollection<Product> Products { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Product> Products1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Product> Products2 { get; set; }
     }
 }
