@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MerchantDAL", "MerchantDAL\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MerchantService", "MerchantService\MerchantService.csproj", "{51FE864F-0CD9-4506-AC66-BB06B88126FF}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Merchant.Installer", "Merchant.Installer\Merchant.Installer.vdproj", "{C123FCC4-7429-488A-B8F7-8AD78005FB1A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,8 @@ Global
 		{51FE864F-0CD9-4506-AC66-BB06B88126FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{51FE864F-0CD9-4506-AC66-BB06B88126FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{51FE864F-0CD9-4506-AC66-BB06B88126FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C123FCC4-7429-488A-B8F7-8AD78005FB1A}.Debug|Any CPU.ActiveCfg = Debug
+		{C123FCC4-7429-488A-B8F7-8AD78005FB1A}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

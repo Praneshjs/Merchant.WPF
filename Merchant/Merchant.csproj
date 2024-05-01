@@ -235,6 +235,9 @@
   <ItemGroup>
     <Resource Include="Paplee heart.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="PapleeHeartIcon.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
