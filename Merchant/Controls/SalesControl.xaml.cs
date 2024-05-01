@@ -1,20 +1,12 @@
 ﻿using Merchant.Helper;
 using MerchantDAL.Models;
 using MerchantService.Services;
-using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Merchant.Controls
 {
@@ -26,6 +18,8 @@ namespace Merchant.Controls
         public SalesControl()
         {
             InitializeComponent();
+            if (DesignerProperties.GetIsInDesignMode(this))
+                return;
 
             GetAllProductAsync(string.Empty, true);
         }
@@ -48,8 +42,12 @@ namespace Merchant.Controls
             var allData = await fetchService.GetProductAsync(allInfo, isActive);
             var groupedData = allData
                 .GroupBy(p => new { p.FullProductName, p.WeightTypeId, p.SellingPrice })
-                .Select(group => group.First())
-                .OrderBy(t => t.FullProductName)
+                .Select(group => new ProductWithCount
+                {
+                    Product = group.First(),
+                    AvailableQuantity = group.Count()
+                })
+                .OrderBy(t => t.Product.FullProductName)
                 .ToList();
             lstProductSearch.ItemsSource = null;
             lstProductSearch.ItemsSource = groupedData;
@@ -57,34 +55,80 @@ namespace Merchant.Controls
 
         private void btnAddProductItem_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is Button button && button.Tag is ProductModel selectedData)
+            if (sender is Button button && button.Tag is ProductWithCount selectedData)
             {
                 var container = ListViewHelper.FindAncestor<ListViewItem>(button);
                 var textBox = ListViewHelper.FindChild<TextBox>(container, "txtQuantityInGrid");
+                decimal.TryParse(textBox.Text, out decimal quantity);
+                if (quantity == 0) quantity = 1;
+                var purchaseItems = UserSession.Instance.SalesManager.GetAllSales(1);
+                bool isItemNotFound = true;
+                foreach(var item in purchaseItems)
+                {
+                    if(item.ProductId == selectedData.Product.Id
+                        && item.BrandId == selectedData.Product.BrandId
+                        && item.ProductTypeId == selectedData.Product.ProductTypeId
+                        && item.Weight == selectedData.Product.ItemWeight
+                        && item.SellingPrice == selectedData.Product.SellingPrice)
+                    {
+                        var availableQuantity = selectedData.AvailableQuantity;
+                        var requiredQuantity = item.Quantity + quantity;
+                        if (requiredQuantity <= availableQuantity)
+                        {
+                            item.Quantity = requiredQuantity;
+                            isItemNotFound = false;
+                        }
+                        else
+                        {
+                            validationMsgCtrl.ShowValidationBox($"{selectedData.Product.FullProductName} available Quantity {availableQuantity}");
+                            return;
+                        }
+                    }
+                }
 
-                if (textBox != null && decimal.TryParse(textBox.Text, out decimal quantity))
+                if (isItemNotFound)
                 {
                     SalesItemModel sale = new SalesItemModel
                     {
-                        ProductId = selectedData.Id,
-                        BrandId = selectedData.BrandId,
-                        ProductTypeId = selectedData.ProductTypeId,
-                        FullProductName = selectedData.FullProductName,
-                        SellingPrice = selectedData.SellingPrice,
-                        Weight = selectedData.ItemWeight,
+                        ProductId = selectedData.Product.Id,
+                        BrandId = selectedData.Product.BrandId,
+                        ProductTypeId = selectedData.Product.ProductTypeId,
+                        FullProductName = selectedData.Product.FullProductName,
+                        SellingPrice = selectedData.Product.SellingPrice,
+                        Weight = selectedData.Product.ItemWeight,
+                        ProductWeight = selectedData.Product.ProductWeight,
                         Quantity = quantity
                     };
 
                     UserSession.Instance.SalesManager.AddSale(1, sale);
-                    var purchaseItems = UserSession.Instance.SalesManager.GetAllSales(1);
-                    lstPurchaseList.ItemsSource = null;
-                    lstPurchaseList.ItemsSource = purchaseItems;
+                    purchaseItems = UserSession.Instance.SalesManager.GetAllSales(1);
                 }
-                else
-                {
-                    // Handle invalid quantity input
-                }
+                AssignPurchaseListItemsSource(purchaseItems);
             }
+        }
+
+        private void btnRemovePurchaseItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button && button.Tag is SalesItemModel selectedData)
+            {
+                var purchaseItems = UserSession.Instance.SalesManager.GetAllSales(1);
+                var itemRemove = purchaseItems.FirstOrDefault(item => item.ProductId == selectedData.ProductId
+                       && item.BrandId == selectedData.BrandId
+                       && item.ProductTypeId == selectedData.ProductTypeId
+                       && item.Weight == selectedData.Weight
+                       && item.SellingPrice == selectedData.SellingPrice);
+                UserSession.Instance.SalesManager.RemoveSale(1, itemRemove);
+                purchaseItems = UserSession.Instance.SalesManager.GetAllSales(1);
+                AssignPurchaseListItemsSource(purchaseItems);
+            }
+        }
+
+        private void AssignPurchaseListItemsSource(List<SalesItemModel> purchaseItems)
+        {
+            SerialNumberConverter serialNumberConverter = (SerialNumberConverter)this.FindResource("SerialNumberConverter");
+            serialNumberConverter.ResetCounter();
+            lstPurchaseList.ItemsSource = null;
+            lstPurchaseList.ItemsSource = purchaseItems;
         }
     }
 }

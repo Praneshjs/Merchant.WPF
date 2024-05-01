@@ -1,5 +1,4 @@
-﻿using MerchantDAL.EntityModel;
-using MerchantDAL.Models;
+﻿using MerchantDAL.Models;
 using MerchantService.QR;
 using MerchantService.Services;
 using Newtonsoft.Json;
@@ -57,9 +56,8 @@ namespace Merchant.Controls
 
             var productWeightType = masterDatas.Where(s => s.CommonControl.ControlType == "Weight Type")
                .Select(t => new CommonDataModel() { Id = t.Id, ControlValue = t.ControlValue }).ToList();
-            productWeightType.Add(new CommonDataModel { Id = 0, ControlValue = "Select Weight Type" });
             cmbWeightType.ItemsSource = productWeightType.OrderBy(s => s.Id);
-            cmbWeightType.SelectedIndex = 1; //Default as Kgs
+            cmbWeightType.SelectedIndex = 0;
         }
 
         private async void GetAllProductAsync(int pageIndex, DateTime? expiryDate = null, string allInfo = null, bool? isActive = null)
@@ -185,7 +183,7 @@ namespace Merchant.Controls
         {
             cmbBrandName.SelectedIndex = 0;
             cmbProductType.SelectedIndex = 0;
-            cmbWeightType.SelectedIndex = 1;
+            cmbWeightType.SelectedIndex = 0;
             txtWeight.Text = string.Empty;
             txtQuantity.Text = string.Empty;
             txtSellingPrice.Text = string.Empty;

@@ -66,14 +66,15 @@ namespace Merchant.Controls
                 if (string.IsNullOrEmpty(selectedId))
                 {
                     var isDataExist = await fetch.IsProductMasterExist(controlTypeId, controlValue);
-                    if (isDataExist) validationMsg.AppendLine($"Master Data: {cmbControlType.SelectedValue} and {controlValue} already exist.");
+                    var data = (CommonControlModel)cmbControlType?.SelectedItem;
+                    if (isDataExist) validationMsg.AppendLine($"Data already exist - {data.CommonControlName} and {controlValue} .");
                 }
                 if (validationMsg.Length > 0)
                 {
                     validationMsgCtrl.ShowValidationBox(validationMsg.ToString());
                     return;
                 }
-                
+
                 var allData = await fetch.SubmitProductMasterAsync(selectedId, controlTypeId, controlValue, (bool)isActive);
                 BindProductMasterGridData(allData, currentPageIndex);
                 validationMsgCtrl.ShowValidationBox("Product master created successfully");

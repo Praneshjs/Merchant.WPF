@@ -56,10 +56,6 @@ namespace MerchantDAL.Entities
                 {
                     query = query.Where(s => s.IsActive == IsActiveFilter);
                 }
-                else if (isActive != null)
-                {
-                    query = query.Where(s => s.IsActive == isActive);
-                }
                 else
                 {
                     query = query.Where(s => (s.CommonData.ControlValue.ToLower() == searchText.ToLower()

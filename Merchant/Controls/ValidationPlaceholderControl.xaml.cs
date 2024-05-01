@@ -14,7 +14,7 @@ namespace Merchant.Controls
         {
             InitializeComponent();
 
-            timer = new Timer(3000);
+            timer = new Timer(4000);
             timer.Elapsed += TimerElapsed;
         }
 

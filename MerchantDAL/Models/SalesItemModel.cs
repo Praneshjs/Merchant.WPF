@@ -11,6 +11,7 @@ namespace MerchantDAL.Models
         public string FullProductName { get; set; }
         public Nullable<decimal> SellingPrice { get; set; }
         public decimal Weight { get; set; }
+        public string ProductWeight { get; set; }
         public decimal Quantity { get; set; }
         public decimal ItemSetPrice => Math.Round(Quantity * (SellingPrice ?? 0), 2);
 

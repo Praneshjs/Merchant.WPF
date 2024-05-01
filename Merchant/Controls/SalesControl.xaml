@@ -7,6 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
+        <local:SerialNumberConverter x:Key="SerialNumberConverter"/>
         <Style TargetType="TextBox" x:Key="txtNonGrid">
             <Setter Property="Padding" Value="3"/>
             <Setter Property="Template">
@@ -58,6 +59,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        
         <Style TargetType="Button" x:Key="NonGrid">
             <Setter Property="Padding" Value="10"/>
             <Setter Property="Height"  Value="40"/>
@@ -91,8 +93,7 @@
         </Style>
         
         <Style TargetType="Button" x:Key="InGrid">
-            <Setter Property="Padding" Value="3"/>
-            <Setter Property="Background" Value="#badc58"/>
+            <Setter Property="Padding" Value="12 0 12 2"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="FontSize" Value="15"/>
@@ -135,6 +136,7 @@
         <Grid Grid.Column="0" Margin="0 20 0 0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0 0 0 5">
@@ -142,23 +144,24 @@
                               PreviewKeyUp="txtProductSearch_PreviewKeyUp" />
                 <Button Name="btnProductSearch" Content="Search" Click="btnProductSearch_Click" Style="{StaticResource NonGrid}"/>
             </StackPanel>
-            <ListView Grid.Row="1" x:Name="lstProductSearch" ItemsSource="{Binding Product}" MaxHeight="400" VerticalAlignment="Top">
+            <local:ValidationPlaceholderControl Grid.Row="1" x:Name="validationMsgCtrl" />
+            <ListView Grid.Row="2" x:Name="lstProductSearch" ItemsSource="{Binding Product}" MaxHeight="400" VerticalAlignment="Top">
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn Header="Product" Width="300" DisplayMemberBinding="{Binding FullProductName}" />
-                        <GridViewColumn Header="Weight" Width="100" DisplayMemberBinding="{Binding ProductWeight}" />
-                        <GridViewColumn Header="Rate" Width="70" DisplayMemberBinding="{Binding SellingPrice}" />
+                        <GridViewColumn Header="Product Name" Width="300" DisplayMemberBinding="{Binding Product.FullProductName}" />
+                        <GridViewColumn Header="Weight" Width="100" DisplayMemberBinding="{Binding Product.ProductWeight}" />
+                        <GridViewColumn Header="Rate" Width="70" DisplayMemberBinding="{Binding Product.SellingPrice}" />
                         <GridViewColumn Header="Qnty." Width="70">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBox Name="txtQuantityInGrid" Text="{Binding Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource txtInGrid}" MinWidth="55" />
+                                    <TextBox Name="txtQuantityInGrid" Text="{Binding Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource txtInGrid}" MinWidth="55" ToolTip="Item Quantity" />
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
                         <GridViewColumn Header="Add" Width="50">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Button Content="Add" Name="btnAddProductItem" Click="btnAddProductItem_Click" Tag="{Binding}" Style="{StaticResource InGrid}" />
+                                    <Button Content="+" Name="btnAddProductItem" Click="btnAddProductItem_Click"  Background="#4b7bec" Tag="{Binding}" Style="{StaticResource InGrid}" ToolTip="Add Item" />
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
@@ -206,16 +209,37 @@
             </ListView>
 
         </Grid>
+        
         <Grid Grid.Column="1" Margin="20">
             <!-- ListView to display purchase list -->
-            <ListView x:Name="lstPurchaseList" ItemsSource="{Binding SalesModel}">
+            <ListView x:Name="lstPurchaseList" ItemsSource="{Binding SalesModel}" MaxHeight="400" VerticalAlignment="Top">
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn Header="Product Name" Width="200" DisplayMemberBinding="{Binding FullProductName}" />
-                        <GridViewColumn Header="Weight" Width="75" DisplayMemberBinding="{Binding ProductWeight}" />
-                        <GridViewColumn Header="Rate" Width="75" DisplayMemberBinding="{Binding SellingPrice}" />
-                        <GridViewColumn Header="Qnty." Width="75" DisplayMemberBinding="{Binding Quantity}" />
-                        <GridViewColumn Header="Total" Width="100" DisplayMemberBinding="{Binding ItemSetPrice}" />
+                        <GridViewColumn Header="Sn.">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Converter={StaticResource SerialNumberConverter}}" HorizontalAlignment="Center"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Product Name" Width="300" DisplayMemberBinding="{Binding FullProductName}" />
+                        <GridViewColumn Header="Weight" Width="95" DisplayMemberBinding="{Binding ProductWeight}" />
+                        <GridViewColumn Header="Rate" Width="90" DisplayMemberBinding="{Binding SellingPrice}" />
+                        <GridViewColumn Header="Qty." Width="50">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Quantity}" HorizontalAlignment="Center"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Amount" Width="90" DisplayMemberBinding="{Binding ItemSetPrice}" />
+                        <GridViewColumn Header="Del." Width="50">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Content="-"  Name="btnRemovePurchaseItem" Click="btnRemovePurchaseItem_Click" Background="#e17055" Tag="{Binding}" Style="{StaticResource InGrid}" ToolTip="Remove Item" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
                     </GridView>
                 </ListView.View>
                 <ListView.ItemContainerStyle>

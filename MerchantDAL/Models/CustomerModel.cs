@@ -21,5 +21,6 @@ namespace MerchantDAL.Models
         public string PinCode { get; set; }
         public bool IsActive { get; set; }
         public int CreatedById { get; set; }
+        public string FullName => $"{FirstName} {LastName}";
     }
 }

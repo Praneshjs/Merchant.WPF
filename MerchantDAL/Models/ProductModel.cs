@@ -27,4 +27,10 @@ namespace MerchantDAL.Models
         public string ProductWeight => $"{ItemWeight} {CommonData2?.ControlValue}";
 
     }
+
+    public class ProductWithCount
+    {
+        public ProductModel Product { get; set; }
+        public int AvailableQuantity { get; set; }
+    }
 }

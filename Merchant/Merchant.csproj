@@ -102,6 +102,7 @@
     <Compile Include="Controls\SalesControl.xaml.cs">
       <DependentUpon>SalesControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\SerialNumberConverter.cs" />
     <Compile Include="Controls\ValidationPlaceholderControl.xaml.cs">
       <DependentUpon>ValidationPlaceholderControl.xaml</DependentUpon>
     </Compile>

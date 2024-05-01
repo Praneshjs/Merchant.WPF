@@ -194,7 +194,7 @@
                 <Button Name="btnProductSearch" Content="Search" Click="btnProductSearch_Click"/>
             </StackPanel>
 
-            <ListView x:Name="lstProduct" ItemsSource="{Binding Product}" HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="1" >
+            <ListView x:Name="lstProduct" ItemsSource="{Binding Product}" Grid.Column="1" Grid.Row="1" HorizontalContentAlignment="Left" HorizontalAlignment="Left">
                 <ListView.View>
                     <GridView>
                         <GridView.ColumnHeaderContainerStyle>
@@ -203,7 +203,7 @@
                                 <Setter Property="Template">
                                     <Setter.Value>
                                         <ControlTemplate TargetType="{x:Type GridViewColumnHeader}">
-                                            <Border BorderBrush="#84817a" BorderThickness="0 0 0 1">
+                                            <Border BorderBrush="#ccc" BorderThickness="1 1 1 1">
                                                 <ContentPresenter HorizontalAlignment="Center"/>
                                             </Border>
                                         </ControlTemplate>

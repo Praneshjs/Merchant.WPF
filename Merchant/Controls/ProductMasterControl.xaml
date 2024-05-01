@@ -164,7 +164,7 @@
                     <Button Content="Submit" Click="SubmitButton_Click" Margin="0 0 10 0" HorizontalAlignment="Left" Background="#f7f1e3" Foreground="#84817a" FontWeight="Bold"/>
                     <Button Content="Clear" Click="ClearButton_Click" Margin="0 0 10 0" HorizontalAlignment="Right" Background="#f7f1e3" Foreground="#84817a" FontWeight="Bold"/>
                 </StackPanel>
-                <TextBox x:Name="txtSelectedId" Visibility="Hidden" TextWrapping="Wrap" Text="TextBox"/>
+                <TextBox x:Name="txtSelectedId" Visibility="Hidden" TextWrapping="Wrap" Text=""/>
             </StackPanel>
         </Grid>
 
