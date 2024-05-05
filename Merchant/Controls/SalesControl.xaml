@@ -59,7 +59,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        
+
         <Style TargetType="Button" x:Key="NonGrid">
             <Setter Property="Padding" Value="10"/>
             <Setter Property="Height"  Value="40"/>
@@ -91,7 +91,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        
+
         <Style TargetType="Button" x:Key="InGrid">
             <Setter Property="Padding" Value="12 0 12 2"/>
             <Setter Property="Foreground" Value="White"/>
@@ -123,6 +123,38 @@
             </Setter>
         </Style>
 
+        <Style x:Key="TextBlockStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="18" />
+            <Setter Property="Foreground" Value="#84817a"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="TextAlignment" Value="Right"/>
+        </Style>
+
+        <Style TargetType="Label" x:Key="LabelStyle">
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Background" Value="#f7f1e3"/>
+            <Setter Property="Foreground" Value="#84817a"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Label}">
+                        <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" 
+                                Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true" CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" RecognizesAccessKey="True" 
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
         <local:ConcatenateConverter x:Key="ConcatenateConverter"/>
     </UserControl.Resources>
 
@@ -133,14 +165,14 @@
             <ColumnDefinition Width="1*" />
         </Grid.ColumnDefinitions>
 
-        <Grid Grid.Column="0" Margin="0 20 0 0">
+        <Grid Grid.Column="0" Margin="3 20 0 0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0 0 0 5">
-                <TextBox Name="txtProductSearch" Text="{Binding ControlType}" Style="{StaticResource txtNonGrid}" MinWidth="150" 
+            <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0 0 0 5" HorizontalAlignment="Center">
+                <TextBox Name="txtProductSearch" Text="{Binding ControlType}" Style="{StaticResource txtNonGrid}" MinWidth="250" 
                               PreviewKeyUp="txtProductSearch_PreviewKeyUp" />
                 <Button Name="btnProductSearch" Content="Search" Click="btnProductSearch_Click" Style="{StaticResource NonGrid}"/>
             </StackPanel>
@@ -167,7 +199,7 @@
                         </GridViewColumn>
                     </GridView>
                 </ListView.View>
-                 <ListView.ItemContainerStyle>
+                <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
                         <Setter Property="Template">
                             <Setter.Value>
@@ -209,79 +241,125 @@
             </ListView>
 
         </Grid>
-        
-        <Grid Grid.Column="1" Margin="20">
+
+        <Grid Grid.Column="1" Margin="20 20 20 10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="300"/>
+                <RowDefinition Height="150"/>
+            </Grid.RowDefinitions>
             <!-- ListView to display purchase list -->
-            <ListView x:Name="lstPurchaseList" ItemsSource="{Binding SalesModel}" MaxHeight="400" VerticalAlignment="Top">
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn Header="Sn.">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Converter={StaticResource SerialNumberConverter}}" HorizontalAlignment="Center"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Header="Product Name" Width="300" DisplayMemberBinding="{Binding FullProductName}" />
-                        <GridViewColumn Header="Weight" Width="95" DisplayMemberBinding="{Binding ProductWeight}" />
-                        <GridViewColumn Header="Rate" Width="90" DisplayMemberBinding="{Binding SellingPrice}" />
-                        <GridViewColumn Header="Qty." Width="50">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Quantity}" HorizontalAlignment="Center"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Header="Amount" Width="90" DisplayMemberBinding="{Binding ItemSetPrice}" />
-                        <GridViewColumn Header="Del." Width="50">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Button Content="-"  Name="btnRemovePurchaseItem" Click="btnRemovePurchaseItem_Click" Background="#e17055" Tag="{Binding}" Style="{StaticResource InGrid}" ToolTip="Remove Item" />
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                    </GridView>
-                </ListView.View>
-                <ListView.ItemContainerStyle>
-                    <Style TargetType="ListViewItem">
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="ListViewItem">
-                                    <Border x:Name="border" BorderBrush="#ccc" BorderThickness="0 0 0 1" 
+                <ListView  x:Name="lstPurchaseList" Grid.Row="0" ItemsSource="{Binding SalesModel}" MinHeight="325" VerticalAlignment="Top">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Sn.">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Converter={StaticResource SerialNumberConverter}}" HorizontalAlignment="Center"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Product Name" Width="300" DisplayMemberBinding="{Binding FullProductName}" />
+                            <GridViewColumn Header="Weight" Width="95" DisplayMemberBinding="{Binding ProductWeight}" />
+                            <GridViewColumn Header="Rate" Width="90" DisplayMemberBinding="{Binding SellingPrice}">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding SellingPrice}" HorizontalAlignment="Right" TextAlignment="Right"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Qty." Width="50">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Quantity}" HorizontalAlignment="Center"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Amount" Width="90" DisplayMemberBinding="{Binding ItemSetPrice}">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding ItemSetPrice}" HorizontalAlignment="Right" TextAlignment="Right"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Del." Width="50">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="-"  Name="btnRemovePurchaseItem" Click="btnRemovePurchaseItem_Click" Background="#e17055" Tag="{Binding}" Style="{StaticResource InGrid}" ToolTip="Remove Item" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="ListViewItem">
+                                        <Border x:Name="border" BorderBrush="#ccc" BorderThickness="0 0 0 1" 
                                                 Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}">
-                                        <GridViewRowPresenter Content="{TemplateBinding Content}" />
-                                    </Border>
-                                    <ControlTemplate.Triggers>
-                                        <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter TargetName="border" Property="Background" Value="#F0F0F0"/>
-                                        </Trigger>
-                                        <Trigger Property="IsSelected" Value="True">
-                                            <Setter TargetName="border" Property="Background" Value="#FFE0E0E0"/>
-                                        </Trigger>
-                                    </ControlTemplate.Triggers>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                </ListView.ItemContainerStyle>
-                <ListView.Resources>
-                    <Style TargetType="GridViewColumnHeader">
-                        <Setter Property="Foreground" Value="#4b7bec" />
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="{x:Type GridViewColumnHeader}">
-                                    <Border BorderBrush="#84817a" BorderThickness="0 0 0 1">
-                                        <ContentPresenter HorizontalAlignment="Center"/>
-                                    </Border>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                </ListView.Resources>
-            </ListView>
+                                            <GridViewRowPresenter Content="{TemplateBinding Content}" />
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter TargetName="border" Property="Background" Value="#F0F0F0"/>
+                                            </Trigger>
+                                            <Trigger Property="IsSelected" Value="True">
+                                                <Setter TargetName="border" Property="Background" Value="#FFE0E0E0"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    <ListView.Resources>
+                        <Style TargetType="GridViewColumnHeader">
+                            <Setter Property="Foreground" Value="#4b7bec" />
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type GridViewColumnHeader}">
+                                        <Border BorderBrush="#84817a" BorderThickness="0 0 0 1">
+                                            <ContentPresenter HorizontalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ListView.Resources>
+                </ListView>
+            <Border Grid.Row="1" Background="White" BorderBrush="#ccc" BorderThickness="1" CornerRadius="5">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" MinWidth="250" />
+                    </Grid.ColumnDefinitions>
+
+
+                    <Label Grid.Column="0" Grid.Row="0" Content="Gross Amount" Style="{StaticResource LabelStyle}" />
+                    <Label Grid.Column="0" Grid.Row="1"  Content="CGST" Style="{StaticResource LabelStyle}" />
+                    <Label Grid.Column="0" Grid.Row="2"  Content="SGST" Style="{StaticResource LabelStyle}" />
+
+                    <TextBlock Grid.Column="1" Grid.Row="0"  Name="txtBlGrossAmount" Text="3478394.00" Margin="0 0 50 0" Style="{StaticResource TextBlockStyle}"/>
+                    <TextBlock Name="txtBlCGST" Grid.Column="1" Grid.Row="1"  Text="4376.00" Margin="0 0 50 0"  Style="{StaticResource TextBlockStyle}" />
+                    <TextBlock Name="txtBlSGST" Grid.Column="1" Grid.Row="2" Text="4874.00" Margin="0 0 50 0"  Style="{StaticResource TextBlockStyle}" />
+
+                    <Border Grid.Row="3" Grid.ColumnSpan="2" BorderThickness="0,1,0,0" Margin="0 3 0 3" BorderBrush="#ccc" />
+
+                    <Label Grid.Column="0" Grid.Row="4" Margin="0 5 0 0" Content="Net Amount" Style="{StaticResource LabelStyle}"/>
+                    <TextBlock Name="txtBlNetAmount" Grid.Column="1" Grid.Row="4"  Text="10000.00" Margin="0 0 50 0"  FontSize="30" Style="{StaticResource TextBlockStyle}" />
+                </Grid>
+            </Border>
         </Grid>
+
         <Grid Grid.Column="2" Margin="20">
-           
+
         </Grid>
     </Grid>
 </UserControl>
