@@ -15,7 +15,7 @@ namespace MerchantDAL.Models
         public Nullable<int> CreatedBy { get; set; }
         public Nullable<System.DateTime> ModifiedOn { get; set; }
         public Nullable<int> ModifiedBy { get; set; }
-        public Nullable<System.Guid> QRId { get; set; }
+        public Nullable<System.Guid> QRId { get; set; } = Guid.NewGuid();
         public Nullable<decimal> StockPrice { get; set; }
         public Nullable<decimal> SellingPrice { get; set; }
         public Nullable<System.DateTime> MfgDate { get; set; }

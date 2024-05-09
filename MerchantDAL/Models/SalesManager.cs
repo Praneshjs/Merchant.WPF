@@ -6,10 +6,18 @@ namespace MerchantDAL.Models
     public class SalesManager
     {
         private Dictionary<int, List<SalesItemModel>> salesByBillId;
+        private Dictionary<int, List<int>> purchaseItemId;
+
+        private List<int> billId;
+
+        private int currentBillId;
 
         public SalesManager()
         {
             salesByBillId = new Dictionary<int, List<SalesItemModel>>();
+            purchaseItemId = new Dictionary<int, List<int>>();
+            billId = new List<int>();
+            currentBillId = 1;
         }
 
         public void AddSale(int billId, SalesItemModel sale)
@@ -22,11 +30,55 @@ namespace MerchantDAL.Models
             salesByBillId[billId].Add(sale);
         }
 
+        public void AddItemId(int billId, int itemId)
+        {
+            if (!purchaseItemId.ContainsKey(billId))
+            {
+                purchaseItemId[billId] = new List<int>();
+            }
+
+            purchaseItemId[billId].Add(itemId);
+        }
+
+        public void AddBillId(int id)
+        {
+            if (!billId.Where(s => s == id).Any())
+            {
+                billId.Add(id);
+            }
+        }
+
+        public void SetCurrentBillId(int id)
+        {
+            currentBillId = id;
+        }
+
+        public int GetCurrentBillId()
+        {
+            return currentBillId;
+        }
+
+        public void RemoveBillId(int id)
+        {
+            if (billId.Where(s => s == id).Any())
+            {
+                billId.Remove(id);
+            }
+        }
+
+
         public void RemoveSale(int billId, SalesItemModel sale)
         {
             if (salesByBillId.ContainsKey(billId))
             {
                 salesByBillId[billId].Remove(sale);
+            }
+        }
+        public void RemoveItem(int billId, int itemId)
+        {
+            if (purchaseItemId.ContainsKey(billId))
+            {
+                purchaseItemId[billId].Remove(itemId);
             }
         }
 
@@ -39,6 +91,18 @@ namespace MerchantDAL.Models
             else
             {
                 return new List<SalesItemModel>();
+            }
+        }
+
+        public List<int> GetAllItems(int billId)
+        {
+            if (purchaseItemId.ContainsKey(billId))
+            {
+                return purchaseItemId[billId];
+            }
+            else
+            {
+                return new List<int>();
             }
         }
 

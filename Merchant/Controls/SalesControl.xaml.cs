@@ -7,6 +7,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace Merchant.Controls
 {
@@ -22,6 +23,7 @@ namespace Merchant.Controls
                 return;
 
             GetAllProductAsync(string.Empty, true);
+            btnNewOrder_Click(null, null);
         }
 
         private void btnProductSearch_Click(object sender, RoutedEventArgs e)
@@ -61,11 +63,12 @@ namespace Merchant.Controls
                 var textBox = ListViewHelper.FindChild<TextBox>(container, "txtQuantityInGrid");
                 decimal.TryParse(textBox.Text, out decimal quantity);
                 if (quantity == 0) quantity = 1;
-                var purchaseItems = UserSession.Instance.SalesManager.GetAllSales(1);
+                var currentBillId = UserSession.Instance.SalesManager.GetCurrentBillId();
+                var purchaseItems = UserSession.Instance.SalesManager.GetAllSales(currentBillId);
                 bool isItemNotFound = true;
-                foreach(var item in purchaseItems)
+                foreach (var item in purchaseItems)
                 {
-                    if(item.ProductId == selectedData.Product.Id
+                    if (item.ProductId == selectedData.Product.Id
                         && item.BrandId == selectedData.Product.BrandId
                         && item.ProductTypeId == selectedData.Product.ProductTypeId
                         && item.Weight == selectedData.Product.ItemWeight
@@ -100,9 +103,10 @@ namespace Merchant.Controls
                         Quantity = quantity
                     };
 
-                    UserSession.Instance.SalesManager.AddSale(1, sale);
-                    purchaseItems = UserSession.Instance.SalesManager.GetAllSales(1);
+                    UserSession.Instance.SalesManager.AddSale(currentBillId, sale);
+                    purchaseItems = UserSession.Instance.SalesManager.GetAllSales(currentBillId);
                 }
+                ShowPurchaseNetAmount(purchaseItems);
                 AssignPurchaseListItemsSource(purchaseItems);
             }
         }
@@ -111,14 +115,16 @@ namespace Merchant.Controls
         {
             if (sender is Button button && button.Tag is SalesItemModel selectedData)
             {
-                var purchaseItems = UserSession.Instance.SalesManager.GetAllSales(1);
+                var currentBillId = UserSession.Instance.SalesManager.GetCurrentBillId();
+                var purchaseItems = UserSession.Instance.SalesManager.GetAllSales(currentBillId);
                 var itemRemove = purchaseItems.FirstOrDefault(item => item.ProductId == selectedData.ProductId
                        && item.BrandId == selectedData.BrandId
                        && item.ProductTypeId == selectedData.ProductTypeId
                        && item.Weight == selectedData.Weight
                        && item.SellingPrice == selectedData.SellingPrice);
                 UserSession.Instance.SalesManager.RemoveSale(1, itemRemove);
-                purchaseItems = UserSession.Instance.SalesManager.GetAllSales(1);
+                purchaseItems = UserSession.Instance.SalesManager.GetAllSales(currentBillId);
+                ShowPurchaseNetAmount(purchaseItems);
                 AssignPurchaseListItemsSource(purchaseItems);
             }
         }
@@ -129,6 +135,61 @@ namespace Merchant.Controls
             serialNumberConverter.ResetCounter();
             lstPurchaseList.ItemsSource = null;
             lstPurchaseList.ItemsSource = purchaseItems;
+        }
+
+        private void ShowPurchaseNetAmount(List<SalesItemModel> purchaseItems)
+        {
+            var grossAmount = purchaseItems.Select(t => t.ItemSetPrice).Sum();
+            txtBlGrossAmount.Text = grossAmount.ToString();
+            txtProductCount.Text = purchaseItems.Count().ToString();
+            txtNetItemCount.Text = purchaseItems.Select(s => s.Quantity).Sum().ToString();
+            var gstHalf = (grossAmount * (decimal)(1.5 / 100));
+            txtBlCGST.Text = gstHalf.ToString("0.00");
+            txtBlSGST.Text = gstHalf.ToString("0.00");
+            txtBlNetAmount.Text = (grossAmount + (2 * gstHalf)).ToString("0.00");
+        }
+
+        private void btnPlaceOrder_Click(object sender, RoutedEventArgs e)
+        {
+            var currentBillId = UserSession.Instance.SalesManager.GetCurrentBillId();
+            var purchaseItems = UserSession.Instance.SalesManager.GetAllSales(currentBillId);
+
+        }
+
+        private void btnNewOrder_Click(object sender, RoutedEventArgs e)
+        {
+            var currentBillId = UserSession.Instance.SalesManager.GetCurrentBillId();
+            var newBillId = sender == null ? 1 : ++currentBillId;
+            if (newBillId > 5)
+            {
+                validationMsgCtrl.ShowValidationBox("Max 5 bill allowed.");
+                return;
+            }
+            UserSession.Instance.SalesManager.SetCurrentBillId(newBillId);
+            Label newBillLabel = new Label();
+            newBillLabel.Content = $"Bill {newBillId}";
+
+            foreach (UIElement element in BillStackPanel.Children)
+            {
+                if (element is Label label)
+                {
+                    label.Background = (Brush)new BrushConverter().ConvertFrom("#b2bec3");
+                    label.Foreground = (Brush)new BrushConverter().ConvertFrom("#636e72");
+                }
+            }
+
+            newBillLabel.Background = (Brush)new BrushConverter().ConvertFrom("#e17055");
+            newBillLabel.Foreground = Brushes.White;
+            newBillLabel.Height = 25;
+            newBillLabel.FontSize = 12;
+            newBillLabel.Margin = new Thickness(5, 5, 5, 5);
+
+            BillStackPanel.Children.Add(newBillLabel);
+        }
+
+        private void btnClearOrder_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

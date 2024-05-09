@@ -126,7 +126,7 @@ IF OBJECT_ID('Product') IS NULL
 BEGIN
 CREATE TABLE Product (
 	Id int Identity(1,1) PRIMARY KEY,
-	QRId UNIQUEIDENTIFIER,
+	QRId UNIQUEIDENTIFIER unique not null,
 	BrandId int NOT NULL,
 	ProductTypeId int NOT NULL,
 	WeightTypeId int NOT NULL,

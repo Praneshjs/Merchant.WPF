@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Merchant.Controls"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="600" d:DesignWidth="800">
     <UserControl.Resources>
         <local:SerialNumberConverter x:Key="SerialNumberConverter"/>
         <Style TargetType="TextBox" x:Key="txtNonGrid">
@@ -92,12 +92,14 @@
             </Setter>
         </Style>
 
-        <Style TargetType="Button" x:Key="InGrid">
-            <Setter Property="Padding" Value="12 0 12 2"/>
+        <Style TargetType="Button" x:Key="NonGridBlue">
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="Height"  Value="50"/>
+            <Setter Property="Background" Value="#4b7bec"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="FontSize" Value="15"/>
             <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderBrush" Value="#74b9ff"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
@@ -110,7 +112,39 @@
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter TargetName="Border" Property="Effect">
                                     <Setter.Value>
-                                        <DropShadowEffect ShadowDepth="2" Direction="320" Color="Black" Opacity="0.5"/>
+                                        <DropShadowEffect ShadowDepth="2" Direction="320" Color="#74b9ff" Opacity="0.5"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="False">
+                                <Setter TargetName="Border" Property="Effect" Value="{x:Null}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="Button" x:Key="InGrid">
+            <Setter Property="Padding" Value="12 0 12 2"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderBrush" Value="#74b9ff"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Border" Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}"
+                                Padding="{TemplateBinding Padding}" CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Border" Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect ShadowDepth="2" Direction="320" Color="#74b9ff" Opacity="0.5"/>
                                     </Setter.Value>
                                 </Setter>
                             </Trigger>
@@ -246,87 +280,88 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="300"/>
                 <RowDefinition Height="150"/>
+                <RowDefinition Height="150"/>
             </Grid.RowDefinitions>
             <!-- ListView to display purchase list -->
-                <ListView  x:Name="lstPurchaseList" Grid.Row="0" ItemsSource="{Binding SalesModel}" MinHeight="325" VerticalAlignment="Top">
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn Header="Sn.">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Converter={StaticResource SerialNumberConverter}}" HorizontalAlignment="Center"/>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn Header="Product Name" Width="300" DisplayMemberBinding="{Binding FullProductName}" />
-                            <GridViewColumn Header="Weight" Width="95" DisplayMemberBinding="{Binding ProductWeight}" />
-                            <GridViewColumn Header="Rate" Width="90" DisplayMemberBinding="{Binding SellingPrice}">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding SellingPrice}" HorizontalAlignment="Right" TextAlignment="Right"/>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn Header="Qty." Width="50">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Quantity}" HorizontalAlignment="Center"/>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn Header="Amount" Width="90" DisplayMemberBinding="{Binding ItemSetPrice}">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding ItemSetPrice}" HorizontalAlignment="Right" TextAlignment="Right"/>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn Header="Del." Width="50">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <Button Content="-"  Name="btnRemovePurchaseItem" Click="btnRemovePurchaseItem_Click" Background="#e17055" Tag="{Binding}" Style="{StaticResource InGrid}" ToolTip="Remove Item" />
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                        </GridView>
-                    </ListView.View>
-                    <ListView.ItemContainerStyle>
-                        <Style TargetType="ListViewItem">
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="ListViewItem">
-                                        <Border x:Name="border" BorderBrush="#ccc" BorderThickness="0 0 0 1" 
+            <ListView  x:Name="lstPurchaseList" Grid.Row="0" ItemsSource="{Binding SalesModel}" MinHeight="325" VerticalAlignment="Top">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Sn." Width="30">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Converter={StaticResource SerialNumberConverter}}" HorizontalAlignment="Center"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Product Name" Width="300" DisplayMemberBinding="{Binding FullProductName}" />
+                        <GridViewColumn Header="Weight" Width="95" DisplayMemberBinding="{Binding ProductWeight}" />
+                        <GridViewColumn Header="Rate" Width="90" DisplayMemberBinding="{Binding SellingPrice}">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding SellingPrice}" HorizontalAlignment="Right" TextAlignment="Right"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Qty." Width="50">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Quantity}" HorizontalAlignment="Center"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Amount" Width="90" DisplayMemberBinding="{Binding ItemSetPrice}">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding ItemSetPrice}" HorizontalAlignment="Right" TextAlignment="Right"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Del." Width="50">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Content="-"  Name="btnRemovePurchaseItem" Click="btnRemovePurchaseItem_Click" Background="#e17055" Tag="{Binding}" Style="{StaticResource InGrid}" ToolTip="Remove Item" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ListViewItem">
+                                    <Border x:Name="border" BorderBrush="#ccc" BorderThickness="0 0 0 1" 
                                                 Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}">
-                                            <GridViewRowPresenter Content="{TemplateBinding Content}" />
-                                        </Border>
-                                        <ControlTemplate.Triggers>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter TargetName="border" Property="Background" Value="#F0F0F0"/>
-                                            </Trigger>
-                                            <Trigger Property="IsSelected" Value="True">
-                                                <Setter TargetName="border" Property="Background" Value="#FFE0E0E0"/>
-                                            </Trigger>
-                                        </ControlTemplate.Triggers>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </ListView.ItemContainerStyle>
-                    <ListView.Resources>
-                        <Style TargetType="GridViewColumnHeader">
-                            <Setter Property="Foreground" Value="#4b7bec" />
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="{x:Type GridViewColumnHeader}">
-                                        <Border BorderBrush="#84817a" BorderThickness="0 0 0 1">
-                                            <ContentPresenter HorizontalAlignment="Center"/>
-                                        </Border>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </ListView.Resources>
-                </ListView>
+                                        <GridViewRowPresenter Content="{TemplateBinding Content}" />
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="border" Property="Background" Value="#F0F0F0"/>
+                                        </Trigger>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter TargetName="border" Property="Background" Value="#FFE0E0E0"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.Resources>
+                    <Style TargetType="GridViewColumnHeader">
+                        <Setter Property="Foreground" Value="#4b7bec" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type GridViewColumnHeader}">
+                                    <Border BorderBrush="#84817a" BorderThickness="0 0 0 1">
+                                        <ContentPresenter HorizontalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListView.Resources>
+            </ListView>
             <Border Grid.Row="1" Background="White" BorderBrush="#ccc" BorderThickness="1" CornerRadius="5">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -338,28 +373,50 @@
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" MinWidth="250" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" MinWidth="200" />
                     </Grid.ColumnDefinitions>
 
+                    <Label Grid.Column="0" Grid.Row="0" Content="Product Count" Style="{StaticResource LabelStyle}" />
+                    <TextBlock Grid.Column="1" Grid.Row="0"  Name="txtProductCount" Text="0" Margin="0 0 50 0" Style="{StaticResource TextBlockStyle}"/>
 
-                    <Label Grid.Column="0" Grid.Row="0" Content="Gross Amount" Style="{StaticResource LabelStyle}" />
-                    <Label Grid.Column="0" Grid.Row="1"  Content="CGST" Style="{StaticResource LabelStyle}" />
-                    <Label Grid.Column="0" Grid.Row="2"  Content="SGST" Style="{StaticResource LabelStyle}" />
+                    <Label Grid.Column="0" Grid.Row="1" Content="Net Items" Style="{StaticResource LabelStyle}" />
+                    <TextBlock Grid.Column="1" Grid.Row="1"  Name="txtNetItemCount" Text="0" Margin="0 0 50 0" Style="{StaticResource TextBlockStyle}"/>
 
-                    <TextBlock Grid.Column="1" Grid.Row="0"  Name="txtBlGrossAmount" Text="3478394.00" Margin="0 0 50 0" Style="{StaticResource TextBlockStyle}"/>
-                    <TextBlock Name="txtBlCGST" Grid.Column="1" Grid.Row="1"  Text="4376.00" Margin="0 0 50 0"  Style="{StaticResource TextBlockStyle}" />
-                    <TextBlock Name="txtBlSGST" Grid.Column="1" Grid.Row="2" Text="4874.00" Margin="0 0 50 0"  Style="{StaticResource TextBlockStyle}" />
+                    <Label Grid.Column="2" Grid.Row="0" Content="Gross Amount" Style="{StaticResource LabelStyle}" />
+                    <Label Grid.Column="2" Grid.Row="1"  Content="CGST 1.5%" Style="{StaticResource LabelStyle}" />
+                    <Label Grid.Column="2" Grid.Row="2"  Content="SGST 1.5%" Style="{StaticResource LabelStyle}" />
 
-                    <Border Grid.Row="3" Grid.ColumnSpan="2" BorderThickness="0,1,0,0" Margin="0 3 0 3" BorderBrush="#ccc" />
+                    <TextBlock Grid.Column="3" Grid.Row="0"  Name="txtBlGrossAmount" Text="0.00" Margin="0 0 60 0" Style="{StaticResource TextBlockStyle}"/>
+                    <TextBlock Name="txtBlCGST" Grid.Column="3" Grid.Row="1"  Text="0.00" Margin="0 0 60 0"  Style="{StaticResource TextBlockStyle}" />
+                    <TextBlock Name="txtBlSGST" Grid.Column="3" Grid.Row="2" Text="0.00" Margin="0 0 60 0"  Style="{StaticResource TextBlockStyle}" />
 
-                    <Label Grid.Column="0" Grid.Row="4" Margin="0 5 0 0" Content="Net Amount" Style="{StaticResource LabelStyle}"/>
-                    <TextBlock Name="txtBlNetAmount" Grid.Column="1" Grid.Row="4"  Text="10000.00" Margin="0 0 50 0"  FontSize="30" Style="{StaticResource TextBlockStyle}" />
+                    <Border Grid.Row="3" Grid.ColumnSpan="4" BorderThickness="0,1,0,0" Margin="0 3 0 3" BorderBrush="#ccc" />
+
+                    <Label Grid.Column="2" Grid.Row="4" Margin="0 5 0 0" Content="Net Amount" Style="{StaticResource LabelStyle}"/>
+                    <TextBlock Name="txtBlNetAmount" Grid.Column="3" Grid.Row="4"  Text="0.00" Margin="0 0 60 0"  Style="{StaticResource TextBlockStyle}" />
+
+
                 </Grid>
             </Border>
+            <Grid Grid.Row="2" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" Name="btnClearOrder" Background="#fab1a0" Content="Clear Order" HorizontalAlignment="Right" Click="btnClearOrder_Click" Style="{StaticResource NonGridBlue}"/>
+                <Button Grid.Column="1" Name="btnNewOrder" Background="#00b894" Content="New Order" HorizontalAlignment="Right" Click="btnNewOrder_Click" Style="{StaticResource NonGridBlue}"/>
+                <Button Grid.Column="2" Name="btnPlaceOrder" Content="Place Order" HorizontalAlignment="Right" Click="btnPlaceOrder_Click" Style="{StaticResource NonGridBlue}"/>
+            </Grid>
+
         </Grid>
 
         <Grid Grid.Column="2" Margin="20">
 
+            <StackPanel x:Name="BillStackPanel" Background="#dfe6e9" VerticalAlignment="Top" Margin="10">
+            </StackPanel>
         </Grid>
     </Grid>
 </UserControl>

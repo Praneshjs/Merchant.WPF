@@ -19,7 +19,7 @@ namespace Merchant.Controls
     public partial class ProductControl : UserControl
     {
         private int currentPageIndex = 1;
-        private int itemsPerPage = 20;
+        private int itemsPerPage = 15;
         public ProductControl()
         {
             InitializeComponent();
@@ -111,7 +111,6 @@ namespace Merchant.Controls
                 }
                 int.TryParse(btnAddProducts.Tag?.ToString(), out int productId);
                 if (quantity > 1) productId = 0;//for copy data comfort
-                 var qrGuid = Guid.NewGuid();
                 var newData = new ProductModel
                 {
                     Id = productId,
@@ -122,21 +121,19 @@ namespace Merchant.Controls
                     IsActive = true,
                     MfgDate = manufacturedDate,
                     ProductTypeId = productTypeId,
-                    QRId = qrGuid,
                     SellingPrice = sellingPrice,
                     StockPrice = stockPrice,
                     WeightTypeId = weightTypeId,
                     ItemWeight = weight
                 };
-                string productInfo = JsonConvert.SerializeObject(newData, Formatting.Indented);
-
-                QRService productQR = new QRService();
-                var imageStatus = productQR.GenerateQRCode(qrGuid.ToString(), productInfo);
 
                 List<ProductModel> productList = new List<ProductModel>();
+                QRService productQR = new QRService();
                 for (int i = 0; i < quantity; i++)
                 {
                     var clonedData = CloneProductModel(newData);
+                    var productInfo = JsonConvert.SerializeObject(newData, Formatting.Indented);
+                    var imageStatus = productQR.GenerateQRCode(clonedData.QRId.ToString(), productInfo);
                     productList.Add(clonedData);
                 }
 
@@ -171,7 +168,6 @@ namespace Merchant.Controls
                 IsActive = original.IsActive,
                 MfgDate = original.MfgDate,
                 ProductTypeId = original.ProductTypeId,
-                QRId = original.QRId,
                 SellingPrice = original.SellingPrice,
                 StockPrice = original.StockPrice,
                 WeightTypeId = original.WeightTypeId,
