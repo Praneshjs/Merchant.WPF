@@ -15,7 +15,7 @@ namespace MerchantDAL.EntityModel
     public partial class Product
     {
         public int Id { get; set; }
-        public Nullable<System.Guid> QRId { get; set; }
+        public System.Guid QRId { get; set; }
         public int BrandId { get; set; }
         public int ProductTypeId { get; set; }
         public int WeightTypeId { get; set; }

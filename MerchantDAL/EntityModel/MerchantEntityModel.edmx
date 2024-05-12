@@ -56,7 +56,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="QRId" Type="uniqueidentifier" />
+          <Property Name="QRId" Type="uniqueidentifier" Nullable="false" />
           <Property Name="BrandId" Type="int" Nullable="false" />
           <Property Name="ProductTypeId" Type="int" Nullable="false" />
           <Property Name="WeightTypeId" Type="int" Nullable="false" />
@@ -179,7 +179,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Product__BrandId__55BFB948">
+        <Association Name="FK__Product__BrandId__69C6B1F5">
           <End Role="CommonData" Type="Self.CommonData" Multiplicity="1" />
           <End Role="Product" Type="Self.Product" Multiplicity="*" />
           <ReferentialConstraint>
@@ -191,7 +191,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Product__Created__589C25F3">
+        <Association Name="FK__Product__Created__6CA31EA0">
           <End Role="Profile" Type="Self.Profile" Multiplicity="0..1" />
           <End Role="Product" Type="Self.Product" Multiplicity="*" />
           <ReferentialConstraint>
@@ -203,7 +203,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Product__Modifie__59904A2C">
+        <Association Name="FK__Product__Modifie__6D9742D9">
           <End Role="Profile" Type="Self.Profile" Multiplicity="0..1" />
           <End Role="Product" Type="Self.Product" Multiplicity="*" />
           <ReferentialConstraint>
@@ -215,7 +215,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Product__Product__56B3DD81">
+        <Association Name="FK__Product__Product__6ABAD62E">
           <End Role="CommonData" Type="Self.CommonData" Multiplicity="1" />
           <End Role="Product" Type="Self.Product" Multiplicity="*" />
           <ReferentialConstraint>
@@ -227,7 +227,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Product__WeightT__57A801BA">
+        <Association Name="FK__Product__WeightT__6BAEFA67">
           <End Role="CommonData" Type="Self.CommonData" Multiplicity="1" />
           <End Role="Product" Type="Self.Product" Multiplicity="*" />
           <ReferentialConstraint>
@@ -297,23 +297,23 @@
             <End Role="Profile" EntitySet="Profile" />
             <End Role="Customer" EntitySet="Customer" />
           </AssociationSet>
-          <AssociationSet Name="FK__Product__BrandId__55BFB948" Association="Self.FK__Product__BrandId__55BFB948">
+          <AssociationSet Name="FK__Product__BrandId__69C6B1F5" Association="Self.FK__Product__BrandId__69C6B1F5">
             <End Role="CommonData" EntitySet="CommonData" />
             <End Role="Product" EntitySet="Product" />
           </AssociationSet>
-          <AssociationSet Name="FK__Product__Created__589C25F3" Association="Self.FK__Product__Created__589C25F3">
+          <AssociationSet Name="FK__Product__Created__6CA31EA0" Association="Self.FK__Product__Created__6CA31EA0">
             <End Role="Profile" EntitySet="Profile" />
             <End Role="Product" EntitySet="Product" />
           </AssociationSet>
-          <AssociationSet Name="FK__Product__Modifie__59904A2C" Association="Self.FK__Product__Modifie__59904A2C">
+          <AssociationSet Name="FK__Product__Modifie__6D9742D9" Association="Self.FK__Product__Modifie__6D9742D9">
             <End Role="Profile" EntitySet="Profile" />
             <End Role="Product" EntitySet="Product" />
           </AssociationSet>
-          <AssociationSet Name="FK__Product__Product__56B3DD81" Association="Self.FK__Product__Product__56B3DD81">
+          <AssociationSet Name="FK__Product__Product__6ABAD62E" Association="Self.FK__Product__Product__6ABAD62E">
             <End Role="CommonData" EntitySet="CommonData" />
             <End Role="Product" EntitySet="Product" />
           </AssociationSet>
-          <AssociationSet Name="FK__Product__WeightT__57A801BA" Association="Self.FK__Product__WeightT__57A801BA">
+          <AssociationSet Name="FK__Product__WeightT__6BAEFA67" Association="Self.FK__Product__WeightT__6BAEFA67">
             <End Role="CommonData" EntitySet="CommonData" />
             <End Role="Product" EntitySet="Product" />
           </AssociationSet>
@@ -598,7 +598,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="QRId" Type="Guid" />
+          <Property Name="QRId" Type="Guid" Nullable="false" />
           <Property Name="BrandId" Type="Int32" Nullable="false" />
           <Property Name="ProductTypeId" Type="Int32" Nullable="false" />
           <Property Name="WeightTypeId" Type="Int32" Nullable="false" />

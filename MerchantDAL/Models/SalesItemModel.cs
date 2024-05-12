@@ -15,6 +15,8 @@ namespace MerchantDAL.Models
         public decimal Quantity { get; set; }
         public decimal ItemSetPrice => Math.Round(Quantity * (SellingPrice ?? 0), 2);
 
+        public List<Guid> ItemSetQR { get; set; }
+
         // Override ToString method to return ItemSetPrice with 2 decimal places
         public override string ToString()
         {

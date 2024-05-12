@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Merchant.Controls"
              mc:Ignorable="d" 
-             d:DesignHeight="600" d:DesignWidth="800">
+             d:DesignHeight="700" d:DesignWidth="800">
     <UserControl.Resources>
         <local:SerialNumberConverter x:Key="SerialNumberConverter"/>
         <Style TargetType="TextBox" x:Key="txtNonGrid">
@@ -124,7 +124,73 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        
+        <Style TargetType="Button" x:Key="NonGridPeach">
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="Height"  Value="50"/>
+            <Setter Property="Background" Value="#fab1a0"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderBrush" Value="#fab1a0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Border" Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}"
+                                Padding="{TemplateBinding Padding}" CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Border" Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect ShadowDepth="2" Direction="320" Color="#fab1a0" Opacity="0.5"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="False">
+                                <Setter TargetName="Border" Property="Effect" Value="{x:Null}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
 
+        <Style TargetType="Button" x:Key="NonGridGreen">
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="Height"  Value="50"/>
+            <Setter Property="Background" Value="#00b894"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderBrush" Value="#00b894"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Border" Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}"
+                                Padding="{TemplateBinding Padding}" CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Border" Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect ShadowDepth="2" Direction="320" Color="#00b894" Opacity="0.5"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="False">
+                                <Setter TargetName="Border" Property="Effect" Value="{x:Null}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
         <Style TargetType="Button" x:Key="InGrid">
             <Setter Property="Padding" Value="12 0 12 2"/>
             <Setter Property="Foreground" Value="White"/>
@@ -278,12 +344,12 @@
 
         <Grid Grid.Column="1" Margin="20 20 20 10">
             <Grid.RowDefinitions>
-                <RowDefinition Height="300"/>
-                <RowDefinition Height="150"/>
-                <RowDefinition Height="150"/>
+                <RowDefinition Height="400"/>
+                <RowDefinition Height="160"/>
+                <RowDefinition Height="140"/>
             </Grid.RowDefinitions>
             <!-- ListView to display purchase list -->
-            <ListView  x:Name="lstPurchaseList" Grid.Row="0" ItemsSource="{Binding SalesModel}" MinHeight="325" VerticalAlignment="Top">
+            <ListView  x:Name="lstPurchaseList" Grid.Row="0" ItemsSource="{Binding SalesModel}" MinHeight="400" VerticalAlignment="Top">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="Sn." Width="30">
@@ -375,27 +441,27 @@
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" MinWidth="200" />
+                        <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
-                    <Label Grid.Column="0" Grid.Row="0" Content="Product Count" Style="{StaticResource LabelStyle}" />
-                    <TextBlock Grid.Column="1" Grid.Row="0"  Name="txtProductCount" Text="0" Margin="0 0 50 0" Style="{StaticResource TextBlockStyle}"/>
+                    <Label Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" Content="Product Count" Margin="5 5 0 0" Style="{StaticResource LabelStyle}" />
+                    <TextBlock Grid.Column="1" Grid.Row="0" HorizontalAlignment="Left"  Name="txtProductCount" Text="0" Margin="0 5 0 0" Style="{StaticResource TextBlockStyle}"/>
 
-                    <Label Grid.Column="0" Grid.Row="1" Content="Net Items" Style="{StaticResource LabelStyle}" />
-                    <TextBlock Grid.Column="1" Grid.Row="1"  Name="txtNetItemCount" Text="0" Margin="0 0 50 0" Style="{StaticResource TextBlockStyle}"/>
+                    <Label Grid.Column="0" Grid.Row="1" HorizontalAlignment="Left"  Content="Net Items" Margin="5 5 0 0" Style="{StaticResource LabelStyle}" />
+                    <TextBlock Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" Name="txtNetItemCount" Text="0" Margin="0 5 0 0" Style="{StaticResource TextBlockStyle}"/>
 
-                    <Label Grid.Column="2" Grid.Row="0" Content="Gross Amount" Style="{StaticResource LabelStyle}" />
-                    <Label Grid.Column="2" Grid.Row="1"  Content="CGST 1.5%" Style="{StaticResource LabelStyle}" />
-                    <Label Grid.Column="2" Grid.Row="2"  Content="SGST 1.5%" Style="{StaticResource LabelStyle}" />
+                    <Label Grid.Column="2" Grid.Row="0" Content="Gross Amount" Margin="5 5 0 0" Style="{StaticResource LabelStyle}" />
+                    <Label Grid.Column="2" Grid.Row="1"  Content="CGST 1.5%" Margin="5 5 0 0" Style="{StaticResource LabelStyle}" />
+                    <Label Grid.Column="2" Grid.Row="2"  Content="SGST 1.5%" Margin="5 5 0 5" Style="{StaticResource LabelStyle}" />
 
-                    <TextBlock Grid.Column="3" Grid.Row="0"  Name="txtBlGrossAmount" Text="0.00" Margin="0 0 60 0" Style="{StaticResource TextBlockStyle}"/>
-                    <TextBlock Name="txtBlCGST" Grid.Column="3" Grid.Row="1"  Text="0.00" Margin="0 0 60 0"  Style="{StaticResource TextBlockStyle}" />
-                    <TextBlock Name="txtBlSGST" Grid.Column="3" Grid.Row="2" Text="0.00" Margin="0 0 60 0"  Style="{StaticResource TextBlockStyle}" />
+                    <TextBlock Name="txtBlGrossAmount" Grid.Column="3" Grid.Row="0" Text="0.00" Margin="0 5 60 0" Style="{StaticResource TextBlockStyle}"/>
+                    <TextBlock Name="txtBlCGST" Grid.Column="3" Grid.Row="1"  Text="0.00" Margin="0 5 60 0" Style="{StaticResource TextBlockStyle}" />
+                    <TextBlock Name="txtBlSGST" Grid.Column="3" Grid.Row="2" Text="0.00" Margin="0 5 60 0" Style="{StaticResource TextBlockStyle}" />
 
                     <Border Grid.Row="3" Grid.ColumnSpan="4" BorderThickness="0,1,0,0" Margin="0 3 0 3" BorderBrush="#ccc" />
 
-                    <Label Grid.Column="2" Grid.Row="4" Margin="0 5 0 0" Content="Net Amount" Style="{StaticResource LabelStyle}"/>
-                    <TextBlock Name="txtBlNetAmount" Grid.Column="3" Grid.Row="4"  Text="0.00" Margin="0 0 60 0"  Style="{StaticResource TextBlockStyle}" />
+                    <Label Grid.Column="2" Grid.Row="4" Content="Net Amount"  VerticalAlignment="Center" Style="{StaticResource LabelStyle}"/>
+                    <TextBlock Name="txtBlNetAmount" Grid.Column="3" Grid.Row="4"  Text="0.00" Margin="0 5 60 0" VerticalAlignment="Center" Style="{StaticResource TextBlockStyle}" />
 
 
                 </Grid>
@@ -406,8 +472,8 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <Button Grid.Column="0" Name="btnClearOrder" Background="#fab1a0" Content="Clear Order" HorizontalAlignment="Right" Click="btnClearOrder_Click" Style="{StaticResource NonGridBlue}"/>
-                <Button Grid.Column="1" Name="btnNewOrder" Background="#00b894" Content="New Order" HorizontalAlignment="Right" Click="btnNewOrder_Click" Style="{StaticResource NonGridBlue}"/>
+                <Button Grid.Column="0" Name="btnClearOrder" Content="Clear Order" HorizontalAlignment="Right" Click="btnClearOrder_Click" Style="{StaticResource NonGridPeach}"/>
+                <Button Grid.Column="1" Name="btnNewOrder" Content="New Order" HorizontalAlignment="Right" Click="btnNewOrder_Click" Style="{StaticResource NonGridGreen}"/>
                 <Button Grid.Column="2" Name="btnPlaceOrder" Content="Place Order" HorizontalAlignment="Right" Click="btnPlaceOrder_Click" Style="{StaticResource NonGridBlue}"/>
             </Grid>
 
@@ -415,7 +481,7 @@
 
         <Grid Grid.Column="2" Margin="20">
 
-            <StackPanel x:Name="BillStackPanel" Background="#dfe6e9" VerticalAlignment="Top" Margin="10">
+            <StackPanel x:Name="BillStackPanel" Background="#dfe6e9" VerticalAlignment="Top" Margin="10" MaxWidth="50">
             </StackPanel>
         </Grid>
     </Grid>

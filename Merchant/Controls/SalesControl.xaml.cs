@@ -47,7 +47,8 @@ namespace Merchant.Controls
                 .Select(group => new ProductWithCount
                 {
                     Product = group.First(),
-                    AvailableQuantity = group.Count()
+                    AvailableQuantity = group.Count(),
+                    ProductQRId = group.Select(t => t.QRId).ToList()
                 })
                 .OrderBy(t => t.Product.FullProductName)
                 .ToList();
@@ -66,6 +67,7 @@ namespace Merchant.Controls
                 var currentBillId = UserSession.Instance.SalesManager.GetCurrentBillId();
                 var purchaseItems = UserSession.Instance.SalesManager.GetAllSales(currentBillId);
                 bool isItemNotFound = true;
+                var availableQuantity = selectedData.AvailableQuantity;
                 foreach (var item in purchaseItems)
                 {
                     if (item.ProductId == selectedData.Product.Id
@@ -74,11 +76,11 @@ namespace Merchant.Controls
                         && item.Weight == selectedData.Product.ItemWeight
                         && item.SellingPrice == selectedData.Product.SellingPrice)
                     {
-                        var availableQuantity = selectedData.AvailableQuantity;
                         var requiredQuantity = item.Quantity + quantity;
                         if (requiredQuantity <= availableQuantity)
                         {
                             item.Quantity = requiredQuantity;
+                            item.ItemSetQR = selectedData.ProductQRId.Take((int)requiredQuantity).ToList();
                             isItemNotFound = false;
                         }
                         else
@@ -91,20 +93,29 @@ namespace Merchant.Controls
 
                 if (isItemNotFound)
                 {
-                    SalesItemModel sale = new SalesItemModel
+                    if (availableQuantity >= quantity)
                     {
-                        ProductId = selectedData.Product.Id,
-                        BrandId = selectedData.Product.BrandId,
-                        ProductTypeId = selectedData.Product.ProductTypeId,
-                        FullProductName = selectedData.Product.FullProductName,
-                        SellingPrice = selectedData.Product.SellingPrice,
-                        Weight = selectedData.Product.ItemWeight,
-                        ProductWeight = selectedData.Product.ProductWeight,
-                        Quantity = quantity
-                    };
+                        SalesItemModel sale = new SalesItemModel
+                        {
+                            ProductId = selectedData.Product.Id,
+                            BrandId = selectedData.Product.BrandId,
+                            ProductTypeId = selectedData.Product.ProductTypeId,
+                            FullProductName = selectedData.Product.FullProductName,
+                            SellingPrice = selectedData.Product.SellingPrice,
+                            Weight = selectedData.Product.ItemWeight,
+                            ProductWeight = selectedData.Product.ProductWeight,
+                            Quantity = quantity,
+                            ItemSetQR = selectedData.ProductQRId.Take((int)quantity).ToList()
+                        };
 
-                    UserSession.Instance.SalesManager.AddSale(currentBillId, sale);
-                    purchaseItems = UserSession.Instance.SalesManager.GetAllSales(currentBillId);
+                        UserSession.Instance.SalesManager.AddSale(currentBillId, sale);
+                        purchaseItems = UserSession.Instance.SalesManager.GetAllSales(currentBillId);
+                    }
+                    else
+                    {
+                        validationMsgCtrl.ShowValidationBox($"{selectedData.Product.FullProductName} available Quantity {availableQuantity}");
+                        return;
+                    }
                 }
                 ShowPurchaseNetAmount(purchaseItems);
                 AssignPurchaseListItemsSource(purchaseItems);
@@ -122,7 +133,14 @@ namespace Merchant.Controls
                        && item.ProductTypeId == selectedData.ProductTypeId
                        && item.Weight == selectedData.Weight
                        && item.SellingPrice == selectedData.SellingPrice);
-                UserSession.Instance.SalesManager.RemoveSale(1, itemRemove);
+                if (itemRemove?.Quantity > 1)
+                {
+                    itemRemove.Quantity = --itemRemove.Quantity;
+                }
+                else
+                {
+                    UserSession.Instance.SalesManager.RemoveSale(1, itemRemove);
+                }
                 purchaseItems = UserSession.Instance.SalesManager.GetAllSales(currentBillId);
                 ShowPurchaseNetAmount(purchaseItems);
                 AssignPurchaseListItemsSource(purchaseItems);
@@ -158,38 +176,82 @@ namespace Merchant.Controls
 
         private void btnNewOrder_Click(object sender, RoutedEventArgs e)
         {
-            var currentBillId = UserSession.Instance.SalesManager.GetCurrentBillId();
-            var newBillId = sender == null ? 1 : ++currentBillId;
+            var billCount = UserSession.Instance.SalesManager.BillCount();
+            var newBillId = ++billCount;
             if (newBillId > 5)
             {
                 validationMsgCtrl.ShowValidationBox("Max 5 bill allowed.");
                 return;
             }
             UserSession.Instance.SalesManager.SetCurrentBillId(newBillId);
-            Label newBillLabel = new Label();
-            newBillLabel.Content = $"Bill {newBillId}";
+            UserSession.Instance.SalesManager.AddBillId(newBillId);
+            BuildBillListPanel(newBillId);
+            LoadCurrentBillPurchaseGrid();
+        }
 
-            foreach (UIElement element in BillStackPanel.Children)
-            {
-                if (element is Label label)
-                {
-                    label.Background = (Brush)new BrushConverter().ConvertFrom("#b2bec3");
-                    label.Foreground = (Brush)new BrushConverter().ConvertFrom("#636e72");
-                }
-            }
-
-            newBillLabel.Background = (Brush)new BrushConverter().ConvertFrom("#e17055");
-            newBillLabel.Foreground = Brushes.White;
-            newBillLabel.Height = 25;
-            newBillLabel.FontSize = 12;
-            newBillLabel.Margin = new Thickness(5, 5, 5, 5);
-
-            BillStackPanel.Children.Add(newBillLabel);
+        private void LoadCurrentBillPurchaseGrid()
+        {
+            var currentBillId = UserSession.Instance.SalesManager.GetCurrentBillId();
+            var purchaseItems = UserSession.Instance.SalesManager.GetAllSales(currentBillId);
+            ShowPurchaseNetAmount(purchaseItems);
+            AssignPurchaseListItemsSource(purchaseItems);
         }
 
         private void btnClearOrder_Click(object sender, RoutedEventArgs e)
         {
+            var currentBillId = UserSession.Instance.SalesManager.GetCurrentBillId();
+            UserSession.Instance.SalesManager.RemoveBillId(currentBillId);
+            var selectedBillId = UserSession.Instance.SalesManager.GetMaxBillId();
+            BuildBillListPanel(selectedBillId);
+        }
 
+        private void lblCurrentBill_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is Label lblCurrentBill && lblCurrentBill.Tag is int selectedBillId)
+            {
+                BuildBillListPanel(selectedBillId);
+            }
+        }
+
+        private void BuildBillListPanel(int selectedBillId)
+        {
+            BillStackPanel.Children.Clear();
+            var currentBillId = UserSession.Instance.SalesManager.GetCurrentBillId();
+            if (currentBillId != selectedBillId)
+            {
+                UserSession.Instance.SalesManager.SetCurrentBillId(selectedBillId);
+                LoadCurrentBillPurchaseGrid();
+            }
+            var allBillId = UserSession.Instance.SalesManager.GetAllBillId();
+            foreach (var billId in allBillId)
+            {
+                var newBillLabel = GetBillLabel(billId, currentBillId == billId);
+                BillStackPanel.Children.Add(newBillLabel);
+            }
+        }
+
+        private Label GetBillLabel(int newBillId, bool isCurrent)
+        {
+            Label newBillLabel = new Label();
+            newBillLabel.Content = $"Bill {newBillId}";
+            if (isCurrent)
+            {
+                newBillLabel.Background = (Brush)new BrushConverter().ConvertFrom("#4b7bec");
+                newBillLabel.Foreground = Brushes.White;
+            }
+            else
+            {
+                newBillLabel.Background = (Brush)new BrushConverter().ConvertFrom("#b2bec3");
+                newBillLabel.Foreground = (Brush)new BrushConverter().ConvertFrom("#636e72");
+            }
+            newBillLabel.Height = 25;
+            newBillLabel.FontSize = 12;
+            newBillLabel.Margin = new Thickness(5, 5, 5, 5);
+            newBillLabel.Tag = newBillId;
+            newBillLabel.MouseLeftButtonUp += lblCurrentBill_MouseLeftButtonDown;
+            newBillLabel.Cursor = Cursors.Hand;
+
+            return newBillLabel;
         }
     }
 }

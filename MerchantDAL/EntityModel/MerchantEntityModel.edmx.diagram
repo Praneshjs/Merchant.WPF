@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="ff380e88cfd24e37a37925a60ac37791" Name="Diagram1">
+      <Diagram DiagramId="ff380e88cfd24e37a37925a60ac37791" Name="Diagram1" ZoomLevel="99">
         <EntityTypeShape EntityType="MerchantModel.CommonControl" Width="1.5" PointX="3" PointY="1.5" />
         <EntityTypeShape EntityType="MerchantModel.CommonData" Width="1.5" PointX="5.25" PointY="3.5" />
         <EntityTypeShape EntityType="MerchantModel.Customer" Width="1.5" PointX="3" PointY="5.25" />

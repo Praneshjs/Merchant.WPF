@@ -58,10 +58,15 @@ namespace MerchantDAL.Models
             return currentBillId;
         }
 
+        public int BillCount()
+        {
+            return billId.Count();
+        }
         public void RemoveBillId(int id)
         {
             if (billId.Where(s => s == id).Any())
             {
+                salesByBillId.Remove(id);
                 billId.Remove(id);
             }
         }
@@ -104,6 +109,23 @@ namespace MerchantDAL.Models
             {
                 return new List<int>();
             }
+        }
+
+        public int GetMaxBillId()
+        {
+            if (billId.Count() > 0)
+            {
+                return billId.Max();
+            }
+            else
+            {
+                return 1;
+            }
+        }
+
+        public List<int> GetAllBillId()
+        {
+            return billId;
         }
 
         public string GetTotalItemsPrice(int billId)

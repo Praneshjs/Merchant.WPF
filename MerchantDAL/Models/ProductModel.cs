@@ -1,5 +1,6 @@
 ﻿using MerchantDAL.EntityModel;
 using System;
+using System.Collections.Generic;
 
 namespace MerchantDAL.Models
 {
@@ -15,7 +16,7 @@ namespace MerchantDAL.Models
         public Nullable<int> CreatedBy { get; set; }
         public Nullable<System.DateTime> ModifiedOn { get; set; }
         public Nullable<int> ModifiedBy { get; set; }
-        public Nullable<System.Guid> QRId { get; set; } = Guid.NewGuid();
+        public System.Guid QRId { get; set; } = Guid.NewGuid();
         public Nullable<decimal> StockPrice { get; set; }
         public Nullable<decimal> SellingPrice { get; set; }
         public Nullable<System.DateTime> MfgDate { get; set; }
@@ -32,5 +33,7 @@ namespace MerchantDAL.Models
     {
         public ProductModel Product { get; set; }
         public int AvailableQuantity { get; set; }
+
+        public List<Guid> ProductQRId { get; set; } 
     }
 }
