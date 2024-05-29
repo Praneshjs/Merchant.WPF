@@ -225,7 +225,7 @@
 
         <Style x:Key="TextBlockStyle" TargetType="TextBlock">
             <Setter Property="FontSize" Value="18" />
-            <Setter Property="Foreground" Value="#84817a"/>
+            <Setter Property="Foreground" Value="#4b7bec"/>
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="TextAlignment" Value="Right"/>
         </Style>
@@ -461,7 +461,7 @@
                     <Border Grid.Row="3" Grid.ColumnSpan="4" BorderThickness="0,1,0,0" Margin="0 3 0 3" BorderBrush="#ccc" />
 
                     <Label Grid.Column="2" Grid.Row="4" Content="Net Amount"  VerticalAlignment="Center" Style="{StaticResource LabelStyle}"/>
-                    <TextBlock Name="txtBlNetAmount" Grid.Column="3" Grid.Row="4"  Text="0.00" Margin="0 5 60 0" VerticalAlignment="Center" Style="{StaticResource TextBlockStyle}" />
+                    <TextBlock Name="txtBlNetAmount" Grid.Column="3" Grid.Row="4"  Text="0.00" Margin="0 0 60 0" VerticalAlignment="Top" FontSize="25" Style="{StaticResource TextBlockStyle}" />
 
 
                 </Grid>

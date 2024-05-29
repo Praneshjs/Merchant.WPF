@@ -139,7 +139,7 @@ namespace Merchant.Controls
                 }
                 else
                 {
-                    UserSession.Instance.SalesManager.RemoveSale(1, itemRemove);
+                    UserSession.Instance.SalesManager.RemoveSale(currentBillId, itemRemove);
                 }
                 purchaseItems = UserSession.Instance.SalesManager.GetAllSales(currentBillId);
                 ShowPurchaseNetAmount(purchaseItems);
@@ -199,10 +199,19 @@ namespace Merchant.Controls
 
         private void btnClearOrder_Click(object sender, RoutedEventArgs e)
         {
+
             var currentBillId = UserSession.Instance.SalesManager.GetCurrentBillId();
             UserSession.Instance.SalesManager.RemoveBillId(currentBillId);
+            var billCount = UserSession.Instance.SalesManager.BillCount();
+            if (billCount == 0)
+            {
+                btnNewOrder_Click(null, null);
+                return;
+            }
             var selectedBillId = UserSession.Instance.SalesManager.GetMaxBillId();
             BuildBillListPanel(selectedBillId);
+            UserSession.Instance.SalesManager.SetCurrentBillId(selectedBillId);
+            var purchaseItems = UserSession.Instance.SalesManager.GetAllSales(currentBillId);
         }
 
         private void lblCurrentBill_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -225,7 +234,7 @@ namespace Merchant.Controls
             var allBillId = UserSession.Instance.SalesManager.GetAllBillId();
             foreach (var billId in allBillId)
             {
-                var newBillLabel = GetBillLabel(billId, currentBillId == billId);
+                var newBillLabel = GetBillLabel(billId, selectedBillId == billId);
                 BillStackPanel.Children.Add(newBillLabel);
             }
         }
